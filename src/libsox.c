@@ -76,8 +76,6 @@ sox_version_info_t const * sox_version_info(void)
         /* sox_compiler */
 #if defined __GNUC__
         "gcc " __VERSION__,
-#elif defined _MSC_VER
-        "msvc " STRINGIZE(_MSC_FULL_VER),
 #elif defined __SUNPRO_C
     fprintf(file, "sun c " STRINGIZE(__SUNPRO_C),
 #else

@@ -719,36 +719,6 @@ To write a RIFX file, use the
 .B \-B
 option with the output file options.
 .TP
-\fBwaveaudio\fR (optional)
-MS-Windows native audio device driver.  Examples:
-.EX
-	sox infile \-t waveaudio
-	sox infile \-t waveaudio default
-	sox infile \-t waveaudio 1
-	sox infile \-t waveaudio "High Definition Audio Device ("
-.EE
-If the device name is omitted, \fB-1\fR, or \fBdefault\fR, then you
-get the `Microsoft Wave Mapper' device.  Wave Mapper means `use the
-system default audio devices'.  You can control what `default' means
-via the OS Control Panel.
-.SP
-If the device name given is some other number, you get that audio
-device by index; so recording with device name \fB0\fR would get the
-first input device (perhaps the microphone), \fB1\fR would get the
-second (perhaps line in), etc.  Playback using \fB0\fR will get the
-first output device (usually the only audio device).
-.SP
-If the device name given is something other than a number, SoX tries
-to match it (maximum 31 characters) against the names of the available
-devices.
-.SP
-See also
-.BR play (1),
-.BR rec (1),
-and
-.BR sox (1)
-.BR \-d .
-.TP
 .B .wavpcm
 A non-standard, but widely used, variant of
 .BR .wav .

@@ -137,7 +137,7 @@ set(formats_srcs
 )
 
 # Uncomment for bit-rot detection on linux
-#set(formats_srcs ${formats_srcs} coreaudio sndio sunaudio waveaudio)
+#set(formats_srcs ${formats_srcs} coreaudio sndio sunaudio)
 #add_definitions(-Ibit-rot)
 
 add_library(lib${PROJECT_NAME}

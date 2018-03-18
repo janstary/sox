@@ -37,13 +37,6 @@
 #include <sys/types.h>
 #include <time.h>
 
-#if defined(HAVE_WIN32_GLOB_H)
-  #include "win32-glob.h"
-  #define HAVE_GLOB_H 1
-#elif defined(HAVE_GLOB_H)
-  #include <glob.h>
-#endif
-
 #ifdef HAVE_IO_H
   #include <io.h>
 #endif
@@ -102,6 +95,10 @@
 /* _kbhit and _getch */
 #include <conio.h>
 #undef HAVE_TERMIOS_H
+#endif
+
+#if HAVE_GLOB_H
+#include <glob.h>
 #endif
 
 /*#define MORE_INTERACTIVE 1*/
@@ -2528,7 +2525,6 @@ static char const * device_name(char const * const type)
       || !strcmp(type, "sndio")
       || !strcmp(type, "coreaudio")
       || !strcmp(type, "pulseaudio")
-      || !strcmp(type, "waveaudio")
       )
     name = "default";
   
@@ -2561,7 +2557,6 @@ static char const * set_default_device(file_t * f)
   if (!f->filetype) f->filetype = try_device("coreaudio");
   if (!f->filetype) f->filetype = try_device("pulseaudio");
   if (!f->filetype) f->filetype = try_device("alsa");
-  if (!f->filetype) f->filetype = try_device("waveaudio");
   if (!f->filetype) f->filetype = try_device("sndio");
   if (!f->filetype) f->filetype = try_device("oss");
   if (!f->filetype) f->filetype = try_device("sunau");

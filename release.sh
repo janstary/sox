@@ -12,7 +12,6 @@
 #
 # 1. Verify master git repo matches local git repo.
 # 2. Build source packages.
-# 3. Build Windows packages.
 # 4. Generate announce email from NEWS file.
 # 5. Build HTML and PDF documentation and upload to web site.
 # 6. Create new release directory and upload packages to directory.
@@ -164,11 +163,9 @@ if [ -f $detected_module-$release_num.tar.bz2 ]; then
 fi
 
 osx_zip="$module-${release_num}-macosx.zip"
-win_zip="$module-${release_num}-win32.zip"
-win_exe="$module-${release_num}-win32.exe"
 src_gz="$module-${release_num}.tar.gz"
 src_bz2="$module-${release_num}.tar.bz2"
-release_list="$src_gz $src_bz2 $win_exe $win_zip $osx_zip"
+release_list="$src_gz $src_bz2 $osx_zip"
 
 email_file="${module}-${release_num}.email"
 
@@ -185,12 +182,6 @@ build()
 	echo "Creating PDF documentation for web site..."
 	! make -s pdf && echo "pdf failed" && exit 1
     fi
-
-    echo "Creating Windows packages..."
-    make -s distclean
-    rm -f $win_zip
-    rm -f $win_exe
-    ./mingwbuild
 }
 
 MD5SUM=`which md5sum || which gmd5sum`
@@ -230,16 +221,6 @@ http://$webpath/${rcpath}${module}/$release_num/$osx_zip/download
 MD5:  `$MD5SUM $osx_zip`
 SHA1: `$SHA1SUM $osx_zip`
 
-http://$webpath/${rcpath}${module}/$release_num/$win_exe/download
-
-MD5:  `$MD5SUM $win_exe`
-SHA1: `$SHA1SUM $win_exe`
-
-http://$webpath/${rcpath}${module}/$release_num/$win_zip/download
-
-MD5:  `$MD5SUM $win_zip`
-SHA1: `$SHA1SUM $win_zip`
-
 http://$webpath/${rcpath}${module}/$release_num/$src_bz2/download
 
 MD5:  `$MD5SUM $src_bz2`
@@ -277,11 +258,6 @@ fi
 
 if [ ! -f $src_gz -o ! -f $src_bz2 ]; then
     echo "$src_gz or $src_bz2 not found.  Rebuild and try again"
-    exit 1
-fi
-
-if [ ! -f $win_zip -o ! -f $win_exe ]; then
-    echo "$win_zip or $win_exe not found.  Rebuild and try again"
     exit 1
 fi
 
