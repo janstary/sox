@@ -3,7 +3,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = lpc10 libgsm src
-DIST_SUBDIRS = lpc10 libgsm src msvc9 msvc10
+DIST_SUBDIRS = lpc10 libgsm src
 
 RM = rm -f
 
@@ -12,8 +12,7 @@ RM = rm -f
 dist_man_MANS = sox.1 soxi.1 soxformat.7 libsox.3
 EXTRA_DIST = sox.txt soxi.txt soxformat.txt libsox.txt \
 	     CMakeLists.txt sox.pc.in LICENSE.GPL LICENSE.LGPL \
-	     cygbuild README.win32 README.osx scripts/batch-example.bat \
-	     README.sh FEATURES.in
+	     README.osx README.sh FEATURES.in
 
 if HAVE_PKGCONFIG
 pkgconfigdir = @PKGCONFIGDIR@

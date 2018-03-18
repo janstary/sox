@@ -45,7 +45,7 @@ else
     using_libltdl=$with_libltdl
 fi
 
-LT_INIT([dlopen win32-dll])
+LT_INIT([dlopen])
 AC_SUBST(LIBTOOL_DEPS)
 
 AC_ARG_WITH(dyn-default,AS_HELP_STRING([--with-dyn-default],[Default to loading optional formats dynamically]),opt_default=dyn,opt_default=yes)
@@ -66,17 +66,6 @@ if test "$with_pkgconfigdir" != "no"; then
 fi
 AM_CONDITIONAL(HAVE_PKGCONFIG, test x$using_pkgconfig = xyes)
 AC_SUBST(PKGCONFIGDIR, $with_pkgconfigdir)
-
-using_win32_glob="no"
-case $target in
-  *mingw*)
-  using_win32_glob="yes"
-   ;;
-esac
-if test "$using_win32_glob" = yes; then
-   AC_DEFINE([HAVE_WIN32_GLOB_H], 1, [Define to 1 to use win32 glob])
-fi
-AM_CONDITIONAL(HAVE_WIN32_GLOB, test x$using_win32_glob = xyes)
 
 dnl Debugging
 AC_MSG_CHECKING([whether to make a debug build])
@@ -179,9 +168,6 @@ if test "$GCC" = "yes"; then
       *linux* | *solaris*)
         LDFLAGS="$LDFLAGS -Wl,-z,defs"
         ;;
-      *os2* | *cygwin* | *mingw*)
-        APP_LDFLAGS="-no-undefined"
-        ;;
     esac
 fi
 AC_SUBST(APP_LDFLAGS)
@@ -241,14 +227,8 @@ fi
 AC_SUBST(LIBTOOLFLAGS)
 
 dnl Check if ltdl should be enabled.
-using_win32_ltdl="no"
 if test "$using_libltdl" != "no"; then
   case $target in
-    *mingw*)
-    AC_DEFINE([HAVE_WIN32_LTDL_H], 1, [Define to 1 to use internal win32 ltdl])
-    LIBLTDL=""
-    using_win32_ltdl="yes"
-    ;;
     *)
      AC_CHECK_HEADERS(ltdl.h,
 		     AC_CHECK_LIB(ltdl, lt_dlinit, LIBLTDL="$LIBLTDL -lltdl",
@@ -259,8 +239,7 @@ fi
 if test "$using_libltdl" = yes; then
   AC_DEFINE([HAVE_LIBLTDL], 1, [Define to 1 if you have libltdl])
 fi
-AM_CONDITIONAL(HAVE_LIBLTDL, test x$using_libltdl = xyes -a x$using_win32_ltdl = xno)
-AM_CONDITIONAL(HAVE_WIN32_LTDL, test x$using_win32_ltdl = xyes)
+AM_CONDITIONAL(HAVE_LIBLTDL, test x$using_libltdl = xyes)
 AC_SUBST(LIBLTDL)
 
 
@@ -587,8 +566,6 @@ AC_OPTIONAL_FORMAT(ao, AO, [AC_CHECK_HEADER(ao/ao.h, [AC_CHECK_LIB(ao, ao_play, 
 AC_OPTIONAL_FORMAT(pulseaudio, PULSEAUDIO, [AC_CHECK_HEADER(pulse/simple.h, [AC_CHECK_LIB(pulse, pa_simple_new, PULSEAUDIO_LIBS="$PULSEAUDIO_LIBS -lpulse -lpulse-simple",using_pulseaudio=no,"-lpulse-simple")], using_pulseaudio=no)])
 
 
-AC_OPTIONAL_FORMAT(waveaudio, WAVEAUDIO, [AC_CHECK_HEADER(mmsystem.h, [WAVEAUDIO_LIBS="$WAVEAUDIO_LIBS -lwinmm"], using_waveaudio=no, [[#include <windows.h>]])])
-
 dnl When enable_dl_sndfile, do not let SOX_PATH_SNDFILE add libraries
 dnl to be linked in (since they will be dlopen()'ed instead).
 ac_sox_save_SNDFILE_LIBS="$SNDFILE_LIBS"
@@ -670,7 +647,7 @@ AC_SUBST(PLAYRECLINKS)
 AM_CONDITIONAL(STATIC_LIBSOX_ONLY, test "$enable_shared" = "no" -a "$enable_static" = "yes")
 
 dnl Generate output files.
-AC_CONFIG_FILES(Makefile src/Makefile libgsm/Makefile lpc10/Makefile msvc9/Makefile msvc10/Makefile sox.pc)
+AC_CONFIG_FILES(Makefile src/Makefile libgsm/Makefile lpc10/Makefile sox.pc)
 AC_OUTPUT
 
 if test "$using_gsm" != "no"; then
@@ -713,7 +690,6 @@ echo "sndio (OpenBSD)............$using_sndio"
 echo "oss........................$using_oss"
 echo "pulseaudio.................$using_pulseaudio"
 echo "sunaudio...................$using_sunaudio"
-echo "waveaudio (MS-Windows).....$using_waveaudio"
 echo
 echo "OPTIONAL FILE FORMATS"
 echo "amrnb......................$using_amrnb"

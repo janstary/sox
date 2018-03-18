@@ -15,11 +15,6 @@ if HAVE_LIBLTDL
 AM_LDFLAGS = -avoid-version -module
 AM_CPPFLAGS += -DPKGLIBDIR="\"$(pkglibdir)\""
 endif
-if HAVE_WIN32_LTDL
-# Must match line above.
-AM_LDFLAGS = -avoid-version -module
-AM_CPPFLAGS += -DPKGLIBDIR="\"$(pkglibdir)\""
-endif
 
 # Pass flags from --enable-silent-libtool
 LIBTOOL = @LIBTOOL@ @LIBTOOLFLAGS@
@@ -39,9 +34,6 @@ EXTRA_PROGRAMS = example0 example1 example2 example3 example4 example5 example6 
 lib_LTLIBRARIES = libsox.la
 include_HEADERS = sox.h
 sox_SOURCES = sox.c
-if HAVE_WIN32_GLOB
-sox_SOURCES += win32-glob.c win32-glob.h
-endif
 sox_LDADD = libsox.la
 example0_SOURCES = example0.c
 example1_SOURCES = example1.c
@@ -96,10 +88,6 @@ libsox_la_LIBADD += @GOMP_LIBS@
 libsox_la_CFLAGS = @WARN_CFLAGS@
 libsox_la_LDFLAGS = @APP_LDFLAGS@ -version-info @SHLIB_VERSION@ \
   -export-symbols-regex '^(sox_.*|lsx_(check_read_params|(close|open)_dllibrary|(debug(_more|_most)?|fail|report|warn)_impl|eof|fail_errno|filelength|find_(enum_(text|value)|file_extension)|getopt(_init)?|lpc10_(create_(de|en)coder_state|(de|en)code)|raw(read|write)|read(_b_buf|buf|chars)|realloc|rewind|seeki|sigfigs3p?|strcasecmp|tell|unreadb|write(b|_b_buf|buf|s)))$$'
-
-if HAVE_WIN32_LTDL
-  libsox_la_SOURCES += win32-ltdl.c win32-ltdl.h
-endif
 
 if HAVE_LIBLTDL
   libsox_la_CFLAGS += $(LTDLINCL) 
