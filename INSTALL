@@ -1,11 +1,10 @@
                            SoX Installation
                            ----------------
 
-SoX should compile and run on any POSIX compatible system. Some
-non-POSIX compilers are supported via the `CMake' build utility.
-For other compilers/systems, it is often possible to
-manually construct a custom `soxconfig.h' and `Makefile' for that
-system (the minimum requirements are 32-bit CPU, 64-bit FPU, C89 compiler).
+SoX should compile and run on any POSIX compatible system.
+For other compilers/systems, it is often possible to manually
+construct a custom `soxconfig.h' and `Makefile' for that system
+(the minimum requirements are 32-bit CPU, 64-bit FPU, C89 compiler).
 
 Note that the `play', `rec', and `soxi' programs are in fact just
 copies-of or links-to (depending on OS) `sox'.
