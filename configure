@@ -75,7 +75,7 @@ else
 fi
 echo 1>&3
 
-COMP="${CC} ${CFLAGS} -Wno-unused -Werror"
+COMP="${CC} ${CFLAGS} ${LDFLAGS} -Wno-unused -Werror"
 
 # Check whether this HAVE_ setting is manually overridden.
 # If yes, use the override, if no, do not decide anything yet.
