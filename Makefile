@@ -472,6 +472,11 @@ DIST =	README LICENSE.GPL LICENSE.LGPL $(SRCS) $(TESTSRCS) $(HDRS) $(MANS)
 
 all: $(BINS) $(LIBS) $(HDRS) $(MANS) Makefile.local
 
+html: $(HTML)
+txt:  $(TXTS)
+pdf:  $(PDFS)
+ps:   $(POST)
+
 libsox.so: $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm -lgsm -lsndio
 
@@ -495,10 +500,18 @@ include Makefile.depend
 .1.html .3.html .7.html: $(MANS)
 	mandoc -Thtml $< > $@
 
+.1.txt .3.txt .7.txt: $(MANS)
+	mandoc -Tascii $< > $@
+
+.1.pdf .3.pdf .7.pdf: $(MANS)
+	mandoc -Tpdf $< > $@
+
+.1.ps .3.ps .7.ps: $(MANS)
+	mandoc -Tps $< > $@
+
 lint: $(MANS)
 	mandoc -Tlint -Wstyle $(MANS)
 
-#pdfroff -t -man -Tps $(srcdir)/$< > $@
 #play.1 rec.1: sox.1
 
 #cd $(DESTDIR)$(mandir)/man1 && $(RM) play.1 && $(LN_S) sox.1 play.1
@@ -523,6 +536,7 @@ uninstall:
 
 clean:
 	rm -f $(BINS) $(LIBS) $(OBJS) $(BIN_OBJS) $(LIB_OBJS)
+	rm -f $(HTML) $(TXTS) $(PDFS) $(POST)
 	rm -rf .dist *.dSYM *.core *~
 
 distclean: clean
