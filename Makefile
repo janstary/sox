@@ -448,7 +448,10 @@ OBJS = \
 	xi.o	\
 	xmalloc.o
 
-# FIXME have the same for distinction for SRCS?
+# FIXME Make a distinction between formats, effect, drivers etc SRCS/OBJS.
+# This information still lives in the unused Makefile.am
+# (Maybe also rename the source files in that way.)
+
 LIB_OBJS = $(OBJS) $(COMPAT_OBJS) libsox.o libsox_i.o
 BIN_OBJS = $(OBJS) $(COMPAT_OBJS) sox.o
 
@@ -484,14 +487,17 @@ include Makefile.depend
 
 
 .SUFFIXES: .c .o
+.SUFFIXES: .1 .3 .7 .html .pdf .ps .txt
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
+.1.html .3.html .7.html: $(MANS)
+	mandoc -Thtml $< > $@
+
 lint: $(MANS)
 	mandoc -Tlint -Wstyle $(MANS)
 
-#.SUFFIXES: .1 .3 .7 .html .pdf .ps .txt
 #pdfroff -t -man -Tps $(srcdir)/$< > $@
 #play.1 rec.1: sox.1
 
@@ -534,17 +540,6 @@ Makefile.local config.h: configure $(TESTSRCS)
 		#Makefile.depend > Makefile.tmp
 	#mv Makefile.tmp Makefile.depend
 
-# === SUFFIX RULES =====================================================
-
-#.SUFFIXES:	 .1       .3       .5       .7       .8       .h
-#.SUFFIXES:	 .1.html  .3.html  .5.html  .7.html  .8.html  .h.html
-#
-#.h.h.html:
-	#highlight -I $< > $@
-#
-#.1.1.html .3.3.html .5.5.html .7.7.html .8.8.html: mandoc
-	#./mandoc -Thtml -Wall,stop \
-		##-Ostyle=mandoc.css,man=%N.%S.html,includes=%I.html $< > $@
 
 .PHONY: install
 .PHONY: clean distclean depend
