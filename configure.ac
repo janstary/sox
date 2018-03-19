@@ -434,20 +434,8 @@ fi
 # FIXME: <gsm.h> might also be <gsm/gsm.h>
 AC_OPTIONAL_FORMAT(gsm, GSM, [AC_CHECK_HEADER(gsm.h, [AC_CHECK_LIB(gsm, gsm_create, GSM_LIBS="$GSM_LIBS -lgsm",using_gsm=no)], using_gsm=no)])
 
-# Check for liblpc10
-found_liblpc10=yes
-AC_CHECK_HEADERS(lpc10.h, ,
-    [AC_CHECK_HEADERS(lpc10.h, ,found_liblpc10=no)])
-    AC_CHECK_LIB(lpc10, create_lpc10_encoder_state, LPC10_LIBS="$LPC10_LIBS -llpc10", found_liblpc10=no)
-if test "$found_liblpc10" = yes; then
-    AC_DEFINE(EXTERNAL_LPC10, 1, [Define if you are using an external LPC10 library])
-else
-    LIBLPC10_LIBADD=../lpc10/liblpc10.la
-fi
-AM_CONDITIONAL(EXTERNAL_LPC10, test x$found_liblpc10 = xyes)
-AC_SUBST(LIBLPC10_LIBADD)
-
-
+# Check for LPC10
+AC_OPTIONAL_FORMAT(lpc10, LPC10, [AC_CHECK_HEADER(lpc10.h, [AC_CHECK_LIB(lpc10, create_lpc10_encoder_state, LPC10_LIBS="$LPC10_LIBS -llpc10",using_lpc10=no)], using_lpc10=no)])
 
 # Check for Ogg Vorbis
 AC_OPTIONAL_FORMAT(oggvorbis, OGG_VORBIS, [AC_CHECK_HEADER(vorbis/codec.h,
@@ -594,15 +582,6 @@ AC_OPTIONAL_FORMAT(mp3, MP3, [
 
 
 
-
-
-
-# LPC10 format depends on liblpc10
-# No need to check; LPC10 is always found
-AC_OPTIONAL_FORMAT(lpc10, LPC10)
-
-
-
 dnl Check if we want to disable all symlinks
 AC_MSG_CHECKING([whether to enable symlinks])
 AC_ARG_ENABLE(symlinks,
@@ -630,16 +609,8 @@ AC_SUBST(PLAYRECLINKS)
 AM_CONDITIONAL(STATIC_LIBSOX_ONLY, test "$enable_shared" = "no" -a "$enable_static" = "yes")
 
 dnl Generate output files.
-AC_CONFIG_FILES(Makefile src/Makefile lpc10/Makefile sox.pc)
+AC_CONFIG_FILES(Makefile src/Makefile sox.pc)
 AC_OUTPUT
-
-if test "$using_lpc10" != "no"; then
-  if test "$found_liblpc10" = "yes"; then
-    lpc10_option="(external)"
-  else
-    lpc10_option="(in-tree)"
-  fi
-fi
 
 if test "$using_pkgconfig" = "no"; then
   pkgconfig_option="disabled"
@@ -677,7 +648,7 @@ echo " dlopen amrwb..............$enable_dl_amrwb"
 fi
 echo "flac.......................$using_flac"
 echo "gsm........................$using_gsm"
-echo "lpc10......................$using_lpc10 $lpc10_option"
+echo "lpc10......................$using_lpc10"
 echo "mp2/mp3....................$using_mp3"
 echo " id3tag....................$using_id3tag"
 echo " lame......................$using_lame"

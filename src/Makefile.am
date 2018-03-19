@@ -112,7 +112,7 @@ libsox_la_SOURCES += raw-fmt.c s1-fmt.c s2-fmt.c s3-fmt.c \
   ima_rw.c ima_rw.h wav.c wve.c xa.c nulfile.c f4-fmt.c f8-fmt.c gsrt.c
 
 libsox_la_LIBADD += @GSM_LIBS@
-libsox_la_LIBADD += @LPC10_LIBS@ @LIBLPC10_LIBADD@
+libsox_la_LIBADD += @LPC10_LIBS@
 
 pkglib_LTLIBRARIES =
 
