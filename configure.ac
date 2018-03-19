@@ -428,20 +428,11 @@ if test "$with_twolame" != "no"; then
     fi
 fi
 
-# Check for libgsm
-found_libgsm=yes
-AC_CHECK_HEADERS(gsm/gsm.h, ,
-    [AC_CHECK_HEADERS(gsm.h, ,found_libgsm=no)])
-    AC_CHECK_LIB(gsm, gsm_create, GSM_LIBS="$GSM_LIBS -lgsm", found_libgsm=no)
-if test "$found_libgsm" = yes; then
-    AC_DEFINE(EXTERNAL_GSM, 1, [Define if you are using an external GSM library])
-else
-    LIBGSM_LIBADD=../libgsm/libgsm.la
-fi
-AM_CONDITIONAL(EXTERNAL_GSM, test x$found_libgsm = xyes)
-AC_SUBST(LIBGSM_LIBADD)
 
 
+# Check for GSM
+# FIXME: <gsm.h> might also be <gsm/gsm.h>
+AC_OPTIONAL_FORMAT(gsm, GSM, [AC_CHECK_HEADER(gsm.h, [AC_CHECK_LIB(gsm, gsm_create, GSM_LIBS="$GSM_LIBS -lgsm",using_gsm=no)], using_gsm=no)])
 
 # Check for liblpc10
 found_liblpc10=yes
@@ -480,11 +471,6 @@ fi
 #  support for OGG and if OGG libraries are found on this
 #  system then its highly likely to be compiled into FLAC
 #  and will require these at link time.
-case $target in
-  *mingw*)
-  FLAC_LIBS="-lwsock32"
-  ;;
-esac
 AC_OPTIONAL_FORMAT(flac, FLAC, [AC_CHECK_HEADER(FLAC/all.h, [AC_CHECK_DECL(FLAC_API_VERSION_CURRENT, [AC_CHECK_LIB(FLAC, FLAC__stream_encoder_new, FLAC_LIBS="-lFLAC $FLAC_LIBS $OGG_VORBIS_LIBS",using_flac=no, $FLAC_LIBS $OGG_VORBIS_LIBS)], using_flac=no, [#include <FLAC/all.h>])], using_flac=no)], using_flac=no)
 
 
@@ -608,9 +594,6 @@ AC_OPTIONAL_FORMAT(mp3, MP3, [
 
 
 
-# GSM format depends on libgsm
-# No need to check; GSM is always found
-AC_OPTIONAL_FORMAT(gsm, GSM)
 
 
 
@@ -647,16 +630,8 @@ AC_SUBST(PLAYRECLINKS)
 AM_CONDITIONAL(STATIC_LIBSOX_ONLY, test "$enable_shared" = "no" -a "$enable_static" = "yes")
 
 dnl Generate output files.
-AC_CONFIG_FILES(Makefile src/Makefile libgsm/Makefile lpc10/Makefile sox.pc)
+AC_CONFIG_FILES(Makefile src/Makefile lpc10/Makefile sox.pc)
 AC_OUTPUT
-
-if test "$using_gsm" != "no"; then
-  if test "$found_libgsm" = "yes"; then
-    gsm_option="(external)"
-  else
-    gsm_option="(in-tree)"
-  fi
-fi
 
 if test "$using_lpc10" != "no"; then
   if test "$found_liblpc10" = "yes"; then
@@ -701,7 +676,7 @@ if test "x$using_amrwb" = "xyes"; then
 echo " dlopen amrwb..............$enable_dl_amrwb"
 fi
 echo "flac.......................$using_flac"
-echo "gsm........................$using_gsm $gsm_option"
+echo "gsm........................$using_gsm"
 echo "lpc10......................$using_lpc10 $lpc10_option"
 echo "mp2/mp3....................$using_mp3"
 echo " id3tag....................$using_id3tag"
