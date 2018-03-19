@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_SNDIO
+
 /*
  * libsndio sound handler
  *
@@ -240,3 +243,5 @@ LSX_FORMAT_HANDLER(sndio)
   };
   return &handler;
 }
+
+#endif
