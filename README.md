@@ -26,10 +26,11 @@ The main intent is to _simplify_ the codebase and the build system,
 and to bring SoX to a next bugfix release.
 These are the main changes made so far:
 
-* removed `./libgsm`: GSM is an optional format like any other
 * removed all Windows support (MSVC, cygwin, all the `#ifdef`s, ...).
 * removed Debian specific files: no system treated extra
 * removed CMake support: build using plain old make
+* removed `./libgsm`: GSM is an optional format like any other
+* removed `./liblpc10`; extracted into https://github.com/janstary/lpc10
 
 Long-time goals:
 
