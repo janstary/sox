@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "soxconfig.h"
+#include "config.h"
 #include "sox.h"
 #include "util.h"
 
@@ -32,9 +32,11 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <time.h>
 
 #ifdef HAVE_IO_H
@@ -61,13 +63,6 @@
 #endif
 #endif
 
-#ifdef HAVE_SYS_TIME_H
-  #include <sys/time.h>
-#endif
-
-#ifdef HAVE_SYS_TIMEB_H
-  #include <sys/timeb.h>
-#endif
 
 #ifdef HAVE_SYS_UTSNAME_H
   #include <sys/utsname.h>
@@ -77,25 +72,7 @@
   #include <unistd.h>
 #endif
 
-#ifdef HAVE_GETTIMEOFDAY
-  #define TIME_FRAC 1e6
-#else
-  #define timeval timeb
-  #define gettimeofday(a,b) ftime(a)
-  #define tv_sec time
-  #define tv_usec millitm
-  #define TIME_FRAC 1e3
-#endif
-
-#if !defined(HAVE_CONIO_H) && !defined(HAVE_TERMIOS_H) && (defined(_MSC_VER) || defined(__MINGW32__))
-#define HAVE_CONIO_H 1
-#endif
-
-#ifdef HAVE_CONIO_H
-/* _kbhit and _getch */
-#include <conio.h>
-#undef HAVE_TERMIOS_H
-#endif
+#define TIME_FRAC 1e6
 
 #if HAVE_GLOB_H
 #include <glob.h>

@@ -1,4 +1,4 @@
-#include "soxconfig.h"
+#include "config.h"
 
 #ifdef _OPENMP
   #if _OPENMP >= 200805 /* OpenMP 3.0 */
