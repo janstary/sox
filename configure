@@ -60,6 +60,8 @@ HAVE_STRTONUM=
 #HAVE_SYS_ENDIAN=
 #HAVE_VASPRINTF=
 
+HAVE_GSM=
+
 HAVE_SNDIO=
 
 if [ -r ./configure.local ]; then
@@ -150,7 +152,9 @@ runtest() {
 runtest strtonum	STRTONUM	|| true
 #runtest vasprintf	VASPRINTF	|| true
 
-runtest	sndio		SNDIO -lsndio	|| true
+runtest	gsm		GSM	-lgsm	|| true
+
+runtest	sndio		SNDIO	-lsndio	|| true
 
 #if [ ${HAVE_ENDIAN} -eq 0 -a \
      #${HAVE_SYS_ENDIAN} -eq 0 -a \
@@ -186,6 +190,8 @@ __HEREDOC__
 [ ${HAVE_STRTONUM}       -eq 0 ] && echo "#include <stdlib.h>"
 #[ ${HAVE_VASPRINTF}     -eq 0 ] && echo "#include <stdarg.h>"
 
+[ ${HAVE_GSM}            -eq 1 ] && echo "#include <gsm.h>"
+
 [ ${HAVE_SNDIO}          -eq 1 ] && echo "#include <sndio.h>"
 
 
@@ -215,6 +221,8 @@ cat << __HEREDOC__
 #define HAVE_SYS_ENDIAN ${HAVE_SYS_ENDIAN}
 #define HAVE_VASPRINTF ${HAVE_VASPRINTF}
 */
+
+#define HAVE_GSM ${HAVE_GSM}
 
 #define HAVE_SNDIO ${HAVE_SNDIO}
 

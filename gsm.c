@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_GSM
+
 /* Copyright 1991, 1992, 1993 Guido van Rossum And Sundry Contributors.
  * This source code is freely redistributable and may be used for
  * any purpose.  This copyright notice must be maintained.
@@ -25,15 +28,9 @@
  *   Rewritten to support multiple channels
  */
 
-#include "sox_i.h"
-
-#ifdef HAVE_GSM_GSM_H
-#include <gsm/gsm.h>
-#else
-#include <gsm.h>
-#endif
-
 #include <errno.h>
+#include <gsm.h>
+#include "sox_i.h"
 
 #define MAXCHANS 16
 
@@ -247,3 +244,5 @@ LSX_FORMAT_HANDLER(gsm)
   };
   return &handler;
 }
+
+#endif

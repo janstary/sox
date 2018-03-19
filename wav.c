@@ -19,9 +19,7 @@
 #include "ima_rw.h"
 #include "adpcm.h"
 
-#ifdef HAVE_GSM_GSM_H
-#include <gsm/gsm.h>
-#else
+#if HAVE_GSM
 #include <gsm.h>
 #endif
 
@@ -84,11 +82,13 @@ typedef struct {
     unsigned short blockSamplesRemaining;/* Samples remaining per channel */
     int            state[16];       /* step-size info for *ADPCM writes */
 
-    /* following used by GSM 6.10 wav */
+#if HAVE_GSM
     gsm            gsmhandle;
     gsm_signal     *gsmsample;
     int            gsmindex;
     size_t      gsmbytecount;    /* counts bytes written to data block */
+#endif
+
     sox_bool       isRF64;          /* True if file being read is a RF64 */
     uint64_t       ds64_dataSize;   /* Size of data chunk from ds64 header */
 } priv_t;
@@ -217,6 +217,7 @@ static int xxxAdpcmWriteBlock(sox_format_t * ft)
     return (SOX_SUCCESS);
 }
 
+#if HAVE_GSM
 /****************************************************************************/
 /* WAV GSM6.10 support functions                                            */
 /****************************************************************************/
@@ -363,6 +364,8 @@ static void wavgsmstopwrite(sox_format_t * ft)
 
     wavgsmdestroy(ft);
 }
+
+#endif /* HAVE_GSM */
 
 /****************************************************************************/
 /* General Sox WAV file code                                                */
@@ -1572,9 +1575,11 @@ static int wavwritehdr(sox_format_t * ft, int second_header)
         if (wFormatTag == WAVE_FORMAT_GSM610){
             lsx_debug("GSM6.10 format: %li blocks %u padded samples %u padded data bytes",
                     blocksWritten, dwSamplesWritten, dwDataLength);
+#if HAVE_GSM
             if (wav->gsmbytecount != dwDataLength)
                 lsx_warn("help ! internal inconsistency - data_written %u gsmbytecount %lu",
                         dwDataLength, (unsigned long)wav->gsmbytecount);
+#endif
 
         }
     }
