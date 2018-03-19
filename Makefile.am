@@ -12,7 +12,7 @@ RM = rm -f
 dist_man_MANS = sox.1 soxi.1 soxformat.7 libsox.3
 EXTRA_DIST = sox.txt soxi.txt soxformat.txt libsox.txt \
 	     sox.pc.in LICENSE.GPL LICENSE.LGPL \
-	     README.osx README.sh FEATURES.in
+	     README.osx README
 
 if HAVE_PKGCONFIG
 pkgconfigdir = @PKGCONFIGDIR@
@@ -21,9 +21,6 @@ endif
 
 play.1 rec.1: sox.1
 	$(RM) $@ && $(LN_S) $< $@
-
-README: README.sh FEATURES.in
-	./README.sh
 
 # Rule for making text man pages.  Uses GNU nroff's -c so not portable.
 .1.txt:

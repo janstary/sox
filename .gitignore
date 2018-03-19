@@ -21,6 +21,5 @@ sox*.tar.gz
 *.pdf
 *.html
 sox.pc
-README
 *.a
 tags
