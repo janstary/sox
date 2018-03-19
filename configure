@@ -69,6 +69,8 @@ HAVE_STRTONUM=
 #HAVE_SYS_ENDIAN=
 #HAVE_VASPRINTF=
 
+HAVE_SNDIO=
+
 if [ -r ./configure.local ]; then
 	echo "configure.local: reading..." 1>&2
 	echo "configure.local: reading..." 1>&3
@@ -164,6 +166,8 @@ runtest() {
 runtest strtonum	STRTONUM	|| true
 #runtest vasprintf	VASPRINTF	|| true
 
+runtest	sndio		SNDIO -lsndio	|| true
+
 #if [ ${HAVE_ENDIAN} -eq 0 -a \
      #${HAVE_SYS_ENDIAN} -eq 0 -a \
      #${HAVE_NTOHL} -eq 0 ]; then
@@ -200,6 +204,9 @@ __HEREDOC__
 [ ${HAVE_STRTONUM}       -eq 0 ] && echo "#include <stdlib.h>"
 #[ ${HAVE_VASPRINTF}     -eq 0 ] && echo "#include <stdarg.h>"
 
+[ ${HAVE_SNDIO}          -eq 0 ] && echo "#include <sndio.h>"
+
+
 echo
 #[ ${HAVE_PATH_MAX} -eq 0 ] && echo "#define PATH_MAX 4096"
 #if [ ${HAVE_ENDIAN} -eq 0 -a ${HAVE_SYS_ENDIAN} -eq 0 ]; then
@@ -232,6 +239,7 @@ cat << __HEREDOC__
 #define HAVE_OHASH ${HAVE_OHASH}
 */
 
+#define HAVE_SNDIO ${HAVE_SNDIO}
 __HEREDOC__
 
 #if [ ${HAVE_ERR} -eq 0 ]; then
