@@ -59,7 +59,3 @@ cat FEATURES.in \
 	| sed "s/^\*/  o /" \
 	| sed "s/(:[a-zA-Z0-9_= -]*:)//g" \
        	>> README
-
-echo version=pmwiki-2.2.0-beta65 ordered=1 urlencoded=1 > Docs.Features
-echo -n text= >> Docs.Features
-cat FEATURES.in|sed "s/%/%25/g"|sed "s/$/%0a/"|tr -d '\n' >> Docs.Features

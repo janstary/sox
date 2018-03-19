@@ -22,6 +22,5 @@ sox*.tar.gz
 *.html
 sox.pc
 README
-Docs.Features
 *.a
 tags
