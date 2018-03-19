@@ -22,12 +22,18 @@ This is another fork of the original
 
 ## Goals
 
-The main intent is to _simplify_ the codebase,
-in particular the build system, and to bring SoX
-to a next bugfix release.
+The main intent is to _simplify_ the codebase and the build system,
+and to bring SoX to a next bugfix release.
+These are the main changes made so far:
+
+* removed `./libgsm`: GSM is an optional format like any other
+* removed all Windows support (MSVC, cygwin, all the `#ifdef`s, ...).
+* removed Debian specific files: no system treated extra
+* removed CMake support: build using plain old make
+
+Long-time goals:
 
 * Keep SoX running on OpenBSD, FreeBSD, NetBSD, MacOS, Solaris.
-* Drop all Windows support (MSVC, cygwin, all the `#ifdef`s, ...).
 * Get rid of the GNU autotools.
 
 At the same time,
