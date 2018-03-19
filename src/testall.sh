@@ -42,8 +42,8 @@ t() {
 	opts="$*"
 
 	echo "Format: $format   Options: $opts"
-	${bindir}/sox${EXEEXT} ${srcdir}/monkey.wav $opts /tmp/monkey.$format $effect
-	${bindir}/sox${EXEEXT} $opts /tmp/monkey.$format /tmp/monkey1.wav  $effect
+	${bindir}/sox${EXEEXT} ${srcdir}/file.wav $opts /tmp/file.$format $effect
+	${bindir}/sox${EXEEXT} $opts /tmp/file.$format /tmp/file1.wav  $effect
 }
 t 8svx
 t aiff

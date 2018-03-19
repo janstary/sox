@@ -101,7 +101,6 @@ static sox_effect_handler_t const * output_handler(void)
 
 /*
  * Reads input file, applies vol & flanger effects, stores in output file.
- * E.g. example1 monkey.au monkey.aiff
  */
 int main(int argc, char * argv[])
 {
