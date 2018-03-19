@@ -186,7 +186,7 @@ __HEREDOC__
 [ ${HAVE_STRTONUM}       -eq 0 ] && echo "#include <stdlib.h>"
 #[ ${HAVE_VASPRINTF}     -eq 0 ] && echo "#include <stdarg.h>"
 
-[ ${HAVE_SNDIO}          -eq 0 ] && echo "#include <sndio.h>"
+[ ${HAVE_SNDIO}          -eq 1 ] && echo "#include <sndio.h>"
 
 
 echo
@@ -217,6 +217,7 @@ cat << __HEREDOC__
 */
 
 #define HAVE_SNDIO ${HAVE_SNDIO}
+
 __HEREDOC__
 
 #if [ ${HAVE_ERR} -eq 0 ]; then
