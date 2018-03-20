@@ -231,7 +231,10 @@ static int sox_gsmstopwrite(sox_format_t * ft)
         return sox_gsmstopread(ft); /* destroy handles and free buffers */
 }
 
-LSX_FORMAT_HANDLER(gsm)
+LSX_FORMAT_HANDLER(_gsm)
+/* Cal it "_gsm", because
+ * gsm.h: typedef struct gsm_state * gsm;
+ * See the corresponding FORMAT(_gsm) in formats.h */
 {
   static char const * const names[] = {"gsm", NULL};
   static sox_rate_t   const write_rates[] = {8000, 0};

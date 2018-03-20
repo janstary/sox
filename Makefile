@@ -368,6 +368,7 @@ OBJS = \
 	gain.o	\
 	getopt.o	\
 	gsrt.o	\
+	gsm.o	\
 	hcom.o	\
 	hilbert.o	\
 	htk.o	\
