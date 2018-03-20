@@ -84,7 +84,14 @@
   FORMAT(flac)
 #endif
 #if defined HAVE_GSM && (defined STATIC_GSM || !defined HAVE_LIBLTDL)
+/*
+ * ./formats.h:87:10: error: redefinition of 'gsm'
+ * FORMAT(gsm)
+ * /usr/local/include/gsm.h:39:29: note: previous definition is here
+	typedef struct gsm_state * gsm;
+
   FORMAT(gsm)
+ */
 #endif
 #if defined HAVE_LPC10 && (defined STATIC_LPC10 || !defined HAVE_LIBLTDL)
   FORMAT(lpc10)
