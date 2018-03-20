@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_OSS
+
 /* Copyright 1997 Chris Bagwell And Sundry Contributors
  * This source code is freely redistributable and may be used for
  * any purpose.  This copyright notice must be maintained.
@@ -455,3 +458,5 @@ LSX_FORMAT_HANDLER(oss)
   };
   return &handler;
 }
+
+#endif

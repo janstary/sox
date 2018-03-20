@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_FLAC
+
 /* libSoX file format: FLAC   (c) 2006-7 robs@users.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -17,10 +20,8 @@
 
 #include "sox_i.h"
 
-#include <string.h>
-/* Next line for systems that don't define off_t when you #include
-   stdio.h; apparently OS/2 has this bug */
 #include <sys/types.h>
+#include <string.h>
 
 #include <FLAC/all.h>
 
@@ -602,3 +603,5 @@ LSX_FORMAT_HANDLER(flac)
   };
   return &handler;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_PNG
+
 /* libSoX effect: Spectrogram       (c) 2008-9 robs@users.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -23,11 +26,7 @@
 #include "fft4g.h"
 #include <assert.h>
 #include <math.h>
-#ifdef HAVE_LIBPNG_PNG_H
-#include <libpng/png.h>
-#else
 #include <png.h>
-#endif
 #include <zlib.h>
 
 /* For SET_BINARY_MODE: */
@@ -696,3 +695,5 @@ sox_effect_handler_t const * lsx_spectrogram_effect_fn(void)
   handler.usage = lsx_usage_lines(&usage, lines, array_length(lines));
   return &handler;
 }
+
+#endif

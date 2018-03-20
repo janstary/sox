@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_PULSE
+
 /* Pulse Audio sound handler
  *
  * Copyright 2008 Chris Bagwell And Sundry Contributors
@@ -167,3 +170,5 @@ LSX_FORMAT_HANDLER(pulseaudio)
   };
   return &handler;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_ALSA
+
 /* libSoX device driver: ALSA   (c) 2006-2012 SoX contributors
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -377,3 +380,5 @@ LSX_FORMAT_HANDLER(alsa)
   };
   return &handler;
 }
+
+#endif

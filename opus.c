@@ -1,3 +1,6 @@
+#include "config.h"
+#if HAVE_OPUS
+
 /* libSoX Opus-in-Ogg sound format handler
  * Copyright (C) 2013 John Stumpo <stump@jstump.com>
  *
@@ -233,3 +236,5 @@ LSX_FORMAT_HANDLER(opus)
   };
   return &handler;
 }
+
+#endif
