@@ -240,12 +240,12 @@ Makefile.local Makefile.external config.h: configure $(HAVESRCS)
 	@exit 1
 
 
-#depend: config.h
-	#mkdep -f Makefile.depend $(CFLAGS) $(SRCS)
-	#perl -e 'undef $$/; $$_ = <>; s|/usr/include/\S+||g; \
-		#s|\\\n||g; s|  +| |g; s| $$||mg; print;' \
-		#Makefile.depend > Makefile.tmp
-	#mv Makefile.tmp Makefile.depend
+depend: config.h
+	mkdep -f dep $(CFLAGS) $(FORMAT_SRCS) $(EFFECT_SRCS)
+	perl -e 'undef $$/; $$_ = <>; s|/usr/include/\S+||g; \
+		s|\\\n||g; s|  +| |g; s| $$||mg; print;' \
+		dep > Makefile.tmp
+	mv Makefile.tmp dep
 
 
 .PHONY: install
