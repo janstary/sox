@@ -42,8 +42,8 @@ These are the main changes made so far:
 
 TODO:
 
-* Go thorugh the CVEs since 14.4.2.
-  A lot of those have already been fixed in other forks
+* Go through the [CVEs](http://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=sox)
+  since 14.4.2. A lot of those have already been fixed in other forks.
 * Go through the SourceForge
   [tickets](https://sourceforge.net/p/sox/_list/tickets),
   see what is still relevant
