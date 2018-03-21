@@ -150,7 +150,7 @@ amr-wb.o: amr-wb.c amr.h sox_i.h soxomp.h config.h sox.h
 flac.o: flac.c sox_i.h soxomp.h config.h sox.h
 gsm.o: gsm.c sox_i.h soxomp.h config.h sox.h
 lpc10.o: lpc10.c sox_i.h soxomp.h config.h sox.h
-mp3.o: mp3.c sox_i.h soxomp.h config.h sox.h
+mp3.o: mp3.c mp3-util.h sox_i.h soxomp.h config.h sox.h
 opus.o: opus.c sox_i.h soxomp.h config.h sox.h
 spectrogram.o: spectrogram.c sox_i.h soxomp.h config.h sox.h
 vorbis.o: vorbis.c sox_i.h soxomp.h config.h sox.h
