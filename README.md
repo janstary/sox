@@ -67,7 +67,7 @@ from the last official release (14.4.2).
 SoX optionally makes use of some external libraries to obtain support
 for additional file formats and/or effects.  Optional libraries should
 be installed before compiling SoX. These are the supported libraries
-and where to get them, if your OS does not provide them:
+and where to get them, in case your OS does not provide a package:
 
 * [amr](http://sourceforge.net/projects/opencore-amr)
 * [ao](http://xiph.org/ao)
@@ -91,8 +91,8 @@ and where to get them, if your OS does not provide them:
 Run `./configure` to configure the build for your system.
 This will produce four files:
 
-* `config.h` which `#define`s various `HAVE_` constants
-* `config.log` which logs details of the autodetection
+* `config.h` containing the `#include` and `HAVE_` lines
+* `config.log` containing the details of autodetection
 * `Makefile.local` which defines `CC`, `PREFIX` and the like
 * `Makefile.external` which describes the detected libraries
 
@@ -111,14 +111,14 @@ The `./configure` script is
 accompanied by a set of simple programs autodetecting the availability of
 
 * system functions (e.g. [`have-strtonum.c`](have-strtonum.c))
-* optional external libraries (e.g. [`have-sndfile.c`](have-sndfile.c))
+* external libraries (e.g. [`have-sndfile.c`](have-sndfile.c))
 * audio output drivers (e.g. [`have-sndio.c`](have-sndio.c))
 
-For C functions possibly not present in the system,
+For C functions that might not be present in the system,
 we provide autoconfiguration tests and `compat_*.c` implementations.
 Please report any that turn out to be missing.
 Read `config.log`, which shows shows the compiler commands used
-to test the libraries installed on your system and the standard
+to test the libraries installed on your system, and the standard
 output and standard error output these commands produce.
 Failues are most likely to happen if headers or libraries
 are installed in unusual places or interfaces defined
@@ -148,10 +148,8 @@ and `play.1`, `rec.1` and `soxi.1` are links to `sox.1`.
 
 After successfully installing SoX, try translating a sound file.
 You should also playback the new file to make sure it sounds
-like the original.
-
-Choose a format that is native to your OS, such as WAV or AIFF.
-In the following example, we'll use .xxx as the extension.
+like the original. Choose a format that is native to your OS,
+such as WAV or AIFF. In the following example, we use .xxx as the extension.
 
 ```
 $ sox -V file.wav file.xxx
