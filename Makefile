@@ -176,7 +176,7 @@ libsox.so: $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm
 
 sox $(EXAM): $(LIBS) $(BIN_OBJS)
-	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox $(LDADD)
+	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lm -lsox $(LDADD)
 
 soxi play rec: sox
 	ln -sf sox soxi
