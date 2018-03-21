@@ -9,6 +9,7 @@ UTIL_SRCS =		\
 	libsox.c	\
 	libsox_i.c	\
 	sox.c		\
+	sox.h		\
 	soxomp.h	\
 	xmalloc.c	\
 	xmalloc.h
@@ -94,6 +95,7 @@ HAVESRCS = \
 	have-sunaudio.c
 
 SRCS = \
+	$(UTIL_SRC)	\
 	$(FORMAT_SRCS)	\
 	$(EFFECT_SRCS)	\
 	$(EXAMPLE_SRCS)	\
@@ -231,6 +233,7 @@ clean:
 	rm -f $(BINS) $(LIBS) $(BIN_OBJS) $(LIB_OBJS)
 	rm -f $(HTML) $(TXTS) $(PDFS) $(POST)
 	rm -rf .dist *.dSYM *.core *~
+	rm -rf depend _depend
 
 distclean: clean
 	rm -f Makefile.local Makefile.external config.*
@@ -239,13 +242,13 @@ Makefile.local Makefile.external config.h: configure $(HAVESRCS)
 	@echo "$@ is out of date; please run ./configure"
 	@exit 1
 
-
 depend: config.h
-	mkdep -f dep $(CFLAGS) $(FORMAT_SRCS) $(EFFECT_SRCS)
+	mkdep -f depend $(CFLAGS) \
+		$(UTIL_SRCS) $(FORMAT_SRCS) $(EFFECT_SRCS) $(EXAMPLE_SRCS)
 	perl -e 'undef $$/; $$_ = <>; s|/usr/include/\S+||g; \
 		s|\\\n||g; s|  +| |g; s| $$||mg; print;' \
-		dep > Makefile.tmp
-	mv Makefile.tmp dep
+		depend > _depend
+	mv _depend depend
 
 
 .PHONY: install

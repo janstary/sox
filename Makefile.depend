@@ -144,7 +144,6 @@ vad.o: vad.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 vol.o: vol.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 
 # external formats
-
 amr-nb.o: amr-nb.c amr.h sox_i.h soxomp.h config.h sox.h
 amr-wb.o: amr-wb.c amr.h sox_i.h soxomp.h config.h sox.h
 flac.o: flac.c sox_i.h soxomp.h config.h sox.h
@@ -164,12 +163,10 @@ pvf.o: pvf.c sox_i.h soxomp.h config.h sox.h
 sd2.o: sd2.c sox_i.h soxomp.h config.h sox.h
 
 # external effects
-
 ladspa.o: ladspa.h ladspa.c sox_i.h soxomp.h config.h sox.h
 speexdsp.o: speexdsp.c sox_i.h soxomp.h config.h sox.h
 
 # audio drivers
-
 alsa.o: alsa.c sox_i.h soxomp.h config.h sox.h
 ao.o: ao.c sox_i.h soxomp.h config.h sox.h
 coreaudio.o: coreaudio.c sox_i.h soxomp.h config.h sox.h
@@ -177,3 +174,12 @@ oss.o: oss.c sox_i.h soxomp.h config.h sox.h
 pulseaudio.o: pulseaudio.c sox_i.h soxomp.h config.h sox.h
 sndio.o: sndio.c sox_i.h soxomp.h config.h sox.h
 sunaudio.o: sunaudio.c sox_i.h soxomp.h config.h sox.h
+
+# examples
+example0.o: example0.c sox.h
+example1.o: example1.c sox.h
+example2.o: example2.c sox.h util.h config.h xmalloc.h
+example3.o: example3.c sox.h util.h config.h xmalloc.h
+example4.o: example4.c sox.h
+example5.o: example5.c sox.h util.h config.h xmalloc.h
+example6.o: example6.c sox.h util.h config.h xmalloc.h
