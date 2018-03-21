@@ -145,35 +145,35 @@ vol.o: vol.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 
 # external formats
 
-amr-nb.o: amr-nb.c amr.h
-amr-wb.o: amr-wb.c amr.h
-flac.o: flac.c
-gsm.o: gsm.c
-lpc10.o: lpc10.c
-mp3.o: mp3.c
-opus.o: opus.c
-spectrogram.o: spectrogram.c
-vorbis.o: vorbis.c
-sndfile.o: sndfile.c
-caf.o: caf.c
-fap.o: fap.c
-mat4.o: mat4.c
-mat5.o: mat5.c
-paf.o: paf.c
-pvf.o: pvf.c
-sd2.o: sd2.c
+amr-nb.o: amr-nb.c amr.h sox_i.h soxomp.h config.h sox.h
+amr-wb.o: amr-wb.c amr.h sox_i.h soxomp.h config.h sox.h
+flac.o: flac.c sox_i.h soxomp.h config.h sox.h
+gsm.o: gsm.c sox_i.h soxomp.h config.h sox.h
+lpc10.o: lpc10.c sox_i.h soxomp.h config.h sox.h
+mp3.o: mp3.c sox_i.h soxomp.h config.h sox.h
+opus.o: opus.c sox_i.h soxomp.h config.h sox.h
+spectrogram.o: spectrogram.c sox_i.h soxomp.h config.h sox.h
+vorbis.o: vorbis.c sox_i.h soxomp.h config.h sox.h
+sndfile.o: sndfile.c sox_i.h soxomp.h config.h sox.h
+caf.o: caf.c sox_i.h soxomp.h config.h sox.h
+fap.o: fap.c sox_i.h soxomp.h config.h sox.h
+mat4.o: mat4.c sox_i.h soxomp.h config.h sox.h
+mat5.o: mat5.c sox_i.h soxomp.h config.h sox.h
+paf.o: paf.c sox_i.h soxomp.h config.h sox.h
+pvf.o: pvf.c sox_i.h soxomp.h config.h sox.h
+sd2.o: sd2.c sox_i.h soxomp.h config.h sox.h
 
 # external effects
 
-ladspa.o: ladspa.h ladspa.c
-speexdsp.o: speexdsp.c
+ladspa.o: ladspa.h ladspa.c sox_i.h soxomp.h config.h sox.h
+speexdsp.o: speexdsp.c sox_i.h soxomp.h config.h sox.h
 
 # audio drivers
 
-alsa.o: alsa.c
-ao.o: ao.c
-coreaudio.o: coreaudio.c
-oss.o: oss.c
-pulseaudio.o: pulseaudio.c
-sndio.o: sndio.c
-sunaudio.o: sunaudio.c
+alsa.o: alsa.c sox_i.h soxomp.h config.h sox.h
+ao.o: ao.c sox_i.h soxomp.h config.h sox.h
+coreaudio.o: coreaudio.c sox_i.h soxomp.h config.h sox.h
+oss.o: oss.c sox_i.h soxomp.h config.h sox.h
+pulseaudio.o: pulseaudio.c sox_i.h soxomp.h config.h sox.h
+sndio.o: sndio.c sox_i.h soxomp.h config.h sox.h
+sunaudio.o: sunaudio.c sox_i.h soxomp.h config.h sox.h
