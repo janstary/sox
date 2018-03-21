@@ -13,6 +13,7 @@ UTIL_SRCS =		\
 	xmalloc.c	\
 	xmalloc.h
 
+# FIXME: make a distinction between _codec_ and _filetypes_ (*-fmt.c)
 FORMAT_SRCS = \
 	8svx.c adpcm.c adpcm.h adpcms.c adpcms.h \
 	aifc-fmt.c aiff.c aiff.h aiff-fmt.c au.c avr.c \
@@ -48,23 +49,21 @@ EFFECT_SRCS = \
 	tempo.c tremolo.c trim.c upsample.c \
 	vad.c vol.c
 
-# The first two lines are formats supported by external libraries.
-# The third line is formats supported by libsndfile if we have it.
-# The last line is various audio drivers: typically we have one.
-EXTERNAL_SRCS = \
-	amr-nb.c amr-wb.c amr.h flac.c gsm.c ladspa.h ladspa.c lpc10.c \
-	mp3.c opus.c speexdsp.c spectrogram.c vorbis.c \
-	sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c \
-	alsa.c ao.c coreaudio.c oss.c pulseaudio.c sndio.c sunaudio.c
+EXAMPLE_SRCS = \
+	example0.c \
+	example1.c \
+	example2.c \
+	example3.c \
+	example4.c \
+	example5.c \
+	example6.c
 
-# sox_sample_test.c
-# example0.c
-# example1.c
-# example2.c
-# example3.c
-# example4.c
-# example5.c
-# example6.c
+# FIXME sox_sample_test.c
+
+EXTERNAL_SRCS  = amr-nb.c amr-wb.c amr.h flac.c gsm.c ladspa.h ladspa.c lpc10.c
+EXTERNAL_SRCS += mp3.c mp3-util.h opus.c speexdsp.c spectrogram.c vorbis.c
+EXTERNAL_SRCS += sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c
+EXTERNAL_SRCS += alsa.c ao.c coreaudio.c oss.c pulseaudio.c sndio.c sunaudio.c
 
 HAVESRCS = \
 	have-strtonum.c		\
@@ -94,11 +93,10 @@ HAVESRCS = \
 	have-sndio.c		\
 	have-sunaudio.c
 
-
-
 SRCS = \
 	$(FORMAT_SRCS)	\
 	$(EFFECT_SRCS)	\
+	$(EXAMPLE_SRCS)	\
 	$(EXTERNAL_SRCS)
 
 COMPAT_OBJS = \
@@ -149,21 +147,23 @@ LIB_OBJS += $(FORMAT_OBJS) $(EFFECT_OBJS) $(COMPAT_OBJS)
 LIB_OBJS += $(EXTERNAL_OBJS)
 BIN_OBJS  = sox.o
 
-BINS =	sox soxi play rec
-LIBS =	libsox.so
-HDRS =	sox.h
-MAN1 =	sox.1 soxi.1
-MAN3 = 	libsox.3
-MAN7 =	soxformat.7
-MANS =	$(MAN1) $(MAN3) $(MAN7)
-HTML =	sox.html soxi.html soxformat.html libsox.html
-TXTS =	sox.txt soxi.txt soxformat.txt libsox.txt
-PDFS =	sox.pdf soxi.pdf soxformat.pdf libsox.pdf
-POST =	sox.ps soxi.ps soxformat.ps libsox.ps
-DIST =	README LICENSE.GPL LICENSE.LGPL $(SRCS) $(HAVESRCS) $(HDRS) $(MANS)
-#EXTRA_DIST = sox.pc.in
+BINS  = sox soxi play rec
+EXAM  = example0 example1 example2 example3 example4 example5 example6
+LIBS  = libsox.so
+HDRS  = sox.h
+MAN1  = sox.1 soxi.1
+MAN3  = libsox.3
+MAN7  = soxformat.7
+MANS  = $(MAN1) $(MAN3) $(MAN7)
+HTML  = sox.html soxi.html soxformat.html libsox.html
+TXTS  = sox.txt soxi.txt soxformat.txt libsox.txt
+PDFS  = sox.pdf soxi.pdf soxformat.pdf libsox.pdf
+POST  = sox.ps soxi.ps soxformat.ps libsox.ps
+DIST  = $(SRCS) $(HAVESRCS) $(HDRS) $(MANS)
+DIST += README LICENSE.GPL LICENSE.LGPL LICENSE
+DIST += file.wav # sox.pc.in FIXME
 
-all: $(BINS) $(LIBS) $(HDRS) $(MANS) Makefile.local Makefile.external
+all: $(BINS) $(EXAM) $(LIBS) $(HDRS) $(MANS) Makefile.local Makefile.external
 
 html: $(HTML)
 txt:  $(TXTS)
@@ -173,7 +173,7 @@ ps:   $(POST)
 libsox.so: $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm
 
-sox: $(LIBS) $(BIN_OBJS)
+sox $(EXAM): $(LIBS) $(BIN_OBJS)
 	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox $(LDADD)
 
 soxi play rec: sox
@@ -250,3 +250,13 @@ depend: config.h
 
 .PHONY: install
 .PHONY: clean distclean depend
+
+# These are the remnants of the old Makefile.am:
+#
+# FIXME Make sure we export the right symbols
+#-export-symbols-regex '^(sox_.*|lsx_(check_read_params|(close|open)_dllibrary|(debug(_more|_most)?|fail|report|warn)_impl|eof|fail_errno|filelength|find_(enum_(text|value)|file_extension)|getopt(_init)?|lpc10_(create_(de|en)coder_state|(de|en)code)|raw(read|write)|read(_b_buf|buf|chars)|realloc|rewind|seeki|sigfigs3p?|strcasecmp|tell|unreadb|write(b|_b_buf|buf|s)))$$'
+
+# FIXME
+#tests.sh testall.sh test-comments
+#$(srcdir)/tests.sh --bindir=${bindir} --builddir=${builddir} --srcdir=${srcdir}
+#$(srcdir)/testall.sh --bindir=${bindir} --srcdir=${srcdir}
