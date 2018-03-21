@@ -117,10 +117,10 @@ ismanual() {
 singletest() {
 	cat 1>&3 << __HEREDOC__
 ${1}${3}: testing...
-${COMP} -o test-${1} test-${1}.c ${3}
+${COMP} -o have-${1} have-${1}.c ${3}
 __HEREDOC__
 
-	if ${COMP} -o "test-${1}" "${SRCDIR}/test-${1}.c" ${3} 1>&3 2>&3
+	if ${COMP} -o "have-${1}" "${SRCDIR}/have-${1}.c" ${3} 1>&3 2>&3
 	then
 		echo "${1}${3}: ${CC} succeeded" 1>&3
 	else
@@ -129,17 +129,17 @@ __HEREDOC__
 		return 1
 	fi
 
-	if ./test-${1} 1>&3 2>&3; then
+	if ./have-${1} 1>&3 2>&3; then
 		echo "${1}${3}: yes" 1>&2
 		echo "${1}${3}: yes" 1>&3
 		echo 1>&3
 		eval HAVE_${2}=1
-		rm "test-${1}"
+		rm "have-${1}"
 		return 0
 	else
 		echo "${1}${3}: execution failed with $?" 1>&3
 		echo 1>&3
-		rm "test-${1}"
+		rm "have-${1}"
 		return 1
 	fi
 }
@@ -202,7 +202,7 @@ cat << __HEREDOC__
 #endif
 
 #if defined(__linux__) || defined(__MINT__)
-#define _GNU_SOURCE /* See test-*.c for what needs this. */
+#define _GNU_SOURCE /* See have-*.c for what needs this. */
 #endif
 
 __HEREDOC__
