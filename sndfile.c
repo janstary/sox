@@ -20,7 +20,7 @@
 
 #include "sox_i.h"
 
-#ifdef HAVE_SNDFILE
+#if HAVE_SNDFILE
 
 #include <assert.h>
 #include <stdio.h>
@@ -186,10 +186,8 @@ static struct {
   { "snd",      SF_FORMAT_AU },
   { "caf",      SF_FORMAT_CAF },
   { "flac",     SF_FORMAT_FLAC },
-#ifdef HAVE_SNDFILE_1_0_18
   { "wve",      SF_FORMAT_WVE },
   { "ogg",      SF_FORMAT_OGG },
-#endif
   { "svx",      SF_FORMAT_SVX },
   { "8svx",     SF_FORMAT_SVX },
   { "paf",      SF_ENDIAN_BIG | SF_FORMAT_PAF },

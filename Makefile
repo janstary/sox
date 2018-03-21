@@ -24,8 +24,7 @@ FORMAT_SRCS = \
 	hcom.c htk.c ima-fmt.c ima_rw.c ima_rw.h \
 	maud.c nulfile.c prc.c raw.c raw.h raw-fmt.c \
 	sf.c skelform.c smp.c sounder.c soundtool.c sox_i.h sox-fmt.c sphere.c \
-	tx16w.c voc.c vox.c vox.h vox-fmt.c wav.c wavpack.c wve.c w64.c \
-	xa.c xi.c \
+	tx16w.c voc.c vox.c vox.h vox-fmt.c wav.c wavpack.c wve.c w64.c xa.c \
 	al-fmt.c la-fmt.c ul-fmt.c lu-fmt.c \
 	s1-fmt.c s2-fmt.c s3-fmt.c s4-fmt.c \
 	u1-fmt.c u2-fmt.c u3-fmt.c u4-fmt.c
@@ -63,7 +62,7 @@ EXAMPLE_SRCS = \
 
 EXTERNAL_SRCS  = amr-nb.c amr-wb.c amr.h flac.c gsm.c ladspa.h ladspa.c lpc10.c
 EXTERNAL_SRCS += mp3.c mp3-util.h opus.c speexdsp.c spectrogram.c vorbis.c
-EXTERNAL_SRCS += sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c
+EXTERNAL_SRCS += sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c xi.c
 EXTERNAL_SRCS += alsa.c ao.c coreaudio.c oss.c pulseaudio.c sndio.c sunaudio.c
 
 HAVESRCS = \
@@ -114,8 +113,7 @@ FORMAT_OBJS = \
 	hcom.o htk.o ima-fmt.o ima_rw.o \
 	maud.o nulfile.o prc.o raw.o raw-fmt.o \
 	sf.o skelform.o smp.o sounder.o soundtool.o sox-fmt.o sphere.o \
-	tx16w.o voc.o vox.o vox-fmt.o wav.o wavpack.o wve.o w64.o \
-	xa.o xi.o \
+	tx16w.o voc.o vox.o vox-fmt.o wav.o wavpack.o wve.o w64.o xa.o \
 	al-fmt.o la-fmt.o ul-fmt.o lu-fmt.o \
 	s1-fmt.o s2-fmt.o s3-fmt.o s4-fmt.o \
 	u1-fmt.o u2-fmt.o u3-fmt.o u4-fmt.o
@@ -173,10 +171,10 @@ pdf:  $(PDFS)
 ps:   $(POST)
 
 libsox.so: $(LIB_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) $(LDADD)
 
 sox $(EXAM): $(LIBS) $(BIN_OBJS)
-	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lm -lsox $(LDADD)
+	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox
 
 soxi play rec: sox
 	ln -sf sox soxi

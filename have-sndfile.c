@@ -14,8 +14,20 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <unistd.h>
+#include <sndfile.h>
+
 int
 main(void)
 {
-	return 1;
+	SNDFILE* sf;
+	SF_INFO info;
+
+	info.channels   = 2;
+	info.samplerate = 48000;
+	info.format     = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+	if (NULL == (sf = sf_open("/tmp/sox--XXXXXX.wav", SFM_WRITE, &info)))
+		return 1;
+	sf_close(sf);
+	return 0;
 }

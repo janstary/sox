@@ -540,28 +540,6 @@ AC_OPTIONAL_FORMAT(ao, AO, [AC_CHECK_HEADER(ao/ao.h, [AC_CHECK_LIB(ao, ao_play, 
 AC_OPTIONAL_FORMAT(pulseaudio, PULSEAUDIO, [AC_CHECK_HEADER(pulse/simple.h, [AC_CHECK_LIB(pulse, pa_simple_new, PULSEAUDIO_LIBS="$PULSEAUDIO_LIBS -lpulse -lpulse-simple",using_pulseaudio=no,"-lpulse-simple")], using_pulseaudio=no)])
 
 
-dnl When enable_dl_sndfile, do not let SOX_PATH_SNDFILE add libraries
-dnl to be linked in (since they will be dlopen()'ed instead).
-ac_sox_save_SNDFILE_LIBS="$SNDFILE_LIBS"
-SOX_PATH_SNDFILE(tmp_using_sndfile=$opt_default, tmp_using_sndfile=no)
-AC_ARG_ENABLE(dl_sndfile,
-	      AS_HELP_STRING([--enable-dl-sndfile], 
-			     [Dlopen sndfile instead of linking in.]),
-			     enable_dl_sndfile=$enableval, enable_dl_sndfile=no)
-if test "x$using_sndfile" = "xyes"; then
-  if test "x$using_libltdl" = "xyes" -a "x$enable_dl_sndfile" = "xyes"; then
-    AC_DEFINE(DL_SNDFILE, 1, [Define to dlopen() sndfile.]) 
-    dnl When enable_dl_sndfile, do not let SOX_PATH_SNDFILE add libraries
-    dnl to be linked in (since they will be dlopen()'ed instead).
-    SNDFILE_LIBS="$ac_sox_save_SNDFILE_LIBS"
-  else
-    enable_dl_sndfile="no"
-  fi
-fi
-AC_OPTIONAL_FORMAT(sndfile, SNDFILE, [using_sndfile=$tmp_using_sndfile])
-
-
-
 AC_OPTIONAL_FORMAT(oss, OSS, [AC_CHECK_HEADERS(sys/soundcard.h,,
       [AC_CHECK_HEADERS(machine/soundcard.h,
 	  [AC_CHECK_LIB(ossaudio, _oss_ioctl, OSS_LIBS="$OSS_LIBS -lossaudio")],

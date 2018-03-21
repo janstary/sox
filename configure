@@ -39,7 +39,7 @@ CFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings"
 CFLAGS="${CFLAGS} -Wno-unused-parameter"
 CFLAGS="${CFLAGS} -fPIC"
 LDFLAGS=
-LDADD=
+LDADD="-lm"
 #STATIC="-static"
 INSTALL="install"
 
@@ -178,11 +178,12 @@ runtest() {
 runtest strtonum	STRTONUM	|| true
 #runtest vasprintf	VASPRINTF	|| true
 
-runtest	flac		FLAC	-lFLAC	|| true
-runtest	gsm		GSM	-lgsm	|| true
-runtest	png		PNG	-lpng	|| true
+runtest flac		FLAC	-lFLAC		|| true
+runtest gsm		GSM	-lgsm		|| true
+runtest png		PNG	-lpng		|| true
+runtest sndfile		SNDFILE	-lsndfile	|| true
 
-runtest	sndio		SNDIO	-lsndio	|| true
+runtest sndio		SNDIO	-lsndio		|| true
 
 #if [ ${HAVE_ENDIAN} -eq 0 -a \
      #${HAVE_SYS_ENDIAN} -eq 0 -a \
@@ -248,6 +249,7 @@ cat << __HEREDOC__
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
 #define HAVE_PNG	${HAVE_PNG}
+#define HAVE_SNDFILE	${HAVE_SNDFILE}
 
 #define HAVE_SNDIO	${HAVE_SNDIO}
 
@@ -293,11 +295,12 @@ echo "config.h: written" 1>&3
 
 # --- Makefile.local -----------------------------------------
 
-[ ${HAVE_FLAC}       -eq 1 ] && LDADD="${LDADD} -lFLAC"
-[ ${HAVE_GSM}        -eq 1 ] && LDADD="${LDADD} -lgsm"
-[ ${HAVE_PNG}        -eq 1 ] && LDADD="${LDADD} -lpng"
+[ ${HAVE_FLAC}    -eq 1 ] && LDADD="${LDADD} -lFLAC"
+[ ${HAVE_GSM}     -eq 1 ] && LDADD="${LDADD} -lgsm"
+[ ${HAVE_PNG}     -eq 1 ] && LDADD="${LDADD} -lpng"
+[ ${HAVE_SNDFILE} -eq 1 ] && LDADD="${LDADD} -lsndfile"
 
-[ ${HAVE_SNDIO}      -eq 1 ] && LDADD="${LDADD} -lsndio"
+[ ${HAVE_SNDIO}   -eq 1 ] && LDADD="${LDADD} -lsndio"
 
 exec > Makefile.local
 
@@ -326,12 +329,14 @@ echo "Makefile.local: written" 1>&3
 # --- Makefile.external -----------------------------------------
 
 exec > Makefile.external
-echo '# External formats, effects and drivers recognize by ./configure'
+echo '# External formats, effects and drivers recognized by ./configure'
 
-[ ${HAVE_FLAC}  -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
-[ ${HAVE_GSM}   -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
-[ ${HAVE_PNG}   -eq 1 ] && echo "EXTERNAL_OBJS += spectrogram.o"
-[ ${HAVE_SNDIO} -eq 1 ] && echo "EXTERNAL_OBJS += sndio.o"
+[ ${HAVE_FLAC}    -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
+[ ${HAVE_GSM}     -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
+[ ${HAVE_PNG}     -eq 1 ] && echo "EXTERNAL_OBJS += spectrogram.o"
+[ ${HAVE_SNDFILE} -eq 1 ] && echo "EXTERNAL_OBJS += sndfile.o caf.o fap.o mat4.o mat5.o paf.o pvf.o sd2.o xi.o"
+
+[ ${HAVE_SNDIO}   -eq 1 ] && echo "EXTERNAL_OBJS += sndio.o"
 
 echo "Makefile.external: written" 1>&2
 echo "Makefile.external: written" 1>&3
