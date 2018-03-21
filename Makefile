@@ -58,7 +58,8 @@ EXAMPLE_SRCS = \
 	example5.c \
 	example6.c
 
-# FIXME sox_sample_test.c
+TEST_SRCS = \
+	test-sample-conversion.c
 
 EXTERNAL_SRCS  = amr-nb.c amr-wb.c amr.h flac.c gsm.c ladspa.h ladspa.c lpc10.c
 EXTERNAL_SRCS += mp3.c mp3-util.h opus.c speexdsp.c spectrogram.c vorbis.c
@@ -94,15 +95,15 @@ HAVESRCS = \
 	have-sunaudio.c
 
 SRCS = \
-	$(UTIL_SRC)	\
-	$(FORMAT_SRCS)	\
-	$(EFFECT_SRCS)	\
-	$(EXAMPLE_SRCS)	\
-	$(EXTERNAL_SRCS)
+	$(UTIL_SRC)		\
+	$(FORMAT_SRCS)		\
+	$(EFFECT_SRCS)		\
+	$(EXTERNAL_SRCS)	\
+	$(EXAMPLE_SRCS)		\
+	$(TEST_SRCS)
 
 COMPAT_OBJS = \
 	compat-strtonum.o
-
 
 FORMAT_OBJS = \
 	8svx.o adpcm.o adpcms.o \
@@ -176,6 +177,11 @@ libsox.so: $(LIB_OBJS)
 sox: $(LIBS) $(BIN_OBJS)
 	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox
 
+soxi play rec: sox
+	ln -sf sox soxi
+	ln -sf sox play
+	ln -sf sox rec
+
 example0: example0.c
 	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ $< -lsox
 
@@ -197,13 +203,10 @@ example5: example5.c $(LIBS)
 example6: example6.c $(LIBS)
 	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ $< -lsox
 
-soxi play rec: sox
-	ln -sf sox soxi
-	ln -sf sox play
-	ln -sf sox rec
+test-sample-convesion: test-sample-conversion.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 include Makefile.depend
-
 
 .SUFFIXES: .c .o
 .SUFFIXES: .1 .3 .7 .html .pdf .ps .txt
@@ -240,6 +243,12 @@ install: all
 	install -d $(MANDIR)/man3 && install $(MAN3) $(MANDIR)/man3
 	install -d $(MANDIR)/man7 && install $(MAN7) $(MANDIR)/man7
 
+test: test-sample-conversion test-file-conversion
+	./test-sample-conversion
+	./test-file-conversion
+	#test-effect
+	#test-comments
+
 uninstall:
 	cd $(BINDIR)      && rm -f $(BINS)
 	cd $(LIBDIR)      && rm -f $(LIBS)
@@ -273,12 +282,6 @@ depend: config.h
 .PHONY: install
 .PHONY: clean distclean depend
 
-# These are the remnants of the old Makefile.am:
-#
 # FIXME Make sure we export the right symbols
 #-export-symbols-regex '^(sox_.*|lsx_(check_read_params|(close|open)_dllibrary|(debug(_more|_most)?|fail|report|warn)_impl|eof|fail_errno|filelength|find_(enum_(text|value)|file_extension)|getopt(_init)?|lpc10_(create_(de|en)coder_state|(de|en)code)|raw(read|write)|read(_b_buf|buf|chars)|realloc|rewind|seeki|sigfigs3p?|strcasecmp|tell|unreadb|write(b|_b_buf|buf|s)))$$'
 
-# FIXME
-#tests.sh testall.sh test-comments
-#$(srcdir)/tests.sh --bindir=${bindir} --builddir=${builddir} --srcdir=${srcdir}
-#$(srcdir)/testall.sh --bindir=${bindir} --srcdir=${srcdir}

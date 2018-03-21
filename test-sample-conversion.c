@@ -15,10 +15,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifdef NDEBUG /* Enable assert always. */
-#undef NDEBUG /* Must undef above assert.h or other that might include it. */
+#ifdef NDEBUG
+#undef NDEBUG
 #endif
+
 #include <assert.h>
+#include <math.h>
 #include "sox.h"
 
 #define TEST_UINT(bits) \
@@ -137,6 +139,7 @@
   int##bits##_2 = SOX_SAMPLE_TO_SIGNED(bits,sample, clips); \
   assert(int##bits##_2 == int##bits && --clips == 0);
 
+/*
 #if defined __GNUC__
   #pragma GCC system_header
 #elif defined __SUNPRO_CC
@@ -144,6 +147,7 @@
 #elif defined _MSC_VER
   #pragma warning(push, 1)
 #endif
+*/
 
 int main()
 {
@@ -196,8 +200,8 @@ int main()
   return 0;
 }
 
+/*
 #if defined __SUNPRO_CC
-  #pragma enable_warn
-#elif defined _MSC_VER
-  #pragma warning(pop)
+#pragma enable_warn
 #endif
+*/
