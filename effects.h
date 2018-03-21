@@ -13,8 +13,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/* FIXME: generate this list automatically */
-
   EFFECT(allpass)
   EFFECT(band)
   EFFECT(bandpass)
@@ -45,7 +43,7 @@
   EFFECT(highpass)
   EFFECT(hilbert)
   EFFECT(input)
-#ifdef HAVE_LADSPA_H
+#if HAVE_LADSPA
   EFFECT(ladspa)
 #endif
   EFFECT(loudness)
@@ -68,11 +66,11 @@
   EFFECT(riaa)
   EFFECT(silence)
   EFFECT(sinc)
-#ifdef HAVE_PNG
+#if HAVE_PNG && HAVE_ZLIB
   EFFECT(spectrogram)
 #endif
   EFFECT(speed)
-#ifdef HAVE_SPEEXDSP
+#if HAVE_SPEEXDSP
   EFFECT(speexdsp)
 #endif
   EFFECT(splice)

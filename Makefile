@@ -37,7 +37,7 @@ EFFECT_SRCS = \
 	effects.c effects.h effects_i.c effects_i_dsp.c \
 	fade.c fft4g.c fft4g.h fifo.h fir.c firfit.c flanger.c \
 	gain.c hilbert.c input.c \
-	ladspa.h ladspa.c loudness.c \
+	loudness.c \
 	mcompand.c mcompand_xover.h \
 	noiseprof.c noisered.c noisered.h \
 	output.c overdrive.c pad.c phaser.c \
@@ -52,7 +52,7 @@ EFFECT_SRCS = \
 # The third line is formats supported by libsndfile if we have it.
 # The last line is various audio drivers: typically we have one.
 EXTERNAL_SRCS = \
-	amr-nb.c amr-wb.c amr.h flac.c gsm.c lpc10.c \
+	amr-nb.c amr-wb.c amr.h flac.c gsm.c ladspa.h ladspa.c lpc10.c \
 	mp3.c opus.c speexdsp.c spectrogram.c vorbis.c \
 	sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c \
 	alsa.c ao.c coreaudio.c oss.c pulseaudio.c sndio.c sunaudio.c
@@ -66,10 +66,43 @@ EXTERNAL_SRCS = \
 # example5.c
 # example6.c
 
-TESTSRCS	= test-strtonum.c
-SRCS		= $(FORMAT_SRCS) $(EFFECT_SRCS) $(DRIVER_SRCS)
+HAVESRCS = \
+	have-strtonum.c		\
+				\
+	have-amrnb.c		\
+	have-amrwb.c		\
+	have-flac.c		\
+	have-gsm.c		\
+	have-lpc10.c		\
+	have-magic.c		\
+	have-mp3.c		\
+	have-opus.c		\
+	have-png.c		\
+	have-sndfile.c		\
+	have-vorbis.c		\
+	have-wavpack.c		\
+	have-zlib.c		\
+				\
+	have-ladspa.c		\
+	have-speexdsp.c		\
+				\
+	have-alsa.c		\
+	have-ao.c		\
+	have-coreaudio.c	\
+	have-oss.c		\
+	have-pulseaudio.c	\
+	have-sndio.c		\
+	have-sunaudio.c
 
-COMPAT_OBJS	= compat-strtonum.o
+
+
+SRCS = \
+	$(FORMAT_SRCS)	\
+	$(EFFECT_SRCS)	\
+	$(EXTERNAL_SRCS)
+
+COMPAT_OBJS = \
+	compat-strtonum.o
 
 
 FORMAT_OBJS = \
@@ -96,7 +129,7 @@ EFFECT_OBJS = \
 	effects.o effects_i.o effects_i_dsp.o \
 	fade.o fft4g.o fir.o firfit.o flanger.o \
 	gain.o hilbert.o input.o \
-	ladspa.o loudness.o \
+	loudness.o \
 	mcompand.o \
 	noiseprof.o noisered.o \
 	output.o overdrive.o pad.o phaser.o \
@@ -127,7 +160,7 @@ HTML =	sox.html soxi.html soxformat.html libsox.html
 TXTS =	sox.txt soxi.txt soxformat.txt libsox.txt
 PDFS =	sox.pdf soxi.pdf soxformat.pdf libsox.pdf
 POST =	sox.ps soxi.ps soxformat.ps libsox.ps
-DIST =	README LICENSE.GPL LICENSE.LGPL $(SRCS) $(TESTSRCS) $(HDRS) $(MANS)
+DIST =	README LICENSE.GPL LICENSE.LGPL $(SRCS) $(HAVESRCS) $(HDRS) $(MANS)
 #EXTRA_DIST = sox.pc.in
 
 all: $(BINS) $(LIBS) $(HDRS) $(MANS) Makefile.local Makefile.external
@@ -202,7 +235,7 @@ clean:
 distclean: clean
 	rm -f Makefile.local Makefile.external config.*
 
-Makefile.local Makefile.external config.h: configure $(TESTSRCS)
+Makefile.local Makefile.external config.h: configure $(HAVESRCS)
 	@echo "$@ is out of date; please run ./configure"
 	@exit 1
 
