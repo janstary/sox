@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_LPC10
-
 /* libSoX lpc-10 format.
  *
  * Copyright 2007 Reuben Thomas <rrt@sc3d.org>
@@ -226,5 +223,3 @@ LSX_FORMAT_HANDLER(lpc10)
   };
   return &handler;
 }
-
-#endif

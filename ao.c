@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_AO
-
 /* libao player support for sox
  * (c) Reuben Thomas <rrt@sc3d.org> 2007
  *
@@ -135,5 +132,3 @@ LSX_FORMAT_HANDLER(ao)
   };
   return &handler;
 }
-
-#endif

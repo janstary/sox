@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_FLAC
-
 /* libSoX file format: FLAC   (c) 2006-7 robs@users.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it
@@ -603,5 +600,3 @@ LSX_FORMAT_HANDLER(flac)
   };
   return &handler;
 }
-
-#endif

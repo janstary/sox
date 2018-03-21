@@ -21,7 +21,7 @@ set -e
 [ -w config.h   ] && mv config.h config.h.old
 
 # Output file descriptors
-# 1: config.h, Makefile.local
+# 1: config.h, Makefile.local, Makefile.external
 # 2: original stderr
 # 3: config.log
 
@@ -39,10 +39,11 @@ CFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings"
 CFLAGS="${CFLAGS} -Wno-unused-parameter"
 CFLAGS="${CFLAGS} -fPIC"
 LDFLAGS=
-LDADD=
+LDADD="-lz" # FIXME HAVE_ZLIB
 #STATIC="-static"
 INSTALL="install"
 
+# system functions
 #HAVE_ENDIAN=
 #HAVE_ERR=
 #HAVE_NTOHL=
@@ -60,9 +61,20 @@ HAVE_STRTONUM=
 #HAVE_SYS_ENDIAN=
 #HAVE_VASPRINTF=
 
+# external formats
+HAVE_FLAC=
 HAVE_GSM=
+HAVE_LPC10=
+HAVE_MAGIC=
+HAVE_PNG=
+HAVE_VORBIS=
 
+# audio drivers
+HAVE_ALSA=
+HAVE_COREAUDIO=
+HAVE_PULSEAUDIO=
 HAVE_SNDIO=
+HAVE_SUNAUDIO=
 
 if [ -r ./configure.local ]; then
 	echo "configure.local: reading..." 1>&2
@@ -152,7 +164,9 @@ runtest() {
 runtest strtonum	STRTONUM	|| true
 #runtest vasprintf	VASPRINTF	|| true
 
+runtest	flac		FLAC	-lFLAC	|| true
 runtest	gsm		GSM	-lgsm	|| true
+runtest	png		PNG	-lpng	|| true
 
 runtest	sndio		SNDIO	-lsndio	|| true
 
@@ -190,11 +204,6 @@ __HEREDOC__
 [ ${HAVE_STRTONUM}       -eq 0 ] && echo "#include <stdlib.h>"
 #[ ${HAVE_VASPRINTF}     -eq 0 ] && echo "#include <stdarg.h>"
 
-[ ${HAVE_GSM}            -eq 1 ] && echo "#include <gsm.h>"
-
-[ ${HAVE_SNDIO}          -eq 1 ] && echo "#include <sndio.h>"
-
-
 echo
 #[ ${HAVE_PATH_MAX} -eq 0 ] && echo "#define PATH_MAX 4096"
 #if [ ${HAVE_ENDIAN} -eq 0 -a ${HAVE_SYS_ENDIAN} -eq 0 ]; then
@@ -222,9 +231,11 @@ cat << __HEREDOC__
 #define HAVE_VASPRINTF ${HAVE_VASPRINTF}
 */
 
-#define HAVE_GSM ${HAVE_GSM}
+#define HAVE_FLAC	${HAVE_FLAC}
+#define HAVE_GSM	${HAVE_GSM}
+#define HAVE_PNG	${HAVE_PNG}
 
-#define HAVE_SNDIO ${HAVE_SNDIO}
+#define HAVE_SNDIO	${HAVE_SNDIO}
 
 __HEREDOC__
 
@@ -266,7 +277,13 @@ __HEREDOC__
 echo "config.h: written" 1>&2
 echo "config.h: written" 1>&3
 
-# --- tests for Makefile.local -----------------------------------------
+# --- Makefile.local -----------------------------------------
+
+[ ${HAVE_FLAC}       -eq 1 ] && LDADD="${LDADD} -lFLAC"
+[ ${HAVE_GSM}        -eq 1 ] && LDADD="${LDADD} -lgsm"
+[ ${HAVE_PNG}        -eq 1 ] && LDADD="${LDADD} -lpng"
+
+[ ${HAVE_SNDIO}      -eq 1 ] && LDADD="${LDADD} -lsndio"
 
 exec > Makefile.local
 
@@ -291,5 +308,18 @@ __HEREDOC__
 
 echo "Makefile.local: written" 1>&2
 echo "Makefile.local: written" 1>&3
+
+# --- Makefile.external -----------------------------------------
+
+exec > Makefile.external
+
+[ ${HAVE_FLAC}  -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
+[ ${HAVE_GSM}   -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
+[ ${HAVE_PNG}   -eq 1 ] && echo "EXTERNAL_OBJS += spectrogram.o"
+[ ${HAVE_SNDIO} -eq 1 ] && echo "EXTERNAL_OBJS += sndio.o"
+
+echo "Makefile.external: written" 1>&2
+echo "Makefile.external: written" 1>&3
+
 
 exit 0

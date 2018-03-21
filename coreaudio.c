@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_COREAUDIO
-
 /* AudioCore sound handler
  *
  * Copyright 2008 Chris Bagwell And Sundry Contributors
@@ -419,5 +416,3 @@ LSX_FORMAT_HANDLER(coreaudio)
   };
   return &handler;
 }
-
-#endif

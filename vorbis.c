@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_VORBIS
-
 /* libSoX Ogg Vorbis sound format handler
  * Copyright 2001, Stan Seibert <indigo@aztec.asu.edu>
  *
@@ -427,5 +424,3 @@ LSX_FORMAT_HANDLER(vorbis)
   };
   return &handler;
 }
-
-#endif

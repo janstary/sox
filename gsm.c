@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_GSM
-
 /* Copyright 1991, 1992, 1993 Guido van Rossum And Sundry Contributors.
  * This source code is freely redistributable and may be used for
  * any purpose.  This copyright notice must be maintained.
@@ -247,5 +244,3 @@ LSX_FORMAT_HANDLER(_gsm)
   };
   return &handler;
 }
-
-#endif

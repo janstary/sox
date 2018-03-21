@@ -1,6 +1,3 @@
-#include "config.h"
-#if HAVE_SUNAUDIO
-
 /* libSoX direct to Sun Audio Driver
  *
  * Added by Chris Bagwell (cbagwell@sprynet.com) on 2/26/96
@@ -521,5 +518,3 @@ LSX_FORMAT_HANDLER(sunau)
   };
   return &handler;
 }
-
-#endif
