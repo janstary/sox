@@ -54,7 +54,7 @@ voc.o: voc.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h g711.h a
 vox.o: vox.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h vox.h adpcms.h
 vox.o: vox.h
 vox-fmt.o: vox-fmt.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h adpcms.h vox.h
-wav.o: wav.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h ima_rw.h adpcm.h /usr/local/include/gsm.h
+wav.o: wav.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h ima_rw.h adpcm.h
 wavpack.o: wavpack.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 wve.o: wve.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 w64.o: w64.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
