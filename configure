@@ -39,11 +39,11 @@ CFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings"
 CFLAGS="${CFLAGS} -Wno-unused-parameter"
 CFLAGS="${CFLAGS} -fPIC"
 LDFLAGS=
-LDADD="-lz" # FIXME HAVE_ZLIB
+LDADD="-lz" # FIXME HAVE_ZLIB needed with HAVE_PNG for spectrogram
 #STATIC="-static"
 INSTALL="install"
 
-# system functions
+# functions
 #HAVE_ENDIAN=
 #HAVE_ERR=
 #HAVE_NTOHL=
@@ -61,20 +61,30 @@ HAVE_STRTONUM=
 #HAVE_SYS_ENDIAN=
 #HAVE_VASPRINTF=
 
-# external formats
+# formats
+HAVE_AMRNB=
+HAVE_AMRWB=
 HAVE_FLAC=
 HAVE_GSM=
 HAVE_LPC10=
 HAVE_MAGIC=
+HAVE_MP3=
+HAVE_OPUS=
 HAVE_PNG=
+HAVE_SNDFILE=
 HAVE_VORBIS=
+HAVE_WAVPACK=
+HAVE_ZLIB=
 
-# audio drivers
+# drivers
 HAVE_ALSA=
+HAVE_AO=
 HAVE_COREAUDIO=
+HAVE_OSS=
 HAVE_PULSEAUDIO=
 HAVE_SNDIO=
 HAVE_SUNAUDIO=
+
 
 if [ -r ./configure.local ]; then
 	echo "configure.local: reading..." 1>&2
