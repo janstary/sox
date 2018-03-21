@@ -230,10 +230,10 @@ uninstall:
 	cd $(MANDIR)/man7 && rm -f $(MAN7)
 
 clean:
-	rm -f $(BINS) $(LIBS) $(BIN_OBJS) $(LIB_OBJS)
+	rm -f $(BINS) $(LIBS) $(EXAM) $(BIN_OBJS) $(LIB_OBJS) $(EXTERNAL_OBJS)
 	rm -f $(HTML) $(TXTS) $(PDFS) $(POST)
-	rm -rf .dist *.dSYM *.core *~
-	rm -rf depend _depend
+	rm -rf .dist *.dSYM *.core *~ .*~
+	rm -rf depend _depend .depend
 
 distclean: clean
 	rm -f Makefile.local Makefile.external config.*

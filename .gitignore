@@ -1,4 +1,10 @@
+Makefile.external
+Makefile.local
+config.h
+config.h.old
 config.log
+config.log.old
+configure.local
 *.txt
 *.pdf
 *.html
