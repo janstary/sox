@@ -1,3 +1,4 @@
+# SoX's builtin formats and effects
 8svx.o: 8svx.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 adpcm.o: adpcm.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h adpcm.h
 adpcm.o: adpcm.h sox.h
@@ -141,3 +142,38 @@ trim.o: trim.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 upsample.o: upsample.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 vad.o: vad.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
 vol.o: vol.c sox_i.h soxomp.h config.h sox.h util.h xmalloc.h effects.h
+
+# external formats
+
+amr-nb.o: amr-nb.c amr.h
+amr-wb.o: amr-wb.c amr.h
+flac.o: flac.c
+gsm.o: gsm.c
+lpc10.o: lpc10.c
+mp3.o: mp3.c
+opus.o: opus.c
+spectrogram.o: spectrogram.c
+vorbis.o: vorbis.c
+sndfile.o: sndfile.c
+caf.o: caf.c
+fap.o: fap.c
+mat4.o: mat4.c
+mat5.o: mat5.c
+paf.o: paf.c
+pvf.o: pvf.c
+sd2.o: sd2.c
+
+# external effects
+
+ladspa.o: ladspa.h ladspa.c
+speexdsp.o: speexdsp.c
+
+# audio drivers
+
+alsa.o: alsa.c
+ao.o: ao.c
+coreaudio.o: coreaudio.c
+oss.o: oss.c
+pulseaudio.o: pulseaudio.c
+sndio.o: sndio.c
+sunaudio.o: sunaudio.c
