@@ -326,6 +326,7 @@ echo "Makefile.local: written" 1>&3
 # --- Makefile.external -----------------------------------------
 
 exec > Makefile.external
+echo '# External formats, effects and drivers recognize by ./configure'
 
 [ ${HAVE_FLAC}  -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
 [ ${HAVE_GSM}   -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
