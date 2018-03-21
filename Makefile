@@ -173,8 +173,29 @@ ps:   $(POST)
 libsox.so: $(LIB_OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) $(LDADD)
 
-sox $(EXAM): $(LIBS) $(BIN_OBJS)
-	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox
+sox: $(LIBS) $(BIN_OBJS)
+	$(CC) $(CFLAGS) -L. $(LDFLAGS) -o $@ sox.o -lsox
+
+example0: example0.c
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example1: example1.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example2: example2.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example3: example3.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example4: example4.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example5: example5.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
+
+example6: example6.c $(LIBS)
+	$(CC) $(CFLAGS) -L. -o $@ $< -lsox
 
 soxi play rec: sox
 	ln -sf sox soxi
