@@ -39,7 +39,7 @@ CFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings"
 CFLAGS="${CFLAGS} -Wno-unused-parameter"
 CFLAGS="${CFLAGS} -fPIC"
 LDFLAGS=
-LDADD="-lz" # FIXME HAVE_ZLIB needed with HAVE_PNG for spectrogram
+LDADD=
 #STATIC="-static"
 INSTALL="install"
 
