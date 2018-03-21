@@ -2,155 +2,60 @@ VERSION	= 14.4.3
 
 include Makefile.local
 
-SRCS =	8svx.c		\
-	adpcm.c		\
-	adpcms.c	\
-	aifc-fmt.c	\
-	aiff-fmt.c	\
-	aiff.c	\
-	al-fmt.c	\
-	alsa.c	\
-	amr-nb.c	\
-	amr-wb.c	\
-	ao.c	\
-	au.c	\
-	avr.c	\
-	bend.c	\
-	biquad.c	\
-	biquads.c	\
-	caf.c	\
-	cdr.c	\
-	chorus.c	\
-	compand.c	\
-	compandt.c	\
-	contrast.c	\
-	coreaudio.c	\
-	cvsd-fmt.c	\
-	cvsd.c	\
-	dat.c	\
-	dcshift.c	\
-	delay.c	\
-	dft_filter.c	\
-	dither.c	\
-	divide.c	\
-	downsample.c	\
-	dvms-fmt.c	\
-	earwax.c	\
-	echo.c	\
-	echos.c	\
-	effects.c	\
-	effects_i.c	\
-	effects_i_dsp.c	\
-	f4-fmt.c	\
-	f8-fmt.c	\
-	fade.c	\
-	fap.c	\
-	fft4g.c	\
-	fir.c	\
-	firfit.c	\
-	flac.c	\
-	flanger.c	\
-	formats.c	\
-	formats_i.c	\
-	g711.c	\
-	g721.c	\
-	g723_24.c	\
-	g723_40.c	\
-	g72x.c	\
-	gain.c	\
+UTIL_SRCS =		\
 	getopt.c	\
-	gsm.c	\
-	gsrt.c	\
-	hcom.c	\
-	hilbert.c	\
-	htk.c	\
-	ima-fmt.c	\
-	ima_rw.c	\
-	input.c	\
-	la-fmt.c	\
-	ladspa.c	\
+	util.c		\
+	util.h		\
 	libsox.c	\
 	libsox_i.c	\
-	loudness.c	\
-	lpc10.c	\
-	lu-fmt.c	\
-	mat4.c	\
-	mat5.c	\
-	maud.c	\
-	mcompand.c	\
-	mp3.c	\
-	noiseprof.c	\
-	noisered.c	\
-	nulfile.c	\
-	opus.c	\
-	oss.c	\
-	output.c	\
-	overdrive.c	\
-	pad.c	\
-	paf.c	\
-	phaser.c	\
-	prc.c	\
-	pulseaudio.c	\
-	pvf.c	\
-	rate.c	\
-	raw-fmt.c	\
-	raw.c	\
-	remix.c	\
-	repeat.c	\
-	reverb.c	\
-	reverse.c	\
-	s1-fmt.c	\
-	s2-fmt.c	\
-	s3-fmt.c	\
-	s4-fmt.c	\
-	sd2.c	\
-	sf.c	\
-	silence.c	\
-	sinc.c	\
-	skeleff.c	\
-	skelform.c	\
-	smp.c	\
-	sndfile.c	\
-	sndio.c	\
-	sounder.c	\
-	soundtool.c	\
-	sox-fmt.c	\
-	sox.c	\
-	spectrogram.c	\
-	speed.c	\
-	speexdsp.c	\
-	sphere.c	\
-	splice.c	\
-	stat.c	\
-	stats.c	\
-	stretch.c	\
-	sunaudio.c	\
-	swap.c	\
-	synth.c	\
-	tempo.c	\
-	tremolo.c	\
-	trim.c	\
-	tx16w.c	\
-	u1-fmt.c	\
-	u2-fmt.c	\
-	u3-fmt.c	\
-	u4-fmt.c	\
-	ul-fmt.c	\
-	upsample.c	\
-	util.c	\
-	vad.c	\
-	voc.c	\
-	vol.c	\
-	vorbis.c	\
-	vox-fmt.c	\
-	vox.c	\
-	w64.c	\
-	wav.c	\
-	wavpack.c	\
-	wve.c	\
-	xa.c	\
-	xi.c	\
-	xmalloc.c
+	sox.c		\
+	soxomp.h	\
+	xmalloc.c	\
+	xmalloc.h
+
+FORMAT_SRCS = \
+	8svx.c adpcm.c adpcm.h adpcms.c adpcms.h \
+	aifc-fmt.c aiff.c aiff.h aiff-fmt.c au.c avr.c \
+	cdr.c cvsd.c cvsd.h cvsdfilt.h cvsd-fmt.c dat.c dvms-fmt.c \
+	f4-fmt.c f8-fmt.c formats.c formats.h formats_i.c \
+	g711.c g711.h g721.c g723_24.c g723_40.c g72x.c g72x.h gsrt.c \
+	hcom.c htk.c ima-fmt.c ima_rw.c ima_rw.h \
+	maud.c nulfile.c prc.c raw.c raw.h raw-fmt.c \
+	sf.c skelform.c smp.c sounder.c soundtool.c sox_i.h sox-fmt.c sphere.c \
+	tx16w.c voc.c vox.c vox.h vox-fmt.c wav.c wavpack.c wve.c w64.c \
+	xa.c xi.c \
+	al-fmt.c la-fmt.c ul-fmt.c lu-fmt.c \
+	s1-fmt.c s2-fmt.c s3-fmt.c s4-fmt.c \
+	u1-fmt.c u2-fmt.c u3-fmt.c u4-fmt.c
+
+EFFECT_SRCS = \
+	band.h bend.c biquad.c biquad.h biquads.c \
+	chorus.c compand.c compandt.c compandt.h contrast.c \
+	dcshift.c delay.c dft_filter.c dft_filter.h \
+	dither.c dither.h divide.c downsample.c \
+	earwax.c echo.c echos.c \
+	effects.c effects.h effects_i.c effects_i_dsp.c \
+	fade.c fft4g.c fft4g.h fifo.h fir.c firfit.c flanger.c \
+	gain.c hilbert.c input.c \
+	ladspa.h ladspa.c loudness.c \
+	mcompand.c mcompand_xover.h \
+	noiseprof.c noisered.c noisered.h \
+	output.c overdrive.c pad.c phaser.c \
+	rate.c rate_filters.h rate_half_fir.h rate_poly_fir0.h rate_poly_fir.h \
+	remix.c repeat.c reverb.c reverse.c \
+	silence.c sinc.c skeleff.c speed.c splice.c \
+	stat.c stats.c stretch.c swap.c synth.c \
+	tempo.c tremolo.c trim.c upsample.c \
+	vad.c vol.c
+
+# The first two lines are formats supported by external libraries.
+# The third line is formats supported by libsndfile if we have it.
+# The last line is various audio drivers: typically we have one.
+EXTERNAL_SRCS = \
+	amr-nb.c amr-wb.c amr.h flac.c gsm.c lpc10.c \
+	mp3.c opus.c speexdsp.c spectrogram.c vorbis.c \
+	sndfile.c caf.c fap.c mat4.c mat5.c paf.c pvf.c sd2.c \
+	alsa.c ao.c coreaudio.c oss.c pulseaudio.c sndio.c sunaudio.c
 
 # sox_sample_test.c
 # example0.c
@@ -162,299 +67,54 @@ SRCS =	8svx.c		\
 # example6.c
 
 TESTSRCS	= test-strtonum.c
+SRCS		= $(FORMAT_SRCS) $(EFFECT_SRCS) $(DRIVER_SRCS)
 
 COMPAT_OBJS	= compat-strtonum.o
 
-# These are all the objects, but we don't link to anythong optional yet
-# Let OBJS be just SoX itself for now
-ALLOBJS = \
-	8svx.o		\
-	adpcm.o		\
-	adpcms.o	\
-	aifc-fmt.o	\
-	aiff-fmt.o	\
-	aiff.o	\
-	al-fmt.o	\
-	alsa.o	\
-	amr-nb.o	\
-	amr-wb.o	\
-	ao.o	\
-	au.o	\
-	avr.o	\
-	bend.o	\
-	biquad.o	\
-	biquads.o	\
-	caf.o	\
-	cdr.o	\
-	chorus.o	\
-	compand.o	\
-	compandt.o	\
-	contrast.o	\
-	coreaudio.o	\
-	cvsd-fmt.o	\
-	cvsd.o	\
-	dat.o	\
-	dcshift.o	\
-	delay.o	\
-	dft_filter.o	\
-	dither.o	\
-	divide.o	\
-	downsample.o	\
-	dvms-fmt.o	\
-	earwax.o	\
-	echo.o	\
-	echos.o	\
-	effects.o	\
-	effects_i.o	\
-	effects_i_dsp.o	\
-	f4-fmt.o	\
-	f8-fmt.o	\
-	fade.o	\
-	fap.o	\
-	fft4g.o	\
-	fir.o	\
-	firfit.o	\
-	flac.o	\
-	flanger.o	\
-	formats.o	\
-	formats_i.o	\
-	g711.o	\
-	g721.o	\
-	g723_24.o	\
-	g723_40.o	\
-	g72x.o	\
-	gain.o	\
-	getopt.o	\
-	gsm.o	\
-	gsrt.o	\
-	hcom.o	\
-	hilbert.o	\
-	htk.o	\
-	ima-fmt.o	\
-	ima_rw.o	\
-	input.o	\
-	la-fmt.o	\
-	ladspa.o	\
-	loudness.o	\
-	lpc10.o	\
-	lu-fmt.o	\
-	mat4.o	\
-	mat5.o	\
-	maud.o	\
-	mcompand.o	\
-	mp3.o	\
-	noiseprof.o	\
-	noisered.o	\
-	nulfile.o	\
-	opus.o	\
-	oss.o	\
-	output.o	\
-	overdrive.o	\
-	pad.o	\
-	paf.o	\
-	phaser.o	\
-	prc.o	\
-	pulseaudio.o	\
-	pvf.o	\
-	rate.o	\
-	raw-fmt.o	\
-	raw.o	\
-	remix.o	\
-	repeat.o	\
-	reverb.o	\
-	reverse.o	\
-	s1-fmt.o	\
-	s2-fmt.o	\
-	s3-fmt.o	\
-	s4-fmt.o	\
-	sd2.o	\
-	sf.o	\
-	silence.o	\
-	sinc.o	\
-	skeleff.o	\
-	skelform.o	\
-	smp.o	\
-	sndfile.o	\
-	sndio.o	\
-	sounder.o	\
-	soundtool.o	\
-	sox-fmt.o	\
-	spectrogram.o	\
-	speed.o	\
-	speexdsp.o	\
-	sphere.o	\
-	splice.o	\
-	stat.o	\
-	stats.o	\
-	stretch.o	\
-	sunaudio.o	\
-	swap.o	\
-	synth.o	\
-	tempo.o	\
-	tremolo.o	\
-	trim.o	\
-	tx16w.o	\
-	u1-fmt.o	\
-	u2-fmt.o	\
-	u3-fmt.o	\
-	u4-fmt.o	\
-	ul-fmt.o	\
-	upsample.o	\
-	util.o	\
-	vad.o	\
-	voc.o	\
-	vol.o	\
-	vorbis.o	\
-	vox-fmt.o	\
-	vox.o	\
-	w64.o	\
-	wav.o	\
-	wavpack.o	\
-	wve.o	\
-	xa.o	\
-	xi.o	\
-	xmalloc.o
 
-OBJS = \
-	8svx.o		\
-	adpcm.o		\
-	adpcms.o	\
-	aifc-fmt.o	\
-	aiff-fmt.o	\
-	aiff.o	\
-	al-fmt.o	\
-	au.o	\
-	avr.o	\
-	bend.o	\
-	biquad.o	\
-	biquads.o	\
-	caf.o	\
-	cdr.o	\
-	chorus.o	\
-	compand.o	\
-	compandt.o	\
-	contrast.o	\
-	cvsd-fmt.o	\
-	cvsd.o	\
-	dat.o	\
-	dcshift.o	\
-	delay.o	\
-	dft_filter.o	\
-	dither.o	\
-	divide.o	\
-	downsample.o	\
-	dvms-fmt.o	\
-	earwax.o	\
-	echo.o	\
-	echos.o	\
-	effects.o	\
-	effects_i.o	\
-	effects_i_dsp.o	\
-	f4-fmt.o	\
-	f8-fmt.o	\
-	fade.o	\
-	fap.o	\
-	fft4g.o	\
-	fir.o	\
-	firfit.o	\
-	flanger.o	\
-	formats.o	\
-	formats_i.o	\
-	g711.o	\
-	g721.o	\
-	g723_24.o	\
-	g723_40.o	\
-	g72x.o	\
-	gain.o	\
-	getopt.o	\
-	gsrt.o	\
-	gsm.o	\
-	hcom.o	\
-	hilbert.o	\
-	htk.o	\
-	ima-fmt.o	\
-	ima_rw.o	\
-	input.o	\
-	la-fmt.o	\
-	loudness.o	\
-	lu-fmt.o	\
-	mat4.o	\
-	mat5.o	\
-	maud.o	\
-	mcompand.o	\
-	mp3.o	\
-	noiseprof.o	\
-	noisered.o	\
-	nulfile.o	\
-	output.o	\
-	overdrive.o	\
-	pad.o	\
-	paf.o	\
-	phaser.o	\
-	prc.o	\
-	pvf.o	\
-	rate.o	\
-	raw-fmt.o	\
-	raw.o	\
-	remix.o	\
-	repeat.o	\
-	reverb.o	\
-	reverse.o	\
-	s1-fmt.o	\
-	s2-fmt.o	\
-	s3-fmt.o	\
-	s4-fmt.o	\
-	sd2.o	\
-	sf.o	\
-	silence.o	\
-	sinc.o	\
-	skeleff.o	\
-	skelform.o	\
-	smp.o	\
-	sndfile.o	\
-	sndio.o	\
-	sounder.o	\
-	soundtool.o	\
-	sox-fmt.o	\
-	speed.o	\
-	speexdsp.o	\
-	sphere.o	\
-	splice.o	\
-	stat.o	\
-	stats.o	\
-	stretch.o	\
-	swap.o	\
-	synth.o	\
-	tempo.o	\
-	tremolo.o	\
-	trim.o	\
-	tx16w.o	\
-	u1-fmt.o	\
-	u2-fmt.o	\
-	u3-fmt.o	\
-	u4-fmt.o	\
-	ul-fmt.o	\
-	upsample.o	\
-	util.o	\
-	vad.o	\
-	voc.o	\
-	vol.o	\
-	vox-fmt.o	\
-	vox.o	\
-	w64.o	\
-	wav.o	\
-	wavpack.o	\
-	wve.o	\
-	xa.o	\
-	xi.o	\
-	xmalloc.o
+FORMAT_OBJS = \
+	8svx.o adpcm.o adpcms.o \
+	aifc-fmt.o aiff.o aiff-fmt.o au.o avr.o \
+	cdr.o cvsd.o cvsd-fmt.o dat.o dvms-fmt.o \
+	f4-fmt.o f8-fmt.o formats.o formats_i.o \
+	g711.o g721.o g723_24.o g723_40.o g72x.o gsrt.o \
+	hcom.o htk.o ima-fmt.o ima_rw.o \
+	maud.o nulfile.o prc.o raw.o raw-fmt.o \
+	sf.o skelform.o smp.o sounder.o soundtool.o sox-fmt.o sphere.o \
+	tx16w.o voc.o vox.o vox-fmt.o wav.o wavpack.o wve.o w64.o \
+	xa.o xi.o \
+	al-fmt.o la-fmt.o ul-fmt.o lu-fmt.o \
+	s1-fmt.o s2-fmt.o s3-fmt.o s4-fmt.o \
+	u1-fmt.o u2-fmt.o u3-fmt.o u4-fmt.o
 
-# FIXME Make a distinction between formats, effect, drivers etc SRCS/OBJS.
-# This information still lives in the unused Makefile.am
-# (Maybe also rename the source files in that way.)
+EFFECT_OBJS = \
+	bend.o biquad.o biquads.o \
+	chorus.o compand.o compandt.o contrast.o \
+	dcshift.o delay.o dft_filter.o \
+	dither.o divide.o downsample.o \
+	earwax.o echo.o echos.o \
+	effects.o effects_i.o effects_i_dsp.o \
+	fade.o fft4g.o fir.o firfit.o flanger.o \
+	gain.o hilbert.o input.o \
+	ladspa.o loudness.o \
+	mcompand.o \
+	noiseprof.o noisered.o \
+	output.o overdrive.o pad.o phaser.o \
+	rate.o \
+	remix.o repeat.o reverb.o reverse.o \
+	silence.o sinc.o skeleff.o speed.o splice.o \
+	stat.o stats.o stretch.o swap.o synth.o \
+	tempo.o tremolo.o trim.o upsample.o \
+	vad.o vol.o
 
-LIB_OBJS = $(OBJS) $(COMPAT_OBJS) libsox.o libsox_i.o
-BIN_OBJS = $(OBJS) $(COMPAT_OBJS) sox.o
+# Unlike FORMAT_OBJS and EFFECT_OBJS native to SoX,
+# EXTERNAL_OBJS is composed by ./configure into:
+include Makefile.external
+
+LIB_OBJS  = libsox.o libsox_i.o getopt.o util.o xmalloc.o
+LIB_OBJS += $(FORMAT_OBJS) $(EFFECT_OBJS) $(COMPAT_OBJS)
+LIB_OBJS += $(EXTERNAL_OBJS)
+BIN_OBJS  = sox.o
 
 BINS =	sox soxi play rec
 LIBS =	libsox.so
@@ -470,8 +130,7 @@ POST =	sox.ps soxi.ps soxformat.ps libsox.ps
 DIST =	README LICENSE.GPL LICENSE.LGPL $(SRCS) $(TESTSRCS) $(HDRS) $(MANS)
 #EXTRA_DIST = sox.pc.in
 
-
-all: $(BINS) $(LIBS) $(HDRS) $(MANS) Makefile.local
+all: $(BINS) $(LIBS) $(HDRS) $(MANS) Makefile.local Makefile.external
 
 html: $(HTML)
 txt:  $(TXTS)
@@ -479,10 +138,10 @@ pdf:  $(PDFS)
 ps:   $(POST)
 
 libsox.so: $(LIB_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm -lgsm -lsndio
+	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $(LIB_OBJS) -lm
 
-sox: $(BIN_OBJS) $(LIBS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -L. -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox
+sox: $(LIBS) $(BIN_OBJS)
+	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ sox.o -lsox $(LDADD)
 
 soxi play rec: sox
 	ln -sf sox soxi
@@ -536,14 +195,14 @@ uninstall:
 	cd $(MANDIR)/man7 && rm -f $(MAN7)
 
 clean:
-	rm -f $(BINS) $(LIBS) $(OBJS) $(BIN_OBJS) $(LIB_OBJS)
+	rm -f $(BINS) $(LIBS) $(BIN_OBJS) $(LIB_OBJS)
 	rm -f $(HTML) $(TXTS) $(PDFS) $(POST)
 	rm -rf .dist *.dSYM *.core *~
 
 distclean: clean
-	rm -f Makefile.local config.*
+	rm -f Makefile.local Makefile.external config.*
 
-Makefile.local config.h: configure $(TESTSRCS)
+Makefile.local Makefile.external config.h: configure $(TESTSRCS)
 	@echo "$@ is out of date; please run ./configure"
 	@exit 1
 
