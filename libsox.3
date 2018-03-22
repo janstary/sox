@@ -1,72 +1,40 @@
-'\" t
-'\" The line above instructs most `man' programs to invoke tbl
-'\"
-'\" Separate paragraphs; not the same as PP which resets indent level.
-.de SP
-.if t .sp .5
-.if n .sp
-..
-'\"
-'\" Replacement em-dash for nroff (default is too short).
-.ie n .ds m " - 
-.el .ds m \(em
-'\"
-'\" Placeholder macro for if longer nroff arrow is needed.
-.ds RA \(->
-'\"
-'\" Decimal point set slightly raised
-.if t .ds d \v'-.15m'.\v'+.15m'
-.if n .ds d .
-'\"
-'\" Enclosure macro for examples
-.de EX
-.SP
-.nf
-.ft CW
-..
-.de EE
-.ft R
-.SP
-.fi
-..
-.TH SoX 3 "February 19, 2011" "libsox" "Sound eXchange"
-.SH NAME
-libsox \- SoX, an audio file-format and effect library
-.SH SYNOPSIS
-.nf
-.B #include <sox.h>
-.P
-.B int sox_format_init(void);
-.P
-.B void sox_format_quit(void);
-.P
-.B sox_format_t sox_open_read(const char *\fIpath\fB, const sox_signalinfo_t *\fIinfo\fB, const char *\fIfiletype\fB);
-.P
-.B sox_format_t sox_open_write(sox_bool (*\fIoverwrite_permitted\fB)(const char *\fIfilename\fB), const char *\fIpath\fB, const sox_signalinfo_t *\fIinfo\fB, const char *\fIfiletype\fB, const char *\fIcomment\fB, sox_size_t \fIlength\fB, const sox_instrinfo_t *\fIinstr\fB, const sox_loopinfo_t *\fIloops\fB);
-.P
-.B sox_size_t sox_read(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
-.P
-.B sox_size_t sox_write(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
-.P
-.B int sox_close(sox_format_t \fIft\fB);
-.P
-.B int sox_seek(sox_format_t \fIft\fB, sox_size_t \fIoffset\fB, int \fIwhence\fB);
-.P
-.B sox_effect_handler_t const *sox_find_effect(char const *\fIname\fB);
-.P
-.B sox_effect_t *sox_create_effect(sox_effect_handler_t const *\fIeh\fB);
-.P
-.B int sox_effect_options(sox_effect_t *\fIeffp\fB, int \fIargc\fB, char * const \fIargv[]\fB);
-.P
-.B sox_effects_chain_t *sox_create_effects_chain(sox_encodinginfo_t const *\fIin_enc\fB, sox_encodinginfo_t const *\fIout_enc\fB);
-.P
-.B void sox_delete_effects_chain(sox_effects_chain_t *\fIecp\fB);
-.P
-.B int sox_add_effect(sox_effects_chaint_t *\fIchain\fB, sox_effect_t*\fIeffp\fB, sox_signalinfo_t *\fIin\fB, sox_signalinfo_t const *\fIout\fB);
-.P
-.B cc \fIfile.c\fB -o \fIfile \fB-lsox
-.fi
-.SH DESCRIPTION
+.Dd March 19, 2018
+.Dt LIBSOX 3
+.Os
+.Sh NAME
+.Nm libsox
+.Nd audio file-format and effect library
+.Sh SYNOPSIS
+.In sox.h
+.Ft int
+.Fn sox_format_init "void"
+.Ft void
+.Fn sox_format_quit "void"
+.Ft sox_format_t
+.Fn sox_open_read "const char *path" "const sox_signalinfo_t *info" "const char *filetype"
+.Ft sox_format_t
+.Fn sox_open_write(sox_bool (*\fIoverwrite_permitted\fB)(const char *\fIfilename\fB), const char *\fIpath\fB, const sox_signalinfo_t *\fIinfo\fB, const char *\fIfiletype\fB, const char *\fIcomment\fB, sox_size_t \fIlength\fB, const sox_instrinfo_t *\fIinstr\fB, const sox_loopinfo_t *\fIloops\fB);
+.Ft sox_size_t
+.Fn sox_read(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
+.Ft sox_size_t
+.Fn sox_write(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
+.Ft int
+.Fn sox_close(sox_format_t \fIft\fB);
+.Ft int
+.Fn sox_seek(sox_format_t \fIft\fB, sox_size_t \fIoffset\fB, int \fIwhence\fB);
+.Ft sox_effect_handler_t
+.Fn const *sox_find_effect(char const *\fIname\fB);
+.Ft sox_effect_t
+.Fn *sox_create_effect(sox_effect_handler_t const *\fIeh\fB);
+.Ft int
+.Fn sox_effect_options(sox_effect_t *\fIeffp\fB, int \fIargc\fB, char * const \fIargv[]\fB);
+.Ft sox_effects_chain_t
+.Fn *sox_create_effects_chain(sox_encodinginfo_t const *\fIin_enc\fB, sox_encodinginfo_t const *\fIout_enc\fB);
+.Ft void
+.Fn sox_delete_effects_chain(sox_effects_chain_t *\fIecp\fB);
+.Ft int
+.Fn sox_add_effect(sox_effects_chaint_t *\fIchain\fB, sox_effect_t*\fIeffp\fB, sox_signalinfo_t *\fIin\fB, sox_signalinfo_t const *\fIout\fB);
+.Sh DESCRIPTION
 .I libsox
 is a library of sound sample file format readers/writers and sound
 effects processors. It is mainly developed for use by SoX but is
@@ -164,8 +132,7 @@ for reading and writing.
 example0.c and example1.c are a good starting point to see how
 to write applications using libsox.  sox.c itself is also a good
 reference.
-
-.SH RETURN VALUE
+.Sh RETURN VALUE
 Upon successful completion \fBsox_open_input\fR and
 \fBsox_open_output\fR return an \fIsox_format_t\fR (which is a pointer).
 Otherwise, NULL is returned. TODO: Need a way to return reason for
@@ -185,9 +152,7 @@ relies on sox_warn to print information.
 .P
 Upon successful completion \fBsox_seek\fR returns 0. Otherwise, SOX_EOF
 is returned. TODO Need to set a global error and implement sox_tell.
-.SH ERRORS
-TODO
-.SH INTERNALS
+.Sh INTERNALS
 SoX's formats and effects operate with an internal sample format of
 signed 32-bit integer.  The data processing routines are called with
 buffers of these samples, and buffer sizes which refer to the number
@@ -216,7 +181,7 @@ Stereo data is stored with the left and right speaker data in
 successive samples.
 Quadraphonic data is stored in this order: 
 left front, right front, left rear, right rear.
-.SH FORMATS
+.Sh FORMATS
 A 
 .I format 
 is responsible for translating between sound sample files
@@ -285,7 +250,7 @@ fail.
 .TP 20
 stopwrite
 Fix up any file header, or do what needs to be done.
-.SH EFFECTS
+.Sh EFFECTS
 Each effect runs with one input and one output stream.
 An effect's implementation comprises six functions that may be called
 to the follow flow diagram:
@@ -351,37 +316,13 @@ is called to allow resources allocated by
 .I getopts
 to be released.
 See pad.c for an example.
-.SH LINKING
-The method of linking against libsox depends on how SoX was
-built on your system. For a static build, just link against the
-libraries as normal. For a dynamic build, you should use libtool to
-link with the correct linker flags. See the libtool manual for
-details; basically, you use it as:
-.EX
-   libtool \-\-mode=link gcc \-o prog /path/to/libsox.la
-.EE
-.SH BUGS
+.Sh BUGS
 This manual page is both incomplete and out of date.
-.SH SEE ALSO
-.BR sox (1),
-.BR soxformat (7)
-.SP
-example*.c in the SoX source distribution.
-.SH LICENSE
-Copyright 1998\-2011 by Chris Bagwell and SoX Contributors.
-.br
-Copyright 1991 Lance Norskog and Sundry Contributors.
-.SP
-This library is free software; you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation; either version 2.1, or (at your option)
-any later version.
-.SP
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-.SH AUTHORS
-Chris Bagwell (cbagwell@users.sourceforge.net).
-Other authors and contributors are listed in the ChangeLog file that
-is distributed with the source code.
+.Sh SEE ALSO
+.Xr sox 1 ,
+.Xr soxformat 7 ,
+.Pa example*.c
+.Sh AUTHORS
+.An -nosplit
+.An Lance Norskog ,
+.An Chris Bagwell Aq Mt cbagwell@users.sourceforge.net
