@@ -14,8 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <CoreAudio/CoreAudio.h>
+
 int
 main(void)
 {
-	return 1;
+	return 0;
 }
