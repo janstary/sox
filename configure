@@ -160,7 +160,7 @@ runtest() {
 	return 1
 }
 
-
+# functions
 #runtest dirent-namlen	DIRENT_NAMLEN	|| true
 #runtest be32toh		ENDIAN		|| true
 #runtest be32toh		SYS_ENDIAN	-DSYS_ENDIAN || true
@@ -178,12 +178,34 @@ runtest() {
 runtest strtonum	STRTONUM	|| true
 #runtest vasprintf	VASPRINTF	|| true
 
+# formats
+runtest amrnb		AMRNB			|| true
+runtest amrwb		AMRWB			|| true
 runtest flac		FLAC	-lFLAC		|| true
 runtest gsm		GSM	-lgsm		|| true
+runtest lpc10		LPC10			|| true
+runtest magic		MAGIC			|| true
+runtest mp3		MP3			|| true
+runtest opus		OPUS			|| true
 runtest png		PNG	-lpng		|| true
 runtest sndfile		SNDFILE	-lsndfile	|| true
+runtest voris		VORBIS			|| true
+runtest wavpack		WAVPACK			|| true
+runtest zlib		ZLIB			|| true
 
+# effects
+runtest ladspa		LADSPA			|| true
+runtest speexdsp	SPEEXDSP		|| true
+
+# drivers
+runtest alsa		ALSA			|| true
+runtest ao		AO			|| true
+runtest coreaudio	COREAUDIO		|| true
+runtest oss		OSS			|| true
+runtest pulseaudio	PULSEAUDIO		|| true
 runtest sndio		SNDIO	-lsndio		|| true
+runtest sunaudio	SUNAUDIO		|| true
+
 
 #if [ ${HAVE_ENDIAN} -eq 0 -a \
      #${HAVE_SYS_ENDIAN} -eq 0 -a \
@@ -246,12 +268,33 @@ cat << __HEREDOC__
 #define HAVE_VASPRINTF ${HAVE_VASPRINTF}
 */
 
+/* formats */
+#define HAVE_AMRNB	${HAVE_AMRNB}
+#define HAVE_AMRWB	${HAVE_AMRWB}
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
+#define HAVE_LPC10	${HAVE_LPC10}
+#define HAVE_MAGIC	${HAVE_MAGIC}
+#define HAVE_MP3	${HAVE_MP3}
+#define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
 #define HAVE_SNDFILE	${HAVE_SNDFILE}
+#define HAVE_VORBIS	${HAVE_VORBIS}
+#define HAVE_WAVPACK	${HAVE_WAVPACK}
+#define HAVE_ZLIB	${HAVE_ZLIB}
 
+/* effects */
+#define HAVE_LADSPA	${HAVE_LADSPA}
+#define HAVE_SPEEXDSP	${HAVE_SPEEXDSP}
+
+/* drivers */
+#define HAVE_ALSA	${HAVE_ALSA}
+#define HAVE_AO		${HAVE_AO}
+#define HAVE_COREAUDIO	${HAVE_COREAUDIO}
+#define HAVE_OSS	${HAVE_OSS}
+#define HAVE_PULSEAUDIO	${HAVE_PULSEAUDIO}
 #define HAVE_SNDIO	${HAVE_SNDIO}
+#define HAVE_SUNAUDIO	${HAVE_SUNAUDIO}
 
 __HEREDOC__
 
@@ -261,7 +304,6 @@ __HEREDOC__
 	#echo "extern	void	  warn(const char *, ...);"
 	#echo "extern	void	  warnx(const char *, ...);"
 #fi
-
 
 #if [ ${HAVE_PROGNAME} -eq 0 ]; then
 	#echo "extern 	const char *getprogname(void);"
@@ -295,12 +337,30 @@ echo "config.h: written" 1>&3
 
 # --- Makefile.local -----------------------------------------
 
-[ ${HAVE_FLAC}    -eq 1 ] && LDADD="${LDADD} -lFLAC"
-[ ${HAVE_GSM}     -eq 1 ] && LDADD="${LDADD} -lgsm"
-[ ${HAVE_PNG}     -eq 1 ] && LDADD="${LDADD} -lpng"
-[ ${HAVE_SNDFILE} -eq 1 ] && LDADD="${LDADD} -lsndfile"
+[ ${HAVE_AMRNB}      -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_AMRWB}      -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_FLAC}       -eq 1 ] && LDADD="${LDADD} -lFLAC"
+[ ${HAVE_GSM}        -eq 1 ] && LDADD="${LDADD} -lgsm"
+[ ${HAVE_LPC10}      -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_MAGIC}      -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_MP3}        -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_OPUS}       -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_PNG}        -eq 1 ] && LDADD="${LDADD} -lpng"
+[ ${HAVE_SNDFILE}    -eq 1 ] && LDADD="${LDADD} -lsndfile"
+[ ${HAVE_VORBIS}     -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_WAVPACK}    -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_ZLIB}       -eq 1 ] && LDADD="${LDADD} "
 
-[ ${HAVE_SNDIO}   -eq 1 ] && LDADD="${LDADD} -lsndio"
+[ ${HAVE_LADSPA}     -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_SPEEXDSP}   -eq 1 ] && LDADD="${LDADD} "
+
+[ ${HAVE_ALSA}       -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_AO}         -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_COREAUDIO}  -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_OSS}        -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_PULSEAUDIO} -eq 1 ] && LDADD="${LDADD} "
+[ ${HAVE_SNDIO}      -eq 1 ] && LDADD="${LDADD} -lsndio"
+[ ${HAVE_SUNAUDIO}   -eq 1 ] && LDADD="${LDADD} "
 
 exec > Makefile.local
 
@@ -331,15 +391,32 @@ echo "Makefile.local: written" 1>&3
 exec > Makefile.external
 echo '# External formats, effects and drivers recognized by ./configure'
 
-[ ${HAVE_FLAC}    -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
-[ ${HAVE_GSM}     -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
-[ ${HAVE_PNG}     -eq 1 ] && echo "EXTERNAL_OBJS += spectrogram.o"
-[ ${HAVE_SNDFILE} -eq 1 ] && echo "EXTERNAL_OBJS += sndfile.o caf.o fap.o mat4.o mat5.o paf.o pvf.o sd2.o xi.o"
+[ ${HAVE_AMRNB}      -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_AMRWB}      -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_FLAC}       -eq 1 ] && echo "EXTERNAL_OBJS += flac.o"
+[ ${HAVE_GSM}        -eq 1 ] && echo "EXTERNAL_OBJS += gsm.o"
+[ ${HAVE_LPC10}      -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_MAGIC}      -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_MP3}        -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_OPUS}       -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_PNG}        -eq 1 ] && echo "EXTERNAL_OBJS += spectrogram.o"
+[ ${HAVE_SNDFILE}    -eq 1 ] && echo "EXTERNAL_OBJS += sndfile.o caf.o fap.o mat4.o mat5.o paf.o pvf.o sd2.o xi.o"
+[ ${HAVE_VORBIS}     -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_WAVPACK}    -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_ZLIB}       -eq 1 ] && echo "EXTERNAL_OBJS += "
 
-[ ${HAVE_SNDIO}   -eq 1 ] && echo "EXTERNAL_OBJS += sndio.o"
+[ ${HAVE_LADSPA}     -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_SPEEXDSP}   -eq 1 ] && echo "EXTERNAL_OBJS += "
+
+[ ${HAVE_ALSA}       -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_AO}         -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_COREAUDIO}  -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_OSS}        -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_PULSEAUDIO} -eq 1 ] && echo "EXTERNAL_OBJS += "
+[ ${HAVE_SNDIO}      -eq 1 ] && echo "EXTERNAL_OBJS += sndio.o"
+[ ${HAVE_SUNAUDIO}   -eq 1 ] && echo "EXTERNAL_OBJS += "
 
 echo "Makefile.external: written" 1>&2
 echo "Makefile.external: written" 1>&3
-
 
 exit 0
