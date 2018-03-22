@@ -152,7 +152,7 @@ BINS  = sox soxi play rec
 EXAM  = example0 example1 example2 example3 example4 example5 example6
 LIBS  = libsox.so
 HDRS  = sox.h
-MAN1  = sox.1 soxi.1
+MAN1  = sox.1 soxi.1 play.1 rec.1
 MAN3  = libsox.3
 MAN7  = soxformat.7
 MANS  = $(MAN1) $(MAN3) $(MAN7)
@@ -181,6 +181,9 @@ soxi play rec: sox
 	ln -sf sox soxi
 	ln -sf sox play
 	ln -sf sox rec
+
+play.1 rec.1: sox.1
+	ln -sf sox.1 $@
 
 example0: example0.c
 	$(CC) $(CFLAGS) -L. $(LDFLAGS) -Wl,-rpath,$(LIBDIR) -o $@ $< -lsox
@@ -229,12 +232,6 @@ include Makefile.depend
 lint: $(MANS)
 	mandoc -Tlint -Wstyle $(MANS)
 
-#play.1 rec.1: sox.1
-
-#cd $(DESTDIR)$(mandir)/man1 && $(RM) play.1 && $(LN_S) sox.1 play.1
-#cd $(DESTDIR)$(mandir)/man1 && $(RM) rec.1 && $(LN_S) sox.1 rec.1
-#cd $(DESTDIR)$(mandir)/man7 && $(RM) soxeffect.7 && $(LN_S) ../man1/sox.1 soxeffect.7
-
 install: all
 	install -d $(BINDIR) && install -m 0555 $(BINS) $(BINDIR)
 	install -d $(LIBDIR) && install -m 0444 $(LIBS) $(LIBDIR)
@@ -259,7 +256,7 @@ uninstall:
 
 clean:
 	rm -f $(BINS) $(LIBS) $(EXAM) $(BIN_OBJS) $(LIB_OBJS) $(EXTERNAL_OBJS)
-	rm -f $(HTML) $(TXTS) $(PDFS) $(POST)
+	rm -f $(HTML) $(TXTS) $(PDFS) $(POST) play.1 rec.1
 	rm -rf .dist *.dSYM *.core *~ .*~
 	rm -rf depend _depend .depend
 

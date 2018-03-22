@@ -52,8 +52,8 @@ Long-time goals:
 
 * Keep SoX running on OpenBSD, FreeBSD, NetBSD, MacOS, Debian, Solaris.
 * Go through the other forks and cherry-pick new developments.
-* Rewrite `sox.1` and `soxi.1` to mdoc(7).
-* Document `libsox`.
+* Document `libsox`: `libsox.3` is incomplete and outdated.
+* Rewrite `sox.1` and `libsox.3` to mdoc(7).
 
 ## Installation
 
@@ -142,7 +142,7 @@ Depending on the `PREFIX` (which is `/usr/local` by default),
 you might need to `sudo make install` or `doas make install`.
 
 Note that `play`, `rec` and `soxi` are links to `sox`,
-and `play.1`, `rec.1` and `soxi.1` are links to `sox.1`.
+and `play.1` and `rec.1` are links to `sox.1`.
 
 ### test
 
