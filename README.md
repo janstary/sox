@@ -101,7 +101,7 @@ If these look different from what you expected,
 read `configure.local.example`, create `configure.local`,
 and run `./configure` again.
 
-The build system not use GNU autoconf. All modern operating systems
+The build system does not use GNU autoconf. All modern operating systems
 are now reasonably close to POSIX and do not need arcane shell magic
 any longer. If your system does need such magic, consider upgrading
 to reasonably modern POSIX-compliant tools rather than asking for
@@ -120,7 +120,7 @@ Please report any that turn out to be missing.
 Read `config.log`, which shows shows the compiler commands used
 to test the libraries installed on your system, and the standard
 output and standard error output these commands produce.
-Failues are most likely to happen if headers or libraries
+Failures are most likely to happen if headers or libraries
 are installed in unusual places or interfaces defined
 in unusual headers. You can also look at `config.h` and
 check that the `#define HAVE_*` lines match your expectations.
