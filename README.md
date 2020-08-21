@@ -14,16 +14,16 @@ some of which have been rotting there for more than a decade.
 
 These are the forks that I could find:
 
+* [Mans Rullgard](https://sourceforge.net/p/sox/code/ci/master/tree/): the most active nowadays
+* [Eric Wong](https://80x24.org/sox.git/):
+  active till [2015](https://80x24.org/sox.git/log/),
+  keeps a few fixes in [branches](https://80x24.org/sox.git/refs/heads)
 * [Chris Bagwell](https://github.com/cbagwell/sox):
   abandoned shortly after 14.4.2
 * [Ulrich Klauer](https://github.com/chirlu/sox/commits/master):
   inactive since 2013
-* [Eric Wong](https://80x24.org/sox.git/):
-  active till [2015](https://80x24.org/sox.git/log/),
-  keeps a few fixes in [branches](https://80x24.org/sox.git/refs/heads)
-* [Mans Rullgard](https://github.com/mansr/sox): the most active nowadays
 
-This is another fork of https://github.com/cbagwell/sox
+This is another fork of https://sourceforge.net/p/sox/code/ci/master/tree/
 which spawned the last oficial release.
 
 ## Goals
@@ -65,7 +65,7 @@ from the last official release (14.4.2).
 ### dependencies
 
 SoX optionally makes use of some external libraries to obtain support
-for additional file formats and/or effects.  Optional libraries should
+for additional audio formats.  Optional libraries should
 be installed before compiling SoX. These are the supported libraries
 and where to get them, in case your OS does not provide a package:
 
@@ -117,7 +117,7 @@ accompanied by a set of simple programs autodetecting the availability of
 For C functions that might not be present in the system,
 we provide autoconfiguration tests and `compat_*.c` implementations.
 Please report any that turn out to be missing.
-Read `config.log`, which shows shows the compiler commands used
+Read `config.log`, which shows the compiler commands used
 to test the libraries installed on your system, and the standard
 output and standard error output these commands produce.
 Failures are most likely to happen if headers or libraries
