@@ -21,10 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "soxconfig.h"
-#include "sox.h"
-#include "util.h"
-
+#include <sys/utsname.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <unistd.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -33,47 +35,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <time.h>
+#include <glob.h>
 
-#if defined(HAVE_GLOB_H)
-  #include <glob.h>
-#endif
+#include "config.h"
+#include "sox.h"
+#include "util.h"
 
-#ifdef HAVE_IO_H
+#if HAVE_IO
   #include <io.h>
 #endif
 
-#ifdef HAVE_SYS_TIME_H
-  #include <sys/time.h>
-#endif
 
 #ifdef HAVE_SYS_TIMEB_H
   #include <sys/timeb.h>
 #endif
 
-#ifdef HAVE_SYS_UTSNAME_H
-  #include <sys/utsname.h>
-#endif
 
-#ifdef HAVE_UNISTD_H
-  #include <unistd.h>
-#endif
-
-#ifdef HAVE_SYS_IOCTL_H
-  #include <sys/ioctl.h>
-#endif
-
-#ifdef HAVE_GETTIMEOFDAY
-  #define TIME_FRAC 1e6
-#else
-  #define timeval timeb
-  #define gettimeofday(a,b) ftime(a)
-  #define tv_sec time
-  #define tv_usec millitm
-  #define TIME_FRAC 1e3
-#endif
+#define TIME_FRAC 1e6
 
 #if !defined(HAVE_CONIO_H) && !defined(HAVE_TERMIOS_H) && (defined(_MSC_VER) || defined(__MINGW32__))
 #define HAVE_CONIO_H 1
@@ -1520,17 +1499,11 @@ static void open_output_file(void)
 
 static void setsig(int sig, void (*handler)(int))
 {
-#ifdef HAVE_SIGACTION
   struct sigaction sa;
-
   sa.sa_handler = handler;
   sigemptyset(&sa.sa_mask);
   sa.sa_flags = 0;
-
   sigaction(sig, &sa, NULL);
-#else
-  signal(sig, handler);
-#endif
 }
 
 static void sigint(int s)
@@ -1794,9 +1767,7 @@ static int process(void)
 
 static void display_SoX_version(FILE * file)
 {
-#if HAVE_SYS_UTSNAME_H
   struct utsname uts;
-#endif
   const sox_version_info_t* info = sox_version_info();
 
   fprintf(file, "%s:      SoX v%s%s%s\n",
@@ -1810,11 +1781,9 @@ static void display_SoX_version(FILE * file)
       fprintf(file, "time:     %s\n", info->time);
     if (info->distro)
       fprintf(file, "issue:    %s\n", info->distro);
-#if HAVE_SYS_UTSNAME_H
     if (!uname(&uts))
       fprintf(file, "uname:    %s %s %s %s %s\n", uts.sysname, uts.nodename,
           uts.release, uts.version, uts.machine);
-#endif
     if (info->compiler)
         fprintf(file, "compiler: %s\n", info->compiler);
     if (info->arch)
@@ -1966,9 +1935,7 @@ static void usage(char const * message)
 "--add-comment TEXT       Append output file comment",
 "--comment TEXT           Specify comment text for the output file",
 "--comment-file FILENAME  File containing comment text for the output file",
-#if HAVE_GLOB_H
 "--no-glob                Don't `glob' wildcard match the following filename",
-#endif
 ""};
 
   if (!(sox_globals.verbosity > 2)) {
@@ -2838,11 +2805,11 @@ int main(int argc, char **argv)
 
   if (0 != sox_basename(mybase, sizeof(mybase), myname))
   {
-    if (0 == lsx_strcasecmp(mybase, "play"))
+    if (0 == strcasecmp(mybase, "play"))
       sox_mode = sox_play;
-    else if (0 == lsx_strcasecmp(mybase, "rec"))
+    else if (0 == strcasecmp(mybase, "rec"))
       sox_mode = sox_rec;
-    else if (0 == lsx_strcasecmp(mybase, "soxi"))
+    else if (0 == strcasecmp(mybase, "soxi"))
       sox_mode = sox_soxi;
   }
 

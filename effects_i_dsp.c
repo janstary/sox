@@ -565,20 +565,18 @@ void lsx_plot_fir(double * h, int num_points, sox_rate_t rate, sox_plot_t type, 
   }
 }
 
-#if HAVE_FENV_H
-  #include <fenv.h>
-  #if defined FE_INVALID
-    #if HAVE_LRINT && LONG_MAX == 2147483647
-      #define lrint32 lrint
-    #elif defined __GNUC__ && defined __x86_64__
-      #define lrint32 lrint32
-      static __inline sox_int32_t lrint32(double input) {
-        sox_int32_t result;
-        __asm__ __volatile__("fistpl %0": "=m"(result): "t"(input): "st");
-        return result;
-      }
-    #endif
-  #endif
+#include <fenv.h>
+#if defined FE_INVALID
+#if HAVE_LRINT && LONG_MAX == 2147483647
+#define lrint32 lrint
+#elif defined __GNUC__ && defined __x86_64__
+#define lrint32 lrint32
+static __inline sox_int32_t lrint32(double input) {
+sox_int32_t result;
+__asm__ __volatile__("fistpl %0": "=m"(result): "t"(input): "st");
+return result;
+}
+#endif
 #endif
 
 #if defined lrint32

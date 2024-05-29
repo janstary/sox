@@ -1,0 +1,294 @@
+#!/bin/sh
+
+# Copyright (c) 2014-2021 Ingo Schwarze <schwarze@openbsd.org>
+# Copyright (c) 2024 Jan Starý <hans@stare.cz>
+
+set -e
+
+[ -w config.log ] && mv config.log config.log.old
+[ -w config.h   ] && mv config.h config.h.old
+
+# Output file descriptor usage:
+# 1 (stdout): config.h, Makefile.local
+# 2 (stderr): original stderr, usually to the console
+# 3: config.log
+
+exec 3> config.log
+echo "writing config.log"
+
+# default settings
+
+CC=cc
+CFLAGS=
+LDFLAGS=
+FATAL=0
+ADDOBJS=
+ADDLIBS=
+DEVOBJS=
+DEVLIBS=
+
+# standard library functions
+
+# optional external libraries
+HAVE_FLAC=
+HAVE_GSM=
+HAVE_MP3=
+HAVE_OGG=
+HAVE_OPUS=
+HAVE_PNG=
+HAVE_VORBIS=
+HAVE_WAVPACK=
+HAVE_ZLIB=
+
+# optional audio drivers
+HAVE_ALSA=
+HAVE_AO=
+HAVE_COREAUDIO=
+HAVE_OSS=
+HAVE_PORTAUDIO=
+HAVE_PULSEAUDIO=
+HAVE_SNDIO=
+HAVE_SUNAUDIO=
+
+PREFIX="/usr/local"
+BINDIR=
+MANDIR=
+
+INSTALL="install"
+LN="ln -sf"
+
+# manual settings?
+
+if [ -r ./configure.local ]; then
+	echo "reading configure.local" 1>&2
+	echo "reading configure.local" 1>&3
+	cat ./configure.local 1>&3
+	. ./configure.local
+else
+	echo "no configure.local: fully automatic configuration" 1>&2
+	echo "no configure.local: fully automatic configuration" 1>&3
+fi
+echo 1>&3
+
+# test functions
+
+# Check whether this HAVE_ setting is manually overridden.
+# If yes, use the override, if no, do not decide anything yet.
+# Arguments: test file name, test var name, manual value
+ismanual() {
+	[ -z "${3}" ] && return 1
+	echo "tested ${1}: HAVE_${2}=${3} (manual)" 1>&2
+	echo "tested ${1}: HAVE_${2}=${3} (manual)" 1>&3
+	echo 1>&3
+	return 0
+}
+
+# Run a single autoconfiguration test.
+# In case of success, enable the feature.
+# In case of failure, do not decide anything yet.
+# Arguments: test file name, test var name, additional CFLAGS
+singletest() {
+	n=${1}${3}
+	cat 1>&3 << __HEREDOC__
+testing ${n} ...
+${COMP} -o test-${1} test-${1}.c ${3}
+__HEREDOC__
+
+	if ${COMP} -o "test-${1}" "test-${1}.c" ${3} 1>&3 2>&3
+	then
+		echo "partial result of ${n}: ${CC} succeeded" 1>&3
+	else
+		echo "tested ${n}: no (compilation failed)" 1>&2
+		echo "result of ${n}: ${CC} failed with exit status $?" 1>&3
+		echo "result of compiling ${n}: no" 1>&3
+		echo 1>&3
+		return 1
+	fi
+
+	if ./test-${1} 1>&3 2>&3; then
+		echo "tested ${n}: yes" 1>&2
+		echo "result of running ${n}: yes" 1>&3
+		echo 1>&3
+		eval HAVE_${2}=1
+		rm "test-${1}"
+		return 0
+	else
+		echo "tested ${n}: no (execution failed)" 1>&2
+		echo "result of ${n}: execution failed with exit status $?" 1>&3
+		echo "result of running ${n}: no" 1>&3
+		echo 1>&3
+		rm "test-${1}"
+		return 1
+	fi
+}
+
+# Run a complete autoconfiguration test, including the check for
+# a manual override and disabling the feature on failure.
+# Arguments: test file name, test var name, additional CFLAGS
+# The final argument can optionally be repeated a second time.
+runtest() {
+	eval _manual=\${HAVE_${2}}
+	ismanual "${1}" "${2}" "${_manual}" && return 0
+	singletest "${1}" "${2}" "${3}" && return 0
+	[ -n "${4}" ] && singletest "${1}" "${2}" "${4}" && return 0
+	eval HAVE_${2}=0
+	return 1
+}
+
+# compiler options
+
+DEFCFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings -Wno-unused-parameter"
+
+if [ -n "${CFLAGS}" ]; then
+	COMP="${CC} ${CFLAGS} -Wno-unused -Werror"
+else
+	COMP="${CC} ${DEFCFLAGS} -Wno-unused -Werror"
+fi
+
+if [ -n "${CFLAGS}" ]; then
+	echo "CFLAGS specified manually:" 1>&3
+else
+	CFLAGS="${DEFCFLAGS}"
+fi
+
+echo "selected CFLAGS=\"${CFLAGS}\"" 1>&2
+echo "selected CFLAGS=\"${CFLAGS}\"" 1>&3
+echo 1>&3
+
+COMP="${CC} ${CFLAGS}"
+
+# detect library functions
+runtest err		ERR		|| true
+runtest ntohl		NTOHL		|| true
+
+# detect optional formats
+runtest flac	FLAC -lFLAC	|| true
+runtest gsm	GSM  -lgsm	|| true
+runtest png	PNG  -lpng	|| true
+runtest mp3	MP3		|| true
+runtest ogg	OGG		|| true
+runtest opus	OPUS		|| true
+runtest vorbis	VORBIS		|| true
+runtest wavpack	WAVPACK		|| true
+runtest zlib	ZLIB -lz	|| true
+
+# detect optional audio devices/drivers
+runtest alsa		ALSA					|| true
+runtest ao		AO					|| true
+runtest coreaudio	COREAUDIO -Wl,-framework,CoreAudio	|| true
+runtest oss		OSS					|| true
+runtest portaudio	PORTAUDIO				|| true
+runtest pulseaudio	PULSEAUDIO				|| true
+runtest sndio		SNDIO -lsndio				|| true
+runtest sunaudio	SUNAUDIO				|| true
+
+# Do we have all the required functions?
+#if [ ${HAVE_NTOHL} -eq 0 ]; then
+	#echo "FATAL: no endian conversion functions found" 1>&2
+	#echo "FATAL: no endian conversion functions found" 1>&3
+	#FATAL=1
+#fi
+
+[ "${FATAL}" -eq 0 ] || exit 1
+
+# are we linking extra libraries?
+
+ADDLIBS="${ADDLIBS} -lm"
+
+#if [ ${HAVE_FLAC} -eq 1 ]; then
+#	ADDOBJS="${ADDOBJS} flac.o"
+#	ADDLIBS="${ADDLIBS} -lFLAC"
+#fi
+
+#if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
+#	ADDOBJS="${ADDOBJS} spectrogram.o"
+#	ADDLIBS="${ADDLIBS} -lpng -lz"
+#fi
+
+#if [ ${HAVE_COREAUDIO} -eq 1 ]; then
+#	DEVOBJS="${DEVOBJS} coreaudio.o"
+#	DEVLIBS="${DEVLIBS} -Wl,-framework,CoreAudio"
+#fi
+
+#if [ ${HAVE_SNDIO} -eq 1 ]; then
+#	DEVOBJS="${DEVOBJS} sndio.o"
+#	DEVLIBS="${DEVLIBS} -lsndio"
+#fi
+
+echo "extra libs: ${ADDLIBS}" 1>&2
+echo "extra libs: ${ADDLIBS}" 1>&3
+echo "driver libs: ${DEVLIBS}" 1>&2
+echo "driver libs: ${DEVLIBS}" 1>&3
+echo 1>&3
+
+# write config.h
+
+exec > config.h
+
+# includes for compatibility implementations
+#[ ${HAVE_VASPRINTF} -eq 0 ] && echo "#include <stdarg.h>"
+
+# declarations of compatibility implementations
+#if [ ${HAVE_VASPRINTF} -eq 0 ]; then
+	#echo "extern	int	  vasprintf(char **, const char *, va_list);"
+	#CPTOBJS="${CPTOBJS} compat_vasprintf.o"
+#fi
+
+echo
+cat << __HEREDOC__
+#define HAVE_ERR	${HAVE_ERR}
+#define HAVE_NTOHL	${HAVE_NTOHL}
+
+#define HAVE_FLAC	${HAVE_FLAC}
+#define HAVE_GSM	${HAVE_GSM}
+#define HAVE_MP3	${HAVE_MP3}
+#define HAVE_OGG	${HAVE_OGG}
+#define HAVE_OPUS	${HAVE_OPUS}
+#define HAVE_PNG	${HAVE_PNG}
+#define HAVE_VORBIS	${HAVE_VORBIS}
+#define HAVE_WAVPACK	${HAVE_WAVPACK}
+#define HAVE_ZLIB	${HAVE_ZLIB}
+
+#define HAVE_ALSA	${HAVE_ALSA}
+#define HAVE_AO		${HAVE_ALSA}
+#define HAVE_COREAUDIO	${HAVE_COREAUDIO}
+#define HAVE_OSS	${HAVE_OSS}
+#define HAVE_PORTAUDIO	${HAVE_PORTAUDIO}
+#define HAVE_PULSEAUDIO	${HAVE_PULSEAUDIO}
+#define HAVE_SNDIO	${HAVE_SNDIO}
+#define HAVE_SUNAUDIO	${HAVE_SUNAUDIO}
+__HEREDOC__
+
+echo "config.h written" 1>&2
+echo "config.h written" 1>&3
+
+# write Makefile.local
+
+exec > Makefile.local
+
+[ -z "${BINDIR}" ] && BINDIR="${PREFIX}/bin"
+[ -z "${MANDIR}" ] && MANDIR="${PREFIX}/man"
+
+cat << __HEREDOC__
+PREFIX	= ${PREFIX}
+BINDIR	= ${BINDIR}
+MANDIR	= ${MANDIR}
+
+CC	= ${CC}
+CFLAGS	= ${CFLAGS}
+LDFLAGS	= ${LDFLAGS}
+
+INSTALL = ${INSTALL}
+LN	= ${LN}
+
+CPTOBJS	= ${CPTOBJS}
+ADDOBJS	= ${ADDOBJS}
+ADDLIBS	= ${ADDLIBS}
+DEVOBJS	= ${DEVOBJS}
+DEVLIBS	= ${DEVLIBS}
+__HEREDOC__
+
+echo "Makefile.local written" 1>&2
+echo "Makefile.local written" 1>&3
+
+exit 0

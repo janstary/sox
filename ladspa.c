@@ -18,7 +18,7 @@
 
 #include "sox_i.h"
 
-#ifdef HAVE_LADSPA_H
+#if HAVE_LADSPA
 
 #include <assert.h>
 #include <limits.h>
@@ -489,4 +489,4 @@ const sox_effect_handler_t *lsx_ladspa_effect_fn(void)
   return &sox_ladspa_effect;
 }
 
-#endif /* HAVE_LADSPA */
+#endif

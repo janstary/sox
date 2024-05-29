@@ -10,8 +10,9 @@
  * written by Bertrand Petit <madlld@phoe.fmug.org>,
  */
 
-#include "sox_i.h"
+#include <unistd.h>
 #include <string.h>
+#include "sox_i.h"
 
 #if defined(HAVE_LAME_LAME_H) || defined(HAVE_LAME_H) || defined(DL_LAME)
 #define HAVE_LAME 1
@@ -39,16 +40,14 @@ typedef enum {
 } vbr_mode;
 #endif
 
-#if defined(HAVE_ID3TAG) && (defined(HAVE_IO_H) || defined(HAVE_UNISTD_H))
+#if HAVE_ID3TAG && HAVE_IO
 #define USING_ID3TAG 1
 #endif
 
 #ifdef USING_ID3TAG
   #include <id3tag.h>
   #include "id3.h"
-#if defined(HAVE_UNISTD_H)
-  #include <unistd.h>
-#elif defined(HAVE_IO_H)
+#if HAVE_IO
   #include <io.h>
 #endif
 #else

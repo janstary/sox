@@ -45,7 +45,7 @@
   EFFECT(highpass)
   EFFECT(hilbert)
   EFFECT(input)
-#ifdef HAVE_LADSPA_H
+#if HAVE_LADSPA
   EFFECT(ladspa)
 #endif
   EFFECT(loudness)
@@ -68,11 +68,11 @@
   EFFECT(riaa)
   EFFECT(silence)
   EFFECT(sinc)
-#ifdef HAVE_PNG
+#if HAVE_PNG
   EFFECT(spectrogram)
 #endif
   EFFECT(speed)
-#ifdef HAVE_SPEEXDSP
+#if HAVE_SPEEXDSP
   EFFECT(speexdsp)
 #endif
   EFFECT(splice)

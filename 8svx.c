@@ -216,7 +216,7 @@ static int startwrite(sox_format_t * ft)
 
         /* open channel output files */
         for (i = 0; i < ft->signal.channels; i++) {
-                if ((p->tmp[i] = lsx_tmpfile()) == NULL)
+                if ((p->tmp[i] = tmpfile()) == NULL)
                 {
                         lsx_fail_errno(ft,errno,"Can't open channel output file");
                         return(SOX_EOF);

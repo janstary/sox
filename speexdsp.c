@@ -19,7 +19,7 @@
 
 #include "sox_i.h"
 
-#ifdef HAVE_SPEEXDSP
+#if HAVE_SPEEXDSP
 
 #include <speex/speex_types.h>
 #include <speex/speex_preprocess.h>
@@ -346,4 +346,4 @@ const sox_effect_handler_t* lsx_speexdsp_effect_fn(void)
   return &descriptor;
 }
 
-#endif /* HAVE_SPEEXDSP */
+#endif

@@ -16,35 +16,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
 #include <ctype.h>
 #include <stdio.h>
 
-int lsx_strcasecmp(const char * s1, const char * s2)
-{
-#if defined(HAVE_STRCASECMP)
-  return strcasecmp(s1, s2);
-#elif defined(_MSC_VER)
-  return _stricmp(s1, s2);
-#else
-  while (*s1 && (toupper(*s1) == toupper(*s2)))
-    s1++, s2++;
-  return toupper(*s1) - toupper(*s2);
-#endif
-}
-
-int lsx_strncasecmp(char const * s1, char const * s2, size_t n)
-{
-#if defined(HAVE_STRCASECMP)
-  return strncasecmp(s1, s2, n);
-#elif defined(_MSC_VER)
-  return _strnicmp(s1, s2, n);
-#else
-  while (--n && *s1 && (toupper(*s1) == toupper(*s2)))
-    s1++, s2++;
-  return toupper(*s1) - toupper(*s2);
-#endif
-}
+#include "sox_i.h"
 
 sox_bool lsx_strends(char const * str, char const * end)
 {

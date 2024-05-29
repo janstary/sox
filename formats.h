@@ -15,7 +15,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*-------------------------- Static format handlers --------------------------*/
+/* formats implemented "natively" within SoX itself */
 
   FORMAT(aifc)
   FORMAT(aiff)
@@ -63,51 +63,33 @@
   FORMAT(wve)
   FORMAT(xa)
 
-/*--------------------- Plugin or static format handlers ---------------------*/
+/* optional formats provioded by external libraries */
 
-#if defined HAVE_ALSA && (defined STATIC_ALSA || !defined HAVE_LIBLTDL)
-  FORMAT(alsa)
-#endif
-#if defined HAVE_AMRNB && (defined STATIC_AMRNB || !defined HAVE_LIBLTDL)
+#if HAVE_AMRNB
   FORMAT(amr_nb)
 #endif
-#if defined HAVE_AMRWB && (defined STATIC_AMRWB || !defined HAVE_LIBLTDL)
+#if HAVE_AMRWB
   FORMAT(amr_wb)
 #endif
-#if defined HAVE_AO && (defined STATIC_AO || !defined HAVE_LIBLTDL)
-  FORMAT(ao)
-#endif
-#if defined HAVE_COREAUDIO && (defined STATIC_COREAUDIO || !defined HAVE_LIBLTDL)
-  FORMAT(coreaudio)
-#endif
-#if defined HAVE_FLAC && (defined STATIC_FLAC || !defined HAVE_LIBLTDL)
+#if HAVE_FLAC
   FORMAT(flac)
 #endif
-#if defined HAVE_GSM && (defined STATIC_GSM || !defined HAVE_LIBLTDL)
+#if HAVE_GSM
   FORMAT(gsm)
 #endif
-#if defined HAVE_LPC10 && (defined STATIC_LPC10 || !defined HAVE_LIBLTDL)
+#if HAVE_LPC10
   FORMAT(lpc10)
 #endif
-#if defined HAVE_MP3 && (defined STATIC_MP3 || !defined HAVE_LIBLTDL)
+#if HAVE_MP3
   FORMAT(mp3)
 #endif
-#if defined HAVE_OPUS && (defined STATIC_OPUS || !defined HAVE_LIBLTDL)
+#if HAVE_OGGVORBIS
+  FORMAT(vorbis)
+#endif
+#if HAVE_OPUS
   FORMAT(opus)
 #endif
-#if defined HAVE_OSS && (defined STATIC_OSS || !defined HAVE_LIBLTDL)
-  FORMAT(oss)
-#endif
-#if defined HAVE_PULSEAUDIO && (defined STATIC_PULSEAUDIO || !defined HAVE_LIBLTDL)
-  FORMAT(pulseaudio)
-#endif
-#if defined HAVE_WAVEAUDIO && (defined STATIC_WAVEAUDIO || !defined HAVE_LIBLTDL)
-  FORMAT(waveaudio)
-#endif
-#if defined HAVE_SNDIO && (defined STATIC_SNDIO || !defined HAVE_LIBLTDL)
-  FORMAT(sndio)
-#endif
-#if defined HAVE_SNDFILE && (defined STATIC_SNDFILE || !defined HAVE_LIBLTDL)
+#if HAVE_SNDFILE
   FORMAT(sndfile)
   FORMAT(caf)
   FORMAT(fap)
@@ -119,12 +101,33 @@
   FORMAT(w64)
   FORMAT(xi)
 #endif
-#if defined HAVE_SUNAUDIO && (defined STATIC_SUNAUDIO || !defined HAVE_LIBLTDL)
+#if HAVE_WAVPACK
+  FORMAT(wavpack)
+#endif
+
+/* optional audio drivers */
+
+#if HAVE_ALSA
+  FORMAT(alsa)
+#endif
+#if HAVE_AO
+  FORMAT(ao)
+#endif
+#if HAVE_COREAUDIO
+  FORMAT(coreaudio)
+#endif
+#if HAVE_OSS
+  FORMAT(oss)
+#endif
+#if HAVE_PULSEAUDIO
+  FORMAT(pulseaudio)
+#endif
+#if HAVE_SNDIO
+  FORMAT(sndio)
+#endif
+#if HAVE_SUNAUDIO
   FORMAT(sunau)
 #endif
-#if defined HAVE_OGGVORBIS && (defined STATIC_OGGVORBIS || !defined HAVE_LIBLTDL)
-  FORMAT(vorbis)
-#endif
-#if defined HAVE_WAVPACK && (defined STATIC_WAVPACK || !defined HAVE_LIBLTDL)
-  FORMAT(wavpack)
+#if HAVE_WAVEAUDIO
+  FORMAT(waveaudio)
 #endif

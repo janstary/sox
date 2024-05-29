@@ -2474,33 +2474,6 @@ lsx_realloc(
     size_t newsize /**< New size for buffer, or 0 to free the buffer. */
     );
 
-/**
-Plugins API:
-Like strcmp, except that the characters are compared without regard to case.
-@returns 0 (s1 == s2), negative (s1 < s2), or positive (s1 > s2).
-*/
-LSX_RETURN_PURE
-int
-LSX_API
-lsx_strcasecmp(
-    LSX_PARAM_IN_Z char const * s1, /**< First string. */
-    LSX_PARAM_IN_Z char const * s2  /**< Second string. */
-    );
-
-
-/**
-Plugins API:
-Like strncmp, except that the characters are compared without regard to case.
-@returns 0 (s1 == s2), negative (s1 < s2), or positive (s1 > s2).
-*/
-LSX_RETURN_PURE
-int
-LSX_API
-lsx_strncasecmp(
-    LSX_PARAM_IN_Z char const * s1, /**< First string. */
-    LSX_PARAM_IN_Z char const * s2, /**< Second string. */
-    size_t n /**< Maximum number of characters to examine. */
-    );
 
 /**
 Plugins API:

@@ -84,7 +84,7 @@ static int start(sox_effect_t * effp)
   p->max = 1;
   p->min = -1;
   if (p->do_scan) {
-    p->tmp_file = lsx_tmpfile();
+    p->tmp_file = tmpfile();
     if (p->tmp_file == NULL) {
       lsx_fail("can't create temporary file: %s", strerror(errno));
       return SOX_EOF;
@@ -223,7 +223,7 @@ static int stop(sox_effect_t * effp)
 {
   priv_t * p = (priv_t *)effp->priv;
   if (p->do_scan)
-    fclose(p->tmp_file); /* auto-deleted by lsx_tmpfile */
+    fclose(p->tmp_file); /* auto-deleted by tmpfile */
   return SOX_SUCCESS;
 }
 

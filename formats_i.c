@@ -30,11 +30,7 @@ void lsx_fail_errno(sox_format_t * ft, int sox_errno, const char *fmt, ...)
   ft->sox_errno = sox_errno;
 
   va_start(args, fmt);
-#ifdef HAVE_VSNPRINTF
   vsnprintf(ft->sox_errstr, sizeof(ft->sox_errstr), fmt, args);
-#else
-  vsprintf(ft->sox_errstr, fmt, args);
-#endif
   va_end(args);
   ft->sox_errstr[255] = '\0';
 }

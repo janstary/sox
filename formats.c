@@ -21,16 +21,17 @@
 #define _GNU_SOURCE
 #include "sox_i.h"
 
-#include <assert.h>
-#include <ctype.h>
-#include <errno.h>
-#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <assert.h>
+#include <ctype.h>
+#include <fcntl.h>
+#include <errno.h>
 
-#ifdef HAVE_IO_H
+#if HAVE_IO
   #include <io.h>
 #endif
 
@@ -38,9 +39,6 @@
   #include <magic.h>
 #endif
 
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
 
 #define PIPE_AUTO_DETECT_SIZE 256 /* Only as much as we can rewind a pipe */
 #define AUTO_DETECT_SIZE 4096     /* For seekable file, so no restriction */
@@ -371,9 +369,7 @@ static sox_bool is_url(char const * text) /* detects only wget-supported URLs */
 static int xfclose(FILE * file, lsx_io_type io_type)
 {
   return
-#ifdef HAVE_POPEN
     io_type != lsx_io_file? pclose(file) :
-#endif
     fclose(file);
 }
 
@@ -427,31 +423,20 @@ static FILE * xfopen(char const * identifier, char const * mode, lsx_io_type * i
 
   if (*identifier == '|') {
     FILE * f = NULL;
-#ifdef HAVE_POPEN
-#ifndef POPEN_MODE
-#define POPEN_MODE "r"
-#endif
-    f = popen(identifier + 1, POPEN_MODE);
+    f = popen(identifier + 1, "r");
     *io_type = lsx_io_pipe;
     incr_pipe_size(f);
-#else
-    lsx_fail("this build of SoX cannot open pipes");
-#endif
     return f;
   }
   else if (is_url(identifier)) {
     FILE * f = NULL;
-#ifdef HAVE_POPEN
     char const * const command_format = "wget --no-check-certificate -q -O- \"%s\"";
     char * command = lsx_malloc(strlen(command_format) + strlen(identifier));
     sprintf(command, command_format, identifier);
-    f = popen(command, POPEN_MODE);
+    f = popen(command, "r");
     incr_pipe_size(f);
     free(command);
     *io_type = lsx_io_url;
-#else
-    lsx_fail("this build of SoX cannot open URLs");
-#endif
     return f;
   }
   return fopen(identifier, mode);
@@ -518,9 +503,7 @@ static sox_format_t * open_read(
     }
     else {
       ft->fp =
-#ifdef HAVE_FMEMOPEN
         buffer? fmemopen(buffer, buffer_size, "rb") :
-#endif
         xfopen(path, "rb", &ft->io_type);
       type = io_types[ft->io_type];
       if (ft->fp == NULL) {
@@ -915,10 +898,8 @@ static sox_format_t * open_write(
         goto error;
       }
       ft->fp =
-#ifdef HAVE_FMEMOPEN
         buffer? fmemopen(buffer, buffer_size, "w+b") :
         buffer_ptr? open_memstream(buffer_ptr, buffer_size_ptr) :
-#endif
         fopen(path, "w+b");
       if (ft->fp == NULL) {
         lsx_fail("can't open output file `%s': %s", path, strerror(errno));

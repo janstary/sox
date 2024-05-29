@@ -34,7 +34,6 @@ lsx_rewind
 lsx_seeki
 lsx_sigfigs3
 lsx_sigfigs3p
-lsx_strcasecmp
 lsx_strdup
 lsx_tell
 lsx_unreadb

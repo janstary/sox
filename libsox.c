@@ -42,18 +42,14 @@ sox_version_info_t const * sox_version_info(void)
         sizeof(sox_version_info_t),
         /* flags */
         (sox_version_flags_t)(
-#if HAVE_POPEN
         sox_version_have_popen +
-#endif
 #if  HAVE_MAGIC
         sox_version_have_magic +
 #endif
 #if HAVE_OPENMP
         sox_version_have_threads +
 #endif
-#ifdef HAVE_FMEMOPEN
         sox_version_have_memopen +
-#endif
         sox_version_none),
         /* version_code */
         SOX_LIB_VERSION_CODE,

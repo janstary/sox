@@ -26,14 +26,12 @@
 
 #include "sox_i.h"
 
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
 #ifdef HAVE_SYS_SOUNDCARD_H
   #include <sys/soundcard.h>
-#endif
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
 #endif
 
 /* these appear in the sys/soundcard.h of OSS 4.x, and in Linux's

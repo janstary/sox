@@ -17,19 +17,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <inttypes.h>
-#include "soxconfig.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-#ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h> /* For off_t not found in stdio.h */
-#endif
-
-#ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h> /* Needs to be included before we redefine off_t. */
-#endif
-
+#include "config.h"
 #include "xmalloc.h"
 
 /*---------------------------- Portability stuff -----------------------------*/
@@ -42,77 +36,10 @@
 #define UNUSED
 #endif
 
-#ifdef _MSC_VER
-
-#define __STDC__ 1
-#define O_BINARY _O_BINARY
-#define O_CREAT _O_CREAT
-#define O_RDWR _O_RDWR
-#define O_TRUNC _O_TRUNC
-#define S_IFMT _S_IFMT
-#define S_IFREG _S_IFREG
-#define S_IREAD _S_IREAD
-#define S_IWRITE _S_IWRITE
-#define close _close
-#define dup _dup
-#define fdopen _fdopen
-#define fileno _fileno
-
-#ifdef _fstati64
-#define fstat _fstati64
-#else
-#define fstat _fstat
-#endif
-
-#define ftime _ftime
-#define inline __inline
-#define isatty _isatty
-#define kbhit _kbhit
-#define mktemp _mktemp
-#define off_t _off_t
-#define open _open
-#define pclose _pclose
-#define popen _popen
-#define setmode _setmode
-#define snprintf _snprintf
-
-#ifdef _stati64
-#define stat _stati64
-#else
-#define stat _stat
-#endif
-
-#define strdup _strdup
-#define timeb _timeb
-#define unlink _unlink
-
-#if defined(HAVE__FSEEKI64) && !defined(HAVE_FSEEKO)
-#undef off_t
-#define fseeko _fseeki64
-#define ftello _ftelli64
-#define off_t __int64
-#define HAVE_FSEEKO 1
-#endif
-
-#elif defined(__MINGW32__)
-
-#if !defined(HAVE_FSEEKO)
-#undef off_t
-#define fseeko fseeko64
-#define fstat _fstati64
-#define ftello ftello64
-#define off_t off64_t
-#define stat _stati64
-#define HAVE_FSEEKO 1
-#endif
-
-#endif
-
 #if defined(DOS) || defined(WIN32) || defined(__NT__) || defined(__DJGPP__) || defined(__OS2__)
   #define LAST_SLASH(path) max(strrchr(path, '/'), strrchr(path, '\\'))
   #define IS_ABSOLUTE(path) ((path)[0] == '/' || (path)[0] == '\\' || (path)[1] == ':')
   #define SET_BINARY_MODE(file) setmode(fileno(file), O_BINARY)
-  #define POPEN_MODE "rb"
 #else
   #define LAST_SLASH(path) strrchr(path, '/')
   #define IS_ABSOLUTE(path) ((path)[0] == '/')
@@ -174,11 +101,3 @@
 
 #define dB_to_linear(x) exp((x) * M_LN10 * 0.05)
 #define linear_to_dB(x) (log10(x) * 20)
-
-extern int lsx_strcasecmp(const char *s1, const char *st);
-extern int lsx_strncasecmp(char const *s1, char const *s2, size_t n);
-
-#ifndef HAVE_STRCASECMP
-#define strcasecmp(s1, s2) lsx_strcasecmp((s1), (s2))
-#define strncasecmp(s1, s2, n) lsx_strncasecmp((s1), (s2), (n))
-#endif

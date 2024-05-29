@@ -1,0 +1,55 @@
+# Copyright (c) 2014-2021 Ingo Schwarze <schwarze@openbsd.org>
+# Copyright (c) 2024 Jan Starý <hans@stare.cz>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+# For all settings documented in this file, there are reasonable
+# defaults and/or the ./configure script attempts autodetection.
+# Consequently, you only need to create a file ./configure.local
+# and put any of these settings into it if ./configure autodetection
+# fails or if you want to make different choices for other reasons.
+
+# It is recommended that you write ./configure.local from scratch
+# and only put the lines there you need.  This file contains examples.
+# It is not intended as a template to be copied as a whole.
+
+# By default, "cc" is used as the C compiler, but it can be overridden.
+# For example, the system compiler in SunOS 5.9 may not provide <stdint.h>,
+# which may require this line:
+
+CC=gcc
+
+# The following installation directories are used.
+# It is possible to set only one or a few of these variables,
+# there is no need to copy the whole block.
+# Even if you set PREFIX to something else, the other variables
+# pick it up without copying them all over.
+
+PREFIX="/usr/local"
+BINDIR="${PREFIX}/bin"
+MANDIR="${PREFIX}/man"
+
+# Some distributions do not want hardlinks
+# between installed binary programs.
+# Set the following variable to use symbolic links instead.
+# When using this, DESTDIR must be empty or an absolute path.
+
+LN="ln -sf" # default is "ln -f"
+
+# Additional linker flags, if not autodetected.
+
+ADDLIBS="-lm"
+
+# Change the utility program used for installation
+
+INSTALL="install"

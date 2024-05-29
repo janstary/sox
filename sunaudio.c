@@ -15,26 +15,25 @@
  * responsible for the consequences of using this software.
  */
 
-#include "sox_i.h"
-#include "g711.h"
-
 #include <sys/ioctl.h>
 #include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+
 #ifdef HAVE_SUN_AUDIOIO_H
   #include <sun/audioio.h>
 #else
   #include <sys/audioio.h>
 #endif
-#include <errno.h>
 #if !defined(__NetBSD__) && !defined(__OpenBSD__)
 #include <stropts.h>
 #endif
-#include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
+
+#include "sox_i.h"
+#include "g711.h"
 
 typedef struct
 {

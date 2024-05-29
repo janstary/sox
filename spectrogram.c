@@ -19,22 +19,20 @@
 #undef NDEBUG /* Must undef above assert.h or other that might include it. */
 #endif
 
-#include "sox_i.h"
-#include "fft4g.h"
+#include <fcntl.h>
 #include <assert.h>
 #include <math.h>
-#ifdef HAVE_LIBPNG_PNG_H
-#include <libpng/png.h>
-#else
+#if HAVE_PNG && HAVE_ZLIB
 #include <png.h>
-#endif
 #include <zlib.h>
+#endif
 
-/* For SET_BINARY_MODE: */
-#include <fcntl.h>
-#ifdef HAVE_IO_H
+#if HAVE_IO
   #include <io.h>
 #endif
+
+#include "sox_i.h"
+#include "fft4g.h"
 
 #define is_p2(x) !(x & (x - 1))
 
