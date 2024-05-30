@@ -20,13 +20,13 @@
  * the consequences of using this software.
  */
 
-#include "sox_i.h"
-
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
 #include <errno.h>
 
 #include <opusfile.h>
+
+#include "sox_i.h"
 
 #define DEF_BUF_LEN 4096
 

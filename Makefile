@@ -155,14 +155,14 @@ LIBS	= $(ADDLIBS) $(DEVLIBS)
 all: $(BINS) $(MANS) Makefile.local
 
 sox: $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
 
 include .depend
 
 .SUFFIXES: .c .o
 
 .c.o:
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
 install: all
 	install -d $(BINDIR)      && install -m 0755 $(BINS) $(BINDIR)

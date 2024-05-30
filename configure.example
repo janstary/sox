@@ -24,10 +24,11 @@
 # It is not intended as a template to be copied as a whole.
 
 # By default, "cc" is used as the C compiler, but it can be overridden.
-# For example, the system compiler in SunOS 5.9 may not provide <stdint.h>,
-# which may require this line:
+# The default include and library paths can also be altered here.
 
 CC=gcc
+CPPFLAGS="-I/usr/local/include"
+LDFLAGS="-L/usr/local/lib"
 
 # The following installation directories are used.
 # It is possible to set only one or a few of these variables,

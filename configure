@@ -20,6 +20,7 @@ echo "writing config.log"
 
 CC=cc
 CFLAGS=
+CPPFLAGS=
 LDFLAGS=
 FATAL=0
 ADDOBJS=
@@ -167,7 +168,7 @@ runtest gsm	GSM  -lgsm	|| true
 runtest png	PNG  -lpng	|| true
 runtest mp3	MP3		|| true
 runtest ogg	OGG		|| true
-runtest opus	OPUS		|| true
+runtest opus	OPUS -lopus	|| true
 runtest vorbis	VORBIS		|| true
 runtest wavpack	WAVPACK		|| true
 runtest zlib	ZLIB -lz	|| true
@@ -198,6 +199,11 @@ ADDLIBS="${ADDLIBS} -lm"
 if [ ${HAVE_FLAC} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} flac.o"
 	ADDLIBS="${ADDLIBS} -lFLAC"
+fi
+
+if [ ${HAVE_OPUS} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} opus.o"
+	ADDLIBS="${ADDLIBS} -lopus -lopusfile"
 fi
 
 #if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
@@ -276,6 +282,7 @@ MANDIR	= ${MANDIR}
 
 CC	= ${CC}
 CFLAGS	= ${CFLAGS}
+CPPFLAGS= ${CPPFLAGS}
 LDFLAGS	= ${LDFLAGS}
 
 INSTALL = ${INSTALL}
