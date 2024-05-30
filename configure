@@ -195,10 +195,10 @@ runtest sunaudio	SUNAUDIO				|| true
 
 ADDLIBS="${ADDLIBS} -lm"
 
-#if [ ${HAVE_FLAC} -eq 1 ]; then
-#	ADDOBJS="${ADDOBJS} flac.o"
-#	ADDLIBS="${ADDLIBS} -lFLAC"
-#fi
+if [ ${HAVE_FLAC} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} flac.o"
+	ADDLIBS="${ADDLIBS} -lFLAC"
+fi
 
 #if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
 #	ADDOBJS="${ADDOBJS} spectrogram.o"
