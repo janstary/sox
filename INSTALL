@@ -48,7 +48,7 @@ pulseaudio	https://www.freedesktop.org/wiki/Software/PulseAudio/
 After installing SoX, try to create, convert and play a sound file
 as a test of basic functionality; for example:
 
-	sox -n file.wav synth 1 sin 220 sin 440
+	sox -n -b 16 file.wav synth 1 sin 220 sin 440 gain -3
 	sox file.wav file.au
 	play file.au
 
