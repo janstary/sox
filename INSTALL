@@ -1,5 +1,5 @@
-                           SoX Installation
-                           ----------------
+SoX Installation
+----------------
 
 SoX should compile and run on any POSIX compatible system.
 To compile and install SoX with a default configuration,
@@ -14,8 +14,9 @@ if you are installing into the default directory of /usr/local.
 
 The configuration can be altered by creating 'configure.local';
 see configure.example for what can be configured. You might want
-to change the PREFIX, for example, to install somewhere else,
-or set specific compiler options.
+to change the PREFIX, for example, to install somewhere else, or
+set specific compiler options, or specify nonstandard directories
+that you system might uses for headers and libraries.
 
 Optional external libraries supporting extra audio encodings and
 file formats (such as Ogg Vorbis) need to be installed before
@@ -44,6 +45,15 @@ CoreAudio	https://developer.apple.com/documentation/coreaudio
 OSS		http://www.opensound.com/oss.html
 pulseaudio	https://www.freedesktop.org/wiki/Software/PulseAudio/
 
+The ./configure script attempts to detect the libraries and drivers
+present on your system. Read its standard output and the Makefile.local
+file which it generates (and which the Makefile includes).
+If anything looks wrong or different from what you wish,
+read configure.example, create configure.local, and re-run
+./configure until the result seems right to you.
+You might also want to look at the config.h file
+(which the sources files will eventualy #include),
+or even the full log saved in config.log
 
 After installing SoX, try to create, convert and play a sound file
 as a test of basic functionality; for example:
