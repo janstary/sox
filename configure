@@ -174,7 +174,7 @@ runtest wavpack	WAVPACK		|| true
 runtest zlib	ZLIB -lz	|| true
 
 # detect optional audio devices/drivers
-runtest alsa		ALSA					|| true
+runtest alsa		ALSA -lasound				|| true
 runtest ao		AO					|| true
 runtest coreaudio	COREAUDIO -Wl,-framework,CoreAudio	|| true
 runtest oss		OSS					|| true
@@ -210,6 +210,11 @@ fi
 #	ADDOBJS="${ADDOBJS} spectrogram.o"
 #	ADDLIBS="${ADDLIBS} -lpng -lz"
 #fi
+
+if [ ${HAVE_ALSA} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} alsa.o"
+	DEVLIBS="${DEVLIBS} -lasound"
+fi
 
 if [ ${HAVE_COREAUDIO} -eq 1 ]; then
 	DEVOBJS="${DEVOBJS} coreaudio.o"
@@ -256,7 +261,7 @@ cat << __HEREDOC__
 #define HAVE_ZLIB	${HAVE_ZLIB}
 
 #define HAVE_ALSA	${HAVE_ALSA}
-#define HAVE_AO		${HAVE_ALSA}
+#define HAVE_AO		${HAVE_AO}
 #define HAVE_COREAUDIO	${HAVE_COREAUDIO}
 #define HAVE_OSS	${HAVE_OSS}
 #define HAVE_PORTAUDIO	${HAVE_PORTAUDIO}
