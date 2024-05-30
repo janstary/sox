@@ -205,10 +205,10 @@ ADDLIBS="${ADDLIBS} -lm"
 #	ADDLIBS="${ADDLIBS} -lpng -lz"
 #fi
 
-#if [ ${HAVE_COREAUDIO} -eq 1 ]; then
-#	DEVOBJS="${DEVOBJS} coreaudio.o"
-#	DEVLIBS="${DEVLIBS} -Wl,-framework,CoreAudio"
-#fi
+if [ ${HAVE_COREAUDIO} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} coreaudio.o"
+	DEVLIBS="${DEVLIBS} -Wl,-framework,CoreAudio"
+fi
 
 #if [ ${HAVE_SNDIO} -eq 1 ]; then
 #	DEVOBJS="${DEVOBJS} sndio.o"
