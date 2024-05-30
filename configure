@@ -216,10 +216,10 @@ if [ ${HAVE_COREAUDIO} -eq 1 ]; then
 	DEVLIBS="${DEVLIBS} -Wl,-framework,CoreAudio"
 fi
 
-#if [ ${HAVE_SNDIO} -eq 1 ]; then
-#	DEVOBJS="${DEVOBJS} sndio.o"
-#	DEVLIBS="${DEVLIBS} -lsndio"
-#fi
+if [ ${HAVE_SNDIO} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} sndio.o"
+	DEVLIBS="${DEVLIBS} -lsndio"
+fi
 
 echo "extra libs: ${ADDLIBS}" 1>&2
 echo "extra libs: ${ADDLIBS}" 1>&3
