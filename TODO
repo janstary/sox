@@ -56,9 +56,6 @@ SOX_FMT_REQ([mp3], [MAD LAME TWOLAME])
 
 SOX_FMT_PKG([oggvorbis], [ogg vorbis vorbisenc vorbisfile])
 
-SOX_DL_LIB([libsndfile], [sndfile.h], [sndfile], [sf_open_virtual])
-SOX_FMT_REQ([sndfile], [LIBSNDFILE])
-
 SOX_FMT_LIB([wavpack], [wavpack/wavpack.h], [wavpack], [WavpackGetSampleRate])
 
 SOX_FMT_LIB([ao], [ao/ao.h], [ao], [ao_play], [], [], [devices])
