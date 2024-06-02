@@ -15,5 +15,6 @@ main(void)
 		return 1;
 
 	unlink("file.paf");
+	sf_close(hdl);
 	return 0;
 }
