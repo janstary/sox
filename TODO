@@ -32,7 +32,6 @@ SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
 SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
 SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
 SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
-SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
 
 SOX_DL_LIB([opencore-amrnb], [opencore-amrnb/interf_dec.h], [opencore-amrnb],
     [Decoder_Interface_init])
@@ -42,8 +41,6 @@ SOX_DL_LIB([opencore-amrwb], [opencore-amrwb/dec_if.h], [opencore-amrwb],
     [D_IF_init])
 SOX_DL_LIB([vo-amrwbenc], [vo-amrwbenc/enc_if.h], [vo-amrwbenc], [E_IF_init])
 SOX_FMT_REQ([amrwb], [OPENCORE_AMRWB VO_AMRWBENC])
-
-SOX_FMT_REQ([gsm], [LIBGSM])
 
 SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],

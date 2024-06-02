@@ -203,6 +203,11 @@ if [ ${HAVE_FLAC} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lFLAC"
 fi
 
+if [ ${HAVE_GSM} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} gsm.o"
+	ADDLIBS="${ADDLIBS} -lgsm"
+fi
+
 if [ ${HAVE_OPUS} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} opus.o"
 	ADDLIBS="${ADDLIBS} -lopus -lopusfile"

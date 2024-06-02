@@ -23,15 +23,15 @@
  *   Rewritten to support multiple channels
  */
 
-#include "sox_i.h"
+#include <errno.h>
 
-#ifdef HAVE_GSM_GSM_H
-#include <gsm/gsm.h>
-#else
+#include "sox_i.h"
+#include "config.h"
+
+#if HAVE_GSM
 #include <gsm.h>
 #endif
 
-#include <errno.h>
 
 #define MAXCHANS 16
 
