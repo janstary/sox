@@ -16,8 +16,10 @@
  */
 
 #include "sox_i.h"
+#include "config.h"
 
 #if HAVE_WAVPACK
+#include <wavpack/wavpack.h>
 
 typedef struct {
   WavpackContext * codec;
