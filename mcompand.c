@@ -47,7 +47,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "compandt.h"
-#include "mcompand_xover.h"
+#include "mcompand.h"
 
 typedef struct {
   sox_compandt_t transfer_fn;
