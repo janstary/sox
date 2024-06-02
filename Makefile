@@ -157,7 +157,7 @@ all: $(BINS) $(MANS) Makefile.local
 sox: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
 
-include .depend
+include Makefile.depend
 
 .SUFFIXES: .c .o
 

@@ -1,0 +1,170 @@
+# audio formats and file handlers
+8svx.o: 8svx.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+adpcm.o: adpcm.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h adpcm.h
+adpcms.o: adpcms.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h adpcms.h
+aifc-fmt.o: aifc-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h aiff.h
+aiff-fmt.o: aiff-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h aiff.h
+aiff.o: aiff.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h aiff.h id3.h
+al-fmt.o: al-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+amr-nb.o: amr-nb.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h amr.h
+amr-wb.o: amr-wb.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h amr.h
+au.o: au.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g72x.h
+avr.o: avr.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+caf.o: caf.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+cdr.o: cdr.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+cvsd-fmt.o: cvsd-fmt.c cvsd.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+cvsd.o: cvsd.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h cvsd.h cvsdfilt.h
+dat.o: dat.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+dvms-fmt.o: dvms-fmt.c cvsd.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+f4-fmt.o: f4-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+f8-fmt.o: f8-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+fap.o: fap.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+fft4g.o: fft4g.c fft4g.h
+fir.o: fir.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
+firfit.o: firfit.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
+flac.o: flac.c sox_i.h
+formats.o: formats.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h formats.h
+formats_i.o: formats_i.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+g711.o: g711.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h
+g721.o: g721.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g72x.h g711.h
+g723_24.o: g723_24.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h g72x.h
+g723_40.o: g723_40.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h g72x.h
+g72x.o: g72x.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h g72x.h
+gsm.o: gsm.c sox_i.h
+gsrt.o: gsrt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+hcom.o: hcom.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+htk.o: htk.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+id3.o: id3.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h id3.h
+ima-fmt.o: ima-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h adpcms.h vox.h
+ima_rw.o: ima_rw.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h ima_rw.h
+la-fmt.o: la-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+lpc10.o: lpc10.c sox_i.h
+lu-fmt.o: lu-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+mat4.o: mat4.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+mat5.o: mat5.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+maud.o: maud.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+mp3.o: mp3.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h mp3-util.h
+noiseprof.o: noiseprof.c noisered.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+noisered.o: noisered.c noisered.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+nulfile.o: nulfile.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+opus.o: opus.c sox_i.h
+pad.o: pad.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+paf.o: paf.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+phaser.o: phaser.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+prc.o: prc.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h adpcms.h
+pvf.o: pvf.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+raw-fmt.o: raw-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+raw.o: raw.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h
+s1-fmt.o: s1-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+s2-fmt.o: s2-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+s3-fmt.o: s3-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+s4-fmt.o: s4-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+sd2.o: sd2.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sf.o: sf.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+skelform.o: skelform.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+smp.o: smp.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sndfile.o: sndfile.c sox_i.h
+sounder.o: sounder.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+soundtool.o: soundtool.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sox-fmt.o: sox-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sphere.o: sphere.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+speed.o: speed.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+u1-fmt.o: u1-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+u2-fmt.o: u2-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+u3-fmt.o: u3-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+u4-fmt.o: u4-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+ul-fmt.o: ul-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h raw.h
+voc.o: voc.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h g711.h adpcms.h
+vorbis.o: vorbis.c
+vox-fmt.o: vox-fmt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h adpcms.h vox.h
+vox.o: vox.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h vox.h adpcms.h
+w64.o: w64.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+wav.o: wav.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h ima_rw.h adpcm.h
+wavpack.o: wavpack.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+wve.o: wve.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+xa.o: xa.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+xi.o: xi.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+
+# audio drivers
+ao.o: ao.c sox_i.h
+alsa.o: alsa.c sox_i.h
+coreaudio.o: coreaudio.c sox_i.h
+oss.o: oss.c sox_i.h
+pulseaudio.o: pulseaudio.c sox_i.h
+sndio.o: sndio.c sox_i.h
+sunaudio.o: sunaudio.c sox_i.h
+waveaudio.o: waveaudio.c sox_i.h
+
+# audio effects
+bend.o: bend.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+biquad.o: biquad.c biquad.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+biquads.o: biquads.c biquad.h sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h band.h
+chorus.o: chorus.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+compand.o: compand.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h compandt.h
+compandt.o: compandt.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h compandt.h
+contrast.o: contrast.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+dcshift.o: dcshift.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+delay.o: delay.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+dft_filter.o: dft_filter.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fft4g.h dft_filter.h fifo.h
+dither.o: dither.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dither.h
+divide.o: divide.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+downsample.o: downsample.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+earwax.o: earwax.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+echo.o: echo.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+echos.o: echos.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+effects.o: effects.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+effects_i.o: effects_i.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+effects_i_dsp.o: effects_i_dsp.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fft4g.h
+fade.o: fade.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+flanger.o: flanger.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+gain.o: gain.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+hilbert.o: hilbert.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
+input.o: input.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+ladspa.o: ladspa.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h ladspa.h
+loudness.o: loudness.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
+mcompand.o: mcompand.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h compandt.h mcompand.h
+output.o: output.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+overdrive.o: overdrive.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+rate.o: rate.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fft4g.h dft_filter.h fifo.h rate_filters.h rate_half_fir.h rate_poly_fir0.h rate_poly_fir.h
+remix.o: remix.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+repeat.o: repeat.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+reverb.o: reverb.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fifo.h
+reverse.o: reverse.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+silence.o: silence.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sinc.o: sinc.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
+skeleff.o: skeleff.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+spectrogram.o: spectrogram.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fft4g.h
+speexdsp.o: speexdsp.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+splice.o: splice.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+stat.o: stat.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+stats.o: stats.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+stretch.o: stretch.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+swap.o: swap.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+synth.o: synth.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+tempo.o: tempo.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h fifo.h
+tremolo.o: tremolo.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+trim.o: trim.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+tx16w.o: tx16w.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+upsample.o: upsample.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+vad.o: vad.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+vol.o: vol.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+
+# optional binaries
+#example0.o: example0.c sox.h
+#example1.o: example1.c sox.h
+#example2.o: example2.c sox.h util.h config.h xmalloc.h
+#example3.o: example3.c sox.h util.h config.h xmalloc.h
+#example4.o: example4.c sox.h
+#example5.o: example5.c sox.h util.h config.h xmalloc.h
+#example6.o: example6.c sox.h util.h config.h xmalloc.h
+
+# sox itself ind its internals
+getopt.o: getopt.c sox.h
+libsox.o: libsox.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+libsox_i.o: libsox_i.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+sox.o: sox.c config.h sox.h util.h xmalloc.h
+util.o: util.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+xmalloc.o: xmalloc.c sox_i.h config.h soxomp.h sox.h util.h xmalloc.h effects.h
+
+# tests
+sox_sample_test.o: sox_sample_test.c sox.h
