@@ -37,6 +37,7 @@ HAVE_MP3=
 HAVE_OGG=
 HAVE_OPUS=
 HAVE_PNG=
+HAVE_SNDFILE=
 HAVE_VORBIS=
 HAVE_WAVPACK=
 HAVE_ZLIB=
@@ -163,15 +164,16 @@ runtest err		ERR		|| true
 runtest ntohl		NTOHL		|| true
 
 # detect optional formats
-runtest flac	FLAC -lFLAC	|| true
-runtest gsm	GSM  -lgsm	|| true
-runtest png	PNG  -lpng	|| true
-runtest mp3	MP3		|| true
-runtest ogg	OGG		|| true
-runtest opus	OPUS -lopus	|| true
-runtest vorbis	VORBIS		|| true
-runtest wavpack	WAVPACK		|| true
-runtest zlib	ZLIB -lz	|| true
+runtest flac	FLAC -lFLAC		|| true
+runtest gsm	GSM  -lgsm		|| true
+runtest mp3	MP3			|| true
+runtest ogg	OGG			|| true
+runtest opus	OPUS -lopus		|| true
+runtest png	PNG  -lpng		|| true
+runtest sndfile	SNDFILE -lsndfile	|| true
+runtest vorbis	VORBIS			|| true
+runtest wavpack	WAVPACK			|| true
+runtest zlib	ZLIB -lz		|| true
 
 # detect optional audio devices/drivers
 runtest alsa		ALSA -lasound				|| true
@@ -210,6 +212,12 @@ fi
 #	ADDOBJS="${ADDOBJS} spectrogram.o"
 #	ADDLIBS="${ADDLIBS} -lpng -lz"
 #fi
+
+if [ ${HAVE_SNDFILE} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} sndfile.o caf.o fap.o mat4.o mat5.o"
+	ADDOBJS="${ADDOBJS} paf.o pvf.o sd2.o w64.o xi.o"
+	ADDLIBS="${ADDLIBS} -lsndfile"
+fi
 
 if [ ${HAVE_ALSA} -eq 1 ]; then
 	DEVOBJS="${DEVOBJS} alsa.o"
@@ -256,6 +264,7 @@ cat << __HEREDOC__
 #define HAVE_OGG	${HAVE_OGG}
 #define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
+#define HAVE_SNDFILE	${HAVE_SNDFILE}
 #define HAVE_VORBIS	${HAVE_VORBIS}
 #define HAVE_WAVPACK	${HAVE_WAVPACK}
 #define HAVE_ZLIB	${HAVE_ZLIB}
