@@ -24,14 +24,9 @@
  */
 
 #include <errno.h>
+#include <gsm.h>
 
 #include "sox_i.h"
-#include "config.h"
-
-#if HAVE_GSM
-#include <gsm.h>
-#endif
-
 
 #define MAXCHANS 16
 

@@ -15,14 +15,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
-
 #include <string.h>
-/* Next line for systems that don't define off_t when you #include
-   stdio.h; apparently OS/2 has this bug */
-#include <sys/types.h>
-
 #include <FLAC/all.h>
+#include "sox_i.h"
 
 #define MAX_COMPRESSION 8
 

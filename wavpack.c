@@ -15,11 +15,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
-#include "config.h"
-
-#if HAVE_WAVPACK
 #include <wavpack/wavpack.h>
+#include "sox_i.h"
 
 typedef struct {
   WavpackContext * codec;
@@ -194,5 +191,3 @@ LSX_FORMAT_HANDLER(wavpack)
   };
   return &handler;
 }
-
-#endif
