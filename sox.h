@@ -510,7 +510,6 @@ typedef enum sox_version_flags_t {
     sox_version_none = 0,         /**< No special features = 0. */
     sox_version_have_popen = 1,   /**< popen = 1. */
     sox_version_have_magic = 2,   /**< magic = 2. */
-    sox_version_have_threads = 4, /**< threads = 4. */
     sox_version_have_memopen = 8  /**< memopen = 8. */
 } sox_version_flags_t;
 
@@ -1292,7 +1291,7 @@ function.
 */
 typedef struct sox_version_info_t {
     size_t       size;         /**< structure size = sizeof(sox_version_info_t) */
-    sox_version_flags_t flags; /**< feature flags = popen | magic | threads | memopen */
+    sox_version_flags_t flags; /**< feature flags = popen | magic | memopen */
     sox_uint32_t version_code; /**< version number = 0x140400 */
     char const * version;      /**< version string = sox_version(), for example, "14.4.0" */
     char const * version_extra;/**< version extra info or null = "PACKAGE_EXTRA", for example, "beta" */
@@ -1333,7 +1332,6 @@ typedef struct sox_globals_t {
   char const * subsystem;        /**< Private: tracks the name of the handler currently writing an output message */
   char       * tmp_path;         /**< Private: client-configured path to use for temporary files */
   sox_bool     use_magic;        /**< Private: true if client has requested use of 'magic' file-type detection */
-  sox_bool     use_threads;      /**< Private: true if client has requested parallel effects processing */
 
   /**
   Log to base 2 of minimum size (in bytes) used by libSoX for DFT (filtering).

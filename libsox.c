@@ -46,9 +46,6 @@ sox_version_info_t const * sox_version_info(void)
 #if  HAVE_MAGIC
         sox_version_have_magic +
 #endif
-#if HAVE_OPENMP
-        sox_version_have_threads +
-#endif
         sox_version_have_memopen +
         sox_version_none),
         /* version_code */
@@ -92,11 +89,10 @@ sox_version_info_t const * sox_version_info(void)
     {
         snprintf(arch, sizeof(arch),
             "%" PRIuPTR "%" PRIuPTR "%" PRIuPTR "%" PRIuPTR
-            " %" PRIuPTR "%" PRIuPTR " %" PRIuPTR "%" PRIuPTR " %c %s",
+            " %" PRIuPTR "%" PRIuPTR " %" PRIuPTR "%" PRIuPTR " %c",
             sizeof(char), sizeof(short), sizeof(long), sizeof(off_t),
             sizeof(float), sizeof(double), sizeof(int *), sizeof(int (*)(void)),
-            MACHINE_IS_BIGENDIAN ? 'B' : 'L',
-            (info.flags & sox_version_have_threads) ? "OMP" : "");
+            MACHINE_IS_BIGENDIAN ? 'B' : 'L');
         arch[sizeof(arch) - 1] = 0;
         info.arch = arch;
     }
@@ -129,7 +125,6 @@ static sox_globals_t s_sox_globals = {
   NULL,            /* char const * subsystem */
   NULL,            /* char       * tmp_path */
   sox_false,       /* sox_bool     use_magic */
-  sox_false,       /* sox_bool     use_threads */
   10               /* size_t       log2_dft_min_size */
 };
 
@@ -138,7 +133,6 @@ sox_globals_t * sox_get_globals(void)
     return &s_sox_globals;
 }
 
-/* FIXME: Not thread safe using globals */
 static sox_effects_globals_t s_sox_effects_globals =
     {sox_plot_off, &s_sox_globals};
 

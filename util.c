@@ -91,8 +91,8 @@ int lsx_enum_option(int c, char const * arg, lsx_enum_item const * items)
 char const * lsx_sigfigs3(double number)
 {
   static char const symbols[] = "\0kMGTPEZY";
-  static char string[16][10];   /* FIXME: not thread-safe */
-  static unsigned n;            /* ditto */
+  static char string[16][10];
+  static unsigned n;
   unsigned a, b, c;
   sprintf(string[n = (n+1) & 15], "%#.3g", number);
   switch (sscanf(string[n], "%u.%ue%u", &a, &b, &c)) {

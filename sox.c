@@ -1892,9 +1892,6 @@ static void usage(char const * message)
   static char const * const linesMagic[] = {
 "--magic                  Use `magic' file-type detection"
   };
-  static char const * const linesThreads[] = {
-"--multi-threaded         Enable parallel effects channels processing"
-  };
   static char const * const lines3[] = {
 "--norm                   Guard (see --guard) & normalise",
 "--play-rate-arg ARG      Default `rate' argument for auto-resample with `play'",
@@ -1903,7 +1900,6 @@ static void usage(char const * message)
 "--replay-gain track|album|off  Default: off (sox, rec), track (play)",
 "-R                       Use default random numbers (same on each run of SoX)",
 "-S, --show-progress      Display progress while processing audio data",
-"--single-threaded        Disable parallel effects channels processing",
 "--temp DIRECTORY         Specify the directory to use for temporary files",
 "-T, --combine multiply   Multiply samples of corresponding channels from all",
 "                         input files (instead of concatenating)",
@@ -1958,9 +1954,6 @@ static void usage(char const * message)
   if (info->flags & sox_version_have_magic)
     for (i = 0; i < array_length(linesMagic); ++i)
       puts(linesMagic[i]);
-  if (info->flags & sox_version_have_threads)
-    for (i = 0; i < array_length(linesThreads); ++i)
-      puts(linesThreads[i]);
   for (i = 0; i < array_length(lines3); ++i)
     puts(lines3[i]);
   display_supported_formats();
@@ -2130,14 +2123,23 @@ static struct lsx_option_t const long_options[] = {
   {"output"          , lsx_option_arg_required, NULL, 0},
   {"effects-file"    , lsx_option_arg_required, NULL, 0},
   {"temp"            , lsx_option_arg_required, NULL, 0},
+
+  /* FIXME leave this here even if we have removed threads,
+   * because the precise order of these --long-options is
+   * relied upon later; see case 17 and case 24 below.
+   * Yes, this is another reason to drop --long-opts */
   {"single-threaded" , lsx_option_arg_none    , NULL, 0},
+
   {"ignore-length"   , lsx_option_arg_none    , NULL, 0},
   {"norm"            , lsx_option_arg_optional, NULL, 0},
   {"magic"           , lsx_option_arg_none    , NULL, 0},
   {"play-rate-arg"   , lsx_option_arg_required, NULL, 0},
   {"clobber"         , lsx_option_arg_none    , NULL, 0},
   {"no-clobber"      , lsx_option_arg_none    , NULL, 0},
+
+  /* FIXME: see above */
   {"multi-threaded"  , lsx_option_arg_none    , NULL, 0},
+
   {"dft-min"         , lsx_option_arg_required, NULL, 0},
 
   {"bits"            , lsx_option_arg_required, NULL, 'b'},
@@ -2309,7 +2311,7 @@ static char parse_gopts_and_fopts(file_t * f)
       case 14: break;
       case 15: effects_filename = lsx_strdup(optstate.arg); break;
       case 16: sox_globals.tmp_path = lsx_strdup(optstate.arg); break;
-      case 17: sox_globals.use_threads = sox_false; break;
+      case 17: /* FIXME sox_globals.use_threads = sox_false; */ break;
       case 18: f->signal.length = SOX_IGNORE_LENGTH; break;
       case 19: do_guarded_norm = is_guarded = sox_true;
         norm_level = lsx_strdup(optstate.arg);
@@ -2323,7 +2325,7 @@ static char parse_gopts_and_fopts(file_t * f)
       case 21: play_rate_arg = lsx_strdup(optstate.arg); break;
       case 22: no_clobber = sox_false; break;
       case 23: no_clobber = sox_true; break;
-      case 24: sox_globals.use_threads = sox_true; break;
+      case 24: /* FIXME sox_globals.use_threads = sox_true; */ break;
       case 25:
         if (sscanf(optstate.arg, "%i %c", &i, &dummy) != 1 || i < 8 || i > 16) {
           lsx_fail("Min DFT size must be in range 8 to 16");
