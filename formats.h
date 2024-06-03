@@ -83,7 +83,7 @@
 #if HAVE_MP3
   FORMAT(mp3)
 #endif
-#if HAVE_OGGVORBIS
+#if HAVE_OGG && HAVE_VORBIS
   FORMAT(vorbis)
 #endif
 #if HAVE_OPUS
