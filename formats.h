@@ -80,7 +80,7 @@
 #if HAVE_LPC10
   FORMAT(lpc10)
 #endif
-#if HAVE_MP3
+#if HAVE_MAD
   FORMAT(mp3)
 #endif
 #if HAVE_OGG && HAVE_VORBIS

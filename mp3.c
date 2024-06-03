@@ -22,9 +22,9 @@
   #define HAVE_TWOLAME 1
 #endif
 
-#if defined(HAVE_MAD_H) || defined(HAVE_LAME) || defined(HAVE_TWOLAME)
+#if HAVE_MAD || defined(HAVE_LAME) || defined(HAVE_TWOLAME)
 
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
 #include <mad.h>
 #endif
 
@@ -64,7 +64,7 @@ typedef enum {
  * Sidestep the issue by defining our own mad_timer_zero. This is needed because
  * mad_timer_zero is used in some of the mad.h macros.
  */
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
 #define mad_timer_zero mad_timer_zero_stub
 static mad_timer_t const mad_timer_zero_stub = {0, 0};
 #endif
@@ -82,19 +82,10 @@ static mad_timer_t const mad_timer_zero_stub = {0, 0};
 
 static const char* const mad_library_names[] =
 {
-#ifdef DL_MAD
-    "libmad",
-    "libmad-0",
-    "cygmad-0",
-#endif
     NULL
 };
 
-#ifdef DL_MAD
-  #define MAD_FUNC LSX_DLENTRY_DYNAMIC
-#else
-  #define MAD_FUNC LSX_DLENTRY_STATIC
-#endif
+#define MAD_FUNC LSX_DLENTRY_STATIC
 
 #define MAD_FUNC_ENTRIES(f,x) \
   MAD_FUNC(f,x, void, mad_stream_buffer, (struct mad_stream *, unsigned char const *, unsigned long)) \
@@ -199,7 +190,7 @@ typedef struct mp3_priv_t {
   unsigned char *mp3_buffer;
   size_t mp3_buffer_size;
 
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
   struct mad_stream       Stream;
   struct mad_frame        Frame;
   struct mad_synth        Synth;
@@ -207,7 +198,7 @@ typedef struct mp3_priv_t {
   ptrdiff_t               cursamp;
   size_t                  FrameCount;
   LSX_DLENTRIES_TO_PTRS(MAD_FUNC_ENTRIES, mad_dl);
-#endif /*HAVE_MAD_H*/
+#endif
 
 #if defined(HAVE_LAME) || defined(HAVE_TWOLAME)
   float *pcm_buffer;
@@ -228,7 +219,7 @@ typedef struct mp3_priv_t {
 #endif
 } priv_t;
 
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
 
 /* This function merges the functions tagtype() and id3_tag_query()
    from MAD's libid3tag, so we don't have to link to it
@@ -259,11 +250,11 @@ static int tagtype(const unsigned char *data, size_t length)
     return 0;
 }
 
-#endif /*HAVE_MAD_H*/
+#endif
 
 #include "mp3-util.h"
 
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
 
 /*
  * (Re)fill the stream buffer that is to be decoded.  If any data
@@ -662,7 +653,7 @@ static int sox_mp3seek(sox_format_t * ft, uint64_t offset)
 
   return SOX_EOF;
 }
-#else /* !HAVE_MAD_H */
+#else /* !HAVE_MAD */
 static int startread(sox_format_t * ft)
 {
   lsx_fail_errno(ft,SOX_EOF,"SoX was compiled without MP3 decoding support");
@@ -671,7 +662,7 @@ static int startread(sox_format_t * ft)
 #define sox_mp3read NULL
 #define stopread NULL
 #define sox_mp3seek NULL
-#endif /*HAVE_MAD_H*/
+#endif /* HAVE_MAD */
 
 #ifdef HAVE_LAME
 
@@ -1295,4 +1286,4 @@ LSX_FORMAT_HANDLER(mp3)
   };
   return &handler;
 }
-#endif /* defined(HAVE_MAD_H) || defined(HAVE_LAME) || defined(HAVE_TWOLAME) */
+#endif

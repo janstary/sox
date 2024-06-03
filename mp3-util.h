@@ -62,7 +62,7 @@ static void write_comments(sox_format_t * ft)
 
 #endif /* HAVE_LAME */
 
-#ifdef HAVE_MAD_H
+#if HAVE_MAD
 
 static unsigned long xing_frames(priv_t * p, struct mad_bitptr ptr, unsigned bitlen)
 {
@@ -168,4 +168,4 @@ static size_t mp3_duration(sox_format_t * ft)
   return num_samples;
 }
 
-#endif /* HAVE_MAD_H */
+#endif

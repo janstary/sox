@@ -33,7 +33,7 @@ DEVLIBS=
 # optional external libraries
 HAVE_FLAC=
 HAVE_GSM=
-HAVE_MP3=
+HAVE_MAD=
 HAVE_OGG=
 HAVE_OPUS=
 HAVE_PNG=
@@ -166,7 +166,7 @@ runtest ntohl		NTOHL		|| true
 # detect optional formats
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
-runtest mp3	MP3			|| true
+runtest mad	MAD     -lmad		|| true
 runtest ogg	OGG     -logg		|| true
 runtest opus	OPUS    -lopus		|| true
 runtest png	PNG     -lpng		|| true
@@ -206,6 +206,11 @@ fi
 if [ ${HAVE_GSM} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} gsm.o"
 	ADDLIBS="${ADDLIBS} -lgsm"
+fi
+
+if [ ${HAVE_MAD} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} mp3.o"
+	ADDLIBS="${ADDLIBS} -lmad"
 fi
 
 if [ ${HAVE_OGG} -eq 1 -a ${HAVE_VORBIS} -eq 1 ]; then
@@ -280,7 +285,7 @@ cat << __HEREDOC__
 
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
-#define HAVE_MP3	${HAVE_MP3}
+#define HAVE_MAD	${HAVE_MAD}
 #define HAVE_OGG	${HAVE_OGG}
 #define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
