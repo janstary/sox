@@ -22,10 +22,9 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <math.h>
-#if HAVE_PNG && HAVE_ZLIB
-#include <png.h>
+
 #include <zlib.h>
-#endif
+#include <png.h>
 
 #if HAVE_IO
   #include <io.h>

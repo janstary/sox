@@ -29,8 +29,6 @@ CFLAGS="$CFLAGS $OPENMP_CFLAGS"
 	Get rid of threads.
 
 SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
-SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
-SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
 SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
 
 SOX_DL_LIB([opencore-amrnb], [opencore-amrnb/interf_dec.h], [opencore-amrnb],
@@ -95,9 +93,6 @@ libsox_la_SOURCES += \
 	remix.c repeat.c reverb.c reverse.c silence.c sinc.c skeleff.c \
 	speed.c splice.c stat.c stats.c stretch.c swap.c \
 	synth.c tempo.c tremolo.c trim.c upsample.c vad.c vol.c
-if HAVE_PNG
-    libsox_la_SOURCES += spectrogram.c
-endif
 
 #########################
 # libsox - File Formats #

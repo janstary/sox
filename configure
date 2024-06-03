@@ -213,10 +213,10 @@ if [ ${HAVE_OPUS} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lopus -lopusfile"
 fi
 
-#if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
-#	ADDOBJS="${ADDOBJS} spectrogram.o"
-#	ADDLIBS="${ADDLIBS} -lpng -lz"
-#fi
+if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} spectrogram.o"
+	ADDLIBS="${ADDLIBS} -lpng -lz"
+fi
 
 if [ ${HAVE_SNDFILE} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} sndfile.o caf.o fap.o mat4.o mat5.o"
