@@ -45,13 +45,9 @@ static char const amrwb_magic[] = "#!AMR-WB\n";
 
 /* OpenCore definitions: */
 
-#ifdef DL_OPENCORE_AMRWB
-  #define AMR_OC_FUNC  LSX_DLENTRY_DYNAMIC
-#else
-  #define AMR_OC_FUNC  LSX_DLENTRY_STATIC
-#endif
+#define AMR_OC_FUNC  LSX_DLENTRY_STATIC
 
-#if defined(HAVE_OPENCORE_AMRWB_DEC_IF_H) || defined(DL_OPENCORE_AMRWB)
+#if HAVE_AMRWB
   #define AMR_OPENCORE 1
   #define AMR_OPENCORE_ENABLE_ENCODE 0
 #endif
@@ -71,22 +67,14 @@ static char const amrwb_magic[] = "#!AMR-WB\n";
 #define AMR_OPENCORE_DESC "amr-wb OpenCore library"
 static const char* const amr_opencore_library_names[] =
 {
-#ifdef DL_OPENCORE_AMRWB
-  "libopencore-amrwb",
-  "libopencore-amrwb-0",
-#endif
   NULL
 };
 
 /* VO definitions: */
 
-#ifdef DL_VO_AMRWBENC
-  #define AMR_VO_FUNC  LSX_DLENTRY_DYNAMIC
-#else
-  #define AMR_VO_FUNC  LSX_DLENTRY_STATIC
-#endif
+#define AMR_VO_FUNC  LSX_DLENTRY_STATIC
 
-#if defined(HAVE_VO_AMRWBENC_ENC_IF_H) || defined(DL_VO_AMRWBENC)
+#if defined(HAVE_VO_AMRWBENC_ENC_IF_H)
   #define AMR_VO 1
 #endif
 
@@ -105,10 +93,6 @@ static const char* const amr_opencore_library_names[] =
 #define AMR_VO_DESC "amr-wb VisualOn library"
 static const char* const amr_vo_library_names[] =
 {
-#ifdef DL_VO_AMRWBENC
-  "libvo-amrwbenc",
-  "libvo-amrwbenc-0",
-#endif
   NULL
 };
 
