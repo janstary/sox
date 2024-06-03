@@ -52,7 +52,6 @@ SOXOBJS	= \
 	libsox.o \
 	lu-fmt.o \
 	maud.o \
-	mp3.o \
 	nulfile.o \
 	prc.o \
 	raw-fmt.o \
