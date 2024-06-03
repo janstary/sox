@@ -14,11 +14,11 @@
 #include <string.h>
 #include "sox_i.h"
 
-#if defined(HAVE_LAME_LAME_H) || defined(HAVE_LAME_H) || defined(DL_LAME)
+#if defined(HAVE_LAME_LAME_H) || defined(HAVE_LAME_H)
 #define HAVE_LAME 1
 #endif
 
-#if defined(HAVE_TWOLAME_H) || defined(DL_TWOLAME)
+#if defined(HAVE_TWOLAME_H)
   #define HAVE_TWOLAME 1
 #endif
 
@@ -32,12 +32,6 @@
 #include <lame/lame.h>
 #elif defined(HAVE_LAME_H)
 #include <lame.h>
-#elif defined(DL_LAME)
-typedef struct lame_global_struct lame_global_flags;
-typedef enum {
-  vbr_off=0,
-  vbr_default=4
-} vbr_mode;
 #endif
 
 #if HAVE_ID3TAG && HAVE_IO
@@ -108,20 +102,10 @@ static const char* const mad_library_names[] =
 
 static const char* const lame_library_names[] =
 {
-#ifdef DL_LAME
-  "libmp3lame",
-  "libmp3lame-0",
-  "lame-enc",
-  "cygmp3lame-0",
-#endif
   NULL
 };
 
-#ifdef DL_LAME
-  #define LAME_FUNC           LSX_DLENTRY_DYNAMIC
-#else /* DL_LAME */
-  #define LAME_FUNC           LSX_DLENTRY_STATIC
-#endif /* DL_LAME */
+#define LAME_FUNC           LSX_DLENTRY_STATIC
 
 #define LAME_FUNC_ENTRIES(f,x) \
   LAME_FUNC(f,x, lame_global_flags*, lame_init, (void)) \
@@ -159,19 +143,11 @@ static const char* const lame_library_names[] =
 #ifdef HAVE_TWOLAME
 static const char* const twolame_library_names[] =
 {
-#ifdef DL_TWOLAME
-  "libtwolame",
-  "libtwolame-0",
-#endif
   NULL
 };
 #endif
 
-#ifdef DL_TWOLAME
-  #define TWOLAME_FUNC LSX_DLENTRY_DYNAMIC
-#else
-  #define TWOLAME_FUNC LSX_DLENTRY_STATIC
-#endif
+#define TWOLAME_FUNC LSX_DLENTRY_STATIC
 
 #define TWOLAME_FUNC_ENTRIES(f,x) \
   TWOLAME_FUNC(f,x, twolame_options*, twolame_init, (void)) \
