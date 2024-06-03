@@ -15,8 +15,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/* formats implemented "natively" within SoX itself */
-
   FORMAT(aifc)
   FORMAT(aiff)
   FORMAT(al)
@@ -62,8 +60,6 @@
   FORMAT(wav)
   FORMAT(wve)
   FORMAT(xa)
-
-/* optional formats provioded by external libraries */
 
 #if HAVE_AMRNB
   FORMAT(amr_nb)
