@@ -31,6 +31,7 @@ DEVLIBS=
 # standard library functions
 
 # optional external libraries
+HAVE_AMRNB=
 HAVE_FLAC=
 HAVE_GSM=
 HAVE_MAD=
@@ -164,6 +165,7 @@ runtest err		ERR		|| true
 runtest ntohl		NTOHL		|| true
 
 # detect optional formats
+runtest amrnb	AMRNB   -lopencore-amrnb|| true
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest mad	MAD     -lmad		|| true
@@ -197,6 +199,11 @@ runtest sunaudio	SUNAUDIO				|| true
 # are we linking extra libraries?
 
 ADDLIBS="${ADDLIBS} -lm"
+
+if [ ${HAVE_AMRNB} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} amr-nb.o"
+	ADDLIBS="${ADDLIBS} -lopencore-amrnb"
+fi
 
 if [ ${HAVE_FLAC} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} flac.o"
@@ -283,6 +290,7 @@ cat << __HEREDOC__
 #define HAVE_ERR	${HAVE_ERR}
 #define HAVE_NTOHL	${HAVE_NTOHL}
 
+#define HAVE_AMRNB	${HAVE_AMRNB}
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
 #define HAVE_MAD	${HAVE_MAD}
