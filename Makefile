@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-BINS	= sox
+PROG	= sox
 MANS	= sox.1 soxi.1
 
 SOXOBJS	= \
@@ -151,7 +151,7 @@ include Makefile.local
 OBJS	= $(SOXOBJS) $(EFFOBJS) $(CPTOBJS) $(ADDOBJS) $(DEVOBJS)
 LIBS	= $(ADDLIBS) $(DEVLIBS)
 
-all: $(BINS) $(MANS) Makefile.local
+all: $(PROG) $(MANS) Makefile.local
 
 sox: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
@@ -163,17 +163,22 @@ include Makefile.depend
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
+test: all
+	$(PROG) -b 16 -c 2 -n file.wav synth 5 sin 220 sin 440 gain -3
+	$(PROG) file.wav file.aiff
+	$(PROG) file.wav file.au
+
 install: all
-	install -d $(BINDIR)      && install -m 0755 $(BINS) $(BINDIR)
+	install -d $(BINDIR)      && install -m 0755 $(PROG) $(BINDIR)
 	install -d $(MANDIR)/man1 && install -m 0644 $(MANS) $(MANDIR)/man1
 	( cd $(BINDIR) && $(LN) sox soxi && $(LN) sox play && $(LN) sox rec )
 
 uninstall:
-	( cd $(BINDIR) && rm -f $(BINS) soxi play rec )
+	( cd $(BINDIR) && rm -f $(PROG) soxi play rec )
 	( cd $(MANDIR) && rm -f $(MANS) )
 
 clean:
-	rm -rf $(BINS) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
+	rm -rf $(PROG) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
 
 distclean: clean
 	rm -f Makefile.local config.*
