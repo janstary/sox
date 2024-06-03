@@ -155,7 +155,6 @@ vol.o: vol.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 #example2.o: example2.c sox.h util.h config.h xmalloc.h
 #example3.o: example3.c sox.h util.h config.h xmalloc.h
 #example4.o: example4.c sox.h
-#example5.o: example5.c sox.h util.h config.h xmalloc.h
 #example6.o: example6.c sox.h util.h config.h xmalloc.h
 
 # sox itself ind its internals

@@ -509,8 +509,7 @@ Flags indicating whether optional features are present in this build of libSoX.
 typedef enum sox_version_flags_t {
     sox_version_none = 0,         /**< No special features = 0. */
     sox_version_have_popen = 1,   /**< popen = 1. */
-    sox_version_have_magic = 2,   /**< magic = 2. */
-    sox_version_have_memopen = 8  /**< memopen = 8. */
+    sox_version_have_magic = 2    /**< magic = 2. */
 } sox_version_flags_t;
 
 /**
@@ -1291,7 +1290,7 @@ function.
 */
 typedef struct sox_version_info_t {
     size_t       size;         /**< structure size = sizeof(sox_version_info_t) */
-    sox_version_flags_t flags; /**< feature flags = popen | magic | memopen */
+    sox_version_flags_t flags; /**< feature flags = popen | magic */
     sox_uint32_t version_code; /**< version number = 0x140400 */
     char const * version;      /**< version string = sox_version(), for example, "14.4.0" */
     char const * version_extra;/**< version extra info or null = "PACKAGE_EXTRA", for example, "beta" */
@@ -1833,22 +1832,6 @@ sox_open_read(
 
 /**
 Client API:
-Opens a decoding session for a memory buffer. Returned handle must be closed with sox_close().
-@returns The handle for the new session, or null on failure.
-*/
-LSX_RETURN_OPT
-sox_format_t *
-LSX_API
-sox_open_mem_read(
-    LSX_PARAM_IN_BYTECOUNT(buffer_size) void  * buffer,     /**< Pointer to audio data buffer (required). */
-    size_t                                      buffer_size,/**< Number of bytes to read from audio data buffer. */
-    LSX_PARAM_IN_OPT sox_signalinfo_t   const * signal,     /**< Information already known about audio stream, or NULL if none. */
-    LSX_PARAM_IN_OPT sox_encodinginfo_t const * encoding,   /**< Information already known about sample encoding, or NULL if none. */
-    LSX_PARAM_IN_OPT_Z char             const * filetype    /**< Previously-determined file type, or NULL to auto-detect. */
-    );
-
-/**
-Client API:
 Returns true if the format handler for the specified file type supports the specified encoding.
 @returns true if the format handler for the specified file type supports the specified encoding.
 */
@@ -1889,40 +1872,6 @@ sox_open_write(
     LSX_PARAM_IN_OPT_Z char               const * filetype, /**< Previously-determined file type, or NULL to auto-detect. */
     LSX_PARAM_IN_OPT   sox_oob_t          const * oob,      /**< Out-of-band data to add to file, or NULL if none. */
     LSX_PARAM_IN_OPT   sox_bool           (LSX_API * overwrite_permitted)(LSX_PARAM_IN_Z char const * filename) /**< Called if file exists to determine whether overwrite is ok. */
-    );
-
-/**
-Client API:
-Opens an encoding session for a memory buffer. Returned handle must be closed with sox_close().
-@returns The new session handle, or null on failure.
-*/
-LSX_RETURN_OPT
-sox_format_t *
-LSX_API
-sox_open_mem_write(
-    LSX_PARAM_OUT_BYTECAP(buffer_size) void                     * buffer,      /**< Pointer to audio data buffer that receives data (required). */
-    LSX_PARAM_IN                       size_t                     buffer_size, /**< Maximum number of bytes to write to audio data buffer. */
-    LSX_PARAM_IN                       sox_signalinfo_t   const * signal,      /**< Information about desired audio stream (required). */
-    LSX_PARAM_IN_OPT                   sox_encodinginfo_t const * encoding,    /**< Information about desired sample encoding, or NULL to use defaults. */
-    LSX_PARAM_IN_OPT_Z                 char               const * filetype,    /**< Previously-determined file type, or NULL to auto-detect. */
-    LSX_PARAM_IN_OPT                   sox_oob_t          const * oob          /**< Out-of-band data to add to file, or NULL if none. */
-    );
-
-/**
-Client API:
-Opens an encoding session for a memstream buffer. Returned handle must be closed with sox_close().
-@returns The new session handle, or null on failure.
-*/
-LSX_RETURN_OPT
-sox_format_t *
-LSX_API
-sox_open_memstream_write(
-    LSX_PARAM_OUT      char                     * * buffer_ptr,    /**< Receives pointer to audio data buffer that receives data (required). */
-    LSX_PARAM_OUT      size_t                   * buffer_size_ptr, /**< Receives size of data written to audio data buffer (required). */
-    LSX_PARAM_IN       sox_signalinfo_t   const * signal,          /**< Information about desired audio stream (required). */
-    LSX_PARAM_IN_OPT   sox_encodinginfo_t const * encoding,        /**< Information about desired sample encoding, or NULL to use defaults. */
-    LSX_PARAM_IN_OPT_Z char               const * filetype,        /**< Previously-determined file type, or NULL to auto-detect. */
-    LSX_PARAM_IN_OPT   sox_oob_t          const * oob              /**< Out-of-band data to add to file, or NULL if none. */
     );
 
 /**

@@ -73,9 +73,6 @@ sox_init
 sox_init_encodinginfo
 sox_is_playlist
 sox_num_comments
-sox_open_mem_read
-sox_open_mem_write
-sox_open_memstream_write
 sox_open_read
 sox_open_write
 sox_parse_playlist

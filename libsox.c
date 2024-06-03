@@ -46,7 +46,6 @@ sox_version_info_t const * sox_version_info(void)
 #if  HAVE_MAGIC
         sox_version_have_magic +
 #endif
-        sox_version_have_memopen +
         sox_version_none),
         /* version_code */
         SOX_LIB_VERSION_CODE,
