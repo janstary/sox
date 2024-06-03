@@ -38,19 +38,13 @@ SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],
 HAVE_LIBLPC10
 
-SOX_DL_LIB([mad], [mad.h], [mad], [mad_stream_buffer])
 SOX_DL_LIB([lame], [lame/lame.h lame.h], [mp3lame], [lame_init])
 SOX_DL_LIB([twolame], [twolame.h], [twolame], [twolame_init])
-SOX_FMT_REQ([mp3], [MAD LAME TWOLAME])
-
-SOX_FMT_PKG([oggvorbis], [ogg vorbis vorbisenc vorbisfile])
 
 SOX_FMT_LIB([ao], [ao/ao.h], [ao], [ao_play], [], [], [devices])
 SOX_FMT_LIB([pulseaudio], [pulse/simple.h], [pulse], [pa_simple_new], [],
     [-lpulse-simple], [devices])
 SOX_FMT_HEADERS([oss], [sys/soundcard.h], [SOUND_MIXER_MUTE], [], [devices])
-SOX_FMT_HEADERS([sunaudio], [sys/audioio.h sun/audioio.h],
-    [AUDIO_GETINFO], [], [devices])
 
 sox.1
 	no need to have soxi.1 and play.1 and rec.1 as copies
