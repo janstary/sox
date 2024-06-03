@@ -249,6 +249,11 @@ if [ ${HAVE_SNDIO} -eq 1 ]; then
 	DEVLIBS="${DEVLIBS} -lsndio"
 fi
 
+if [ ${HAVE_SUNAUDIO} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} sunaudio.o"
+	# no extra lib needed
+fi
+
 echo "extra libs: ${ADDLIBS}" 1>&2
 echo "extra libs: ${ADDLIBS}" 1>&3
 echo "driver libs: ${DEVLIBS}" 1>&2
