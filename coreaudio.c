@@ -6,11 +6,14 @@
 #include "sox_i.h"
 
 #include <CoreAudio/CoreAudio.h>
+#include <pthread.h>
 
 #define Buffactor 4
 
 typedef struct {
   AudioDeviceID adid;
+  pthread_mutex_t mutex;
+  pthread_cond_t cond;
   int device_started;
   size_t bufsize;
   size_t bufrd;
@@ -30,6 +33,8 @@ static OSStatus PlaybackIOProc(AudioDeviceID inDevice UNUSED,
     priv_t *ac = (priv_t*)((sox_format_t*)inClientData)->priv;
     AudioBuffer *buf;
     size_t copylen, avail;
+
+    pthread_mutex_lock(&ac->mutex);
 
     for(buf = outOutputData->mBuffers;
         buf != outOutputData->mBuffers + outOutputData->mNumberBuffers;
@@ -56,6 +61,9 @@ static OSStatus PlaybackIOProc(AudioDeviceID inDevice UNUSED,
         ac->bufrdavail -= copylen;
     }
 
+    pthread_cond_signal(&ac->cond);
+    pthread_mutex_unlock(&ac->mutex);
+
     return kAudioHardwareNoError;
 }
 
@@ -70,6 +78,8 @@ static OSStatus RecIOProc(AudioDeviceID inDevice UNUSED,
     priv_t *ac = (priv_t *)((sox_format_t*)inClientData)->priv;
     AudioBuffer const *buf;
     size_t nfree, copylen, avail;
+
+    pthread_mutex_lock(&ac->mutex);
 
     for(buf = inInputData->mBuffers;
         buf != inInputData->mBuffers + inInputData->mNumberBuffers;
@@ -99,6 +109,9 @@ static OSStatus RecIOProc(AudioDeviceID inDevice UNUSED,
             ac->bufwr -= ac->bufsize;
         ac->bufrdavail += copylen;
     }
+
+    pthread_cond_signal(&ac->cond);
+    pthread_mutex_unlock(&ac->mutex);
 
     return kAudioHardwareNoError;
 }
@@ -245,6 +258,20 @@ static int setup(sox_format_t *ft, int is_input)
                                   kAudioDevicePropertyBufferSize,
                                   property_size, &buf_size);
 
+  rc = pthread_mutex_init(&ac->mutex, NULL);
+  if (rc)
+  {
+    lsx_fail_errno(ft, SOX_EPERM, "failed initializing mutex");
+    return SOX_EOF;
+  }
+
+  rc = pthread_cond_init(&ac->cond, NULL);
+  if (rc)
+  {
+    lsx_fail_errno(ft, SOX_EPERM, "failed initializing condition");
+    return SOX_EOF;
+  }
+
   ac->device_started = 0;
 
   /* Registers callback with the device without activating it. */
@@ -272,6 +299,12 @@ static size_t read_samples(sox_format_t *ft, sox_sample_t *buf, size_t nsamp)
         ac->device_started = 1;
     }
 
+    pthread_mutex_lock(&ac->mutex);
+
+    /* Wait until input buffer has been filled by device driver */
+    while (ac->bufrdavail == 0)
+        pthread_cond_wait(&ac->cond, &ac->mutex);
+
     len = 0;
     while(len < nsamp && ac->bufrdavail > 0){
         buf[len] = SOX_FLOAT_32BIT_TO_SAMPLE(ac->buf[ac->bufrd], ft->clips);
@@ -282,6 +315,8 @@ static size_t read_samples(sox_format_t *ft, sox_sample_t *buf, size_t nsamp)
         ac->bufrdavail--;
     }
 
+    pthread_mutex_unlock(&ac->mutex);
+
     return len;
 }
 
@@ -291,6 +326,8 @@ static int stopread(sox_format_t * ft)
 
   AudioDeviceStop(ac->adid, RecIOProc);
   AudioDeviceRemoveIOProc(ac->adid, RecIOProc);
+  pthread_cond_destroy(&ac->cond);
+  pthread_mutex_destroy(&ac->mutex);
   free(ac->buf);
 
   return SOX_SUCCESS;
@@ -308,8 +345,14 @@ static size_t write_samples(sox_format_t *ft, const sox_sample_t *buf, size_t ns
 
     SOX_SAMPLE_LOCALS;
 
+    pthread_mutex_lock(&ac->mutex);
+
+    /* Wait to start until mutex is locked to help prevent callback
+    * getting zero samples.
+    */
     if(!ac->device_started){
         if(AudioDeviceStart(ac->adid, PlaybackIOProc)){
+            pthread_mutex_unlock(&ac->mutex);
             return SOX_EOF;
         }
         ac->device_started = 1;
@@ -320,12 +363,17 @@ static size_t write_samples(sox_format_t *ft, const sox_sample_t *buf, size_t ns
     * buf_size is in bytes
     */
     for(i = 0; i < nsamp; i++){
+        while(ac->bufrdavail == ac->bufsize - 1)
+            pthread_cond_wait(&ac->cond, &ac->mutex);
+
         ac->buf[ac->bufwr] = SOX_SAMPLE_TO_FLOAT_32BIT(buf[i], ft->clips);
         ac->bufwr++;
         if(ac->bufwr == ac->bufsize)
             ac->bufwr = 0;
         ac->bufrdavail++;
     }
+
+    pthread_mutex_unlock(&ac->mutex);
     return nsamp;
 }
 
@@ -335,10 +383,19 @@ static int stopwrite(sox_format_t * ft)
     priv_t *ac = (priv_t *)ft->priv;
 
     if(ac->device_started){
+        pthread_mutex_lock(&ac->mutex);
+
+        while (ac->bufrdavail > 0)
+            pthread_cond_wait(&ac->cond, &ac->mutex);
+
+        pthread_mutex_unlock(&ac->mutex);
+
         AudioDeviceStop(ac->adid, PlaybackIOProc);
     }
 
     AudioDeviceRemoveIOProc(ac->adid, PlaybackIOProc);
+    pthread_cond_destroy(&ac->cond);
+    pthread_mutex_destroy(&ac->mutex);
     free(ac->buf);
 
     return SOX_SUCCESS;
