@@ -14,7 +14,6 @@
 #define SOX_I_H
 
 #include "config.h"
-#include "soxomp.h" /* already includes config.h */
 #include "sox.h"
 
 #define _GNU_SOURCE

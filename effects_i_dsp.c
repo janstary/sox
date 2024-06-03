@@ -22,70 +22,11 @@
 #undef NDEBUG /* Must undef above assert.h or other that might include it. */
 #endif
 
-#include "sox_i.h"
-#include <assert.h>
 #include <string.h>
+#include <assert.h>
 
-/* Concurrent Control with "Readers" and "Writers", P.J. Courtois et al, 1971:*/
-
-#if defined HAVE_OPENMP
-
-typedef struct {
-  int readcount, writecount; /* initial value = 0 */
-  omp_lock_t mutex_1, mutex_2, mutex_3, w, r; /* initial value = 1 */
-} ccrw2_t; /* Problem #2: `writers-preference' */
-
-#define ccrw2_become_reader(p) do {\
-  omp_set_lock(&p.mutex_3);\
-    omp_set_lock(&p.r);\
-      omp_set_lock(&p.mutex_1);\
-        if (++p.readcount == 1) omp_set_lock(&p.w);\
-      omp_unset_lock(&p.mutex_1);\
-    omp_unset_lock(&p.r);\
-  omp_unset_lock(&p.mutex_3);\
-} while (0)
-#define ccrw2_cease_reading(p) do {\
-  omp_set_lock(&p.mutex_1);\
-    if (!--p.readcount) omp_unset_lock(&p.w);\
-  omp_unset_lock(&p.mutex_1);\
-} while (0)
-#define ccrw2_become_writer(p) do {\
-  omp_set_lock(&p.mutex_2);\
-    if (++p.writecount == 1) omp_set_lock(&p.r);\
-  omp_unset_lock(&p.mutex_2);\
-  omp_set_lock(&p.w);\
-} while (0)
-#define ccrw2_cease_writing(p) do {\
-  omp_unset_lock(&p.w);\
-  omp_set_lock(&p.mutex_2);\
-    if (!--p.writecount) omp_unset_lock(&p.r);\
-  omp_unset_lock(&p.mutex_2);\
-} while (0)
-#define ccrw2_init(p) do {\
-  omp_init_lock(&p.mutex_1);\
-  omp_init_lock(&p.mutex_2);\
-  omp_init_lock(&p.mutex_3);\
-  omp_init_lock(&p.w);\
-  omp_init_lock(&p.r);\
-} while (0)
-#define ccrw2_clear(p) do {\
-  omp_destroy_lock(&p.r);\
-  omp_destroy_lock(&p.w);\
-  omp_destroy_lock(&p.mutex_3);\
-  omp_destroy_lock(&p.mutex_2);\
-  omp_destroy_lock(&p.mutex_1);\
-} while (0)
-
-#else
-
-#define ccrw2_become_reader(x) (void)0
-#define ccrw2_cease_reading(x) (void)0
-#define ccrw2_become_writer(x) (void)0
-#define ccrw2_cease_writing(x) (void)0
-#define ccrw2_init(x) (void)0
-#define ccrw2_clear(x) (void)0
-
-#endif /* HAVE_OPENMP */
+#include "sox_i.h"
+#include "fft4g.h"
 
 /* Numerical Recipes cubic spline: */
 
@@ -155,27 +96,21 @@ int lsx_set_dft_length(int num_taps) /* Set to 4 x nearest power of 2 */
   return 1 << range_limit((int)(d + 2.77), min, max((int)(d + 1.77), 17));
 }
 
-#include "fft4g.h"
 static int * lsx_fft_br;
 static double * lsx_fft_sc;
 static int fft_len = -1;
-#if defined HAVE_OPENMP
-static ccrw2_t fft_cache_ccrw;
-#endif
 
 void init_fft_cache(void)
 {
   assert(lsx_fft_br == NULL);
   assert(lsx_fft_sc == NULL);
   assert(fft_len == -1);
-  ccrw2_init(fft_cache_ccrw);
   fft_len = 0;
 }
 
 void clear_fft_cache(void)
 {
   assert(fft_len >= 0);
-  ccrw2_clear(fft_cache_ccrw);
   free(lsx_fft_br);
   free(lsx_fft_sc);
   lsx_fft_sc = NULL;
@@ -187,10 +122,7 @@ static sox_bool update_fft_cache(int len)
 {
   assert(lsx_is_power_of_2(len));
   assert(fft_len >= 0);
-  ccrw2_become_reader(fft_cache_ccrw);
   if (len > fft_len) {
-    ccrw2_cease_reading(fft_cache_ccrw);
-    ccrw2_become_writer(fft_cache_ccrw);
     if (len > fft_len) {
       int old_n = fft_len;
       fft_len = len;
@@ -200,31 +132,20 @@ static sox_bool update_fft_cache(int len)
         lsx_fft_br[0] = 0;
       return sox_true;
     }
-    ccrw2_cease_writing(fft_cache_ccrw);
-    ccrw2_become_reader(fft_cache_ccrw);
   }
   return sox_false;
-}
-
-static void done_with_fft_cache(sox_bool is_writer)
-{
-  if (is_writer)
-    ccrw2_cease_writing(fft_cache_ccrw);
-  else ccrw2_cease_reading(fft_cache_ccrw);
 }
 
 void lsx_safe_rdft(int len, int type, double * d)
 {
   sox_bool is_writer = update_fft_cache(len);
   lsx_rdft(len, type, d, lsx_fft_br, lsx_fft_sc);
-  done_with_fft_cache(is_writer);
 }
 
 void lsx_safe_cdft(int len, int type, double * d)
 {
   sox_bool is_writer = update_fft_cache(len);
   lsx_cdft(len, type, d, lsx_fft_br, lsx_fft_sc);
-  done_with_fft_cache(is_writer);
 }
 
 void lsx_power_spectrum(int n, double const * in, double * out)

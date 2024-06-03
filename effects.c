@@ -268,20 +268,6 @@ static int flow_effect(sox_effects_chain_t * chain, size_t n)
     size_t idone_min = SOX_SIZE_MAX, idone_max = 0;
     size_t odone_min = SOX_SIZE_MAX, odone_max = 0;
 
-#ifdef HAVE_OPENMP_3_1
-    #pragma omp parallel for \
-        if(sox_globals.use_threads) \
-        schedule(static) default(none) \
-        shared(effp,effp1,idone,obeg,obuf,flow_offs,chain,n,effstatus) \
-        reduction(min:idone_min,odone_min) reduction(max:idone_max,odone_max)
-#elif defined HAVE_OPENMP
-    #pragma omp parallel for \
-        if(sox_globals.use_threads) \
-        schedule(static) default(none) \
-        shared(effp,effp1,idone,obeg,obuf,flow_offs,chain,n,effstatus) \
-        firstprivate(idone_min,odone_min,idone_max,odone_max) \
-        lastprivate(idone_min,odone_min,idone_max,odone_max)
-#endif
     for (f = 0; f < effp->flows; ++f) {
       size_t idonec = idone / effp->flows;
       size_t odonec = obeg / effp->flows;
