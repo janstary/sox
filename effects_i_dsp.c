@@ -138,13 +138,13 @@ static sox_bool update_fft_cache(int len)
 
 void lsx_safe_rdft(int len, int type, double * d)
 {
-  sox_bool is_writer = update_fft_cache(len);
+  update_fft_cache(len);
   lsx_rdft(len, type, d, lsx_fft_br, lsx_fft_sc);
 }
 
 void lsx_safe_cdft(int len, int type, double * d)
 {
-  sox_bool is_writer = update_fft_cache(len);
+  update_fft_cache(len);
   lsx_cdft(len, type, d, lsx_fft_br, lsx_fft_sc);
 }
 
