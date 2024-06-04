@@ -25,9 +25,6 @@ static const unsigned amrnb_block_size[] = {13, 14, 16, 18, 20, 21, 27, 32, 6, 0
 static char const amrnb_magic[] = "#!AMR\n";
 #define amr_block_size amrnb_block_size
 #define amr_magic amrnb_magic
-#define amr_priv_t amrnb_priv_t
-#define amr_opencore_funcs amrnb_opencore_funcs
-#define amr_gp3_funcs amrnb_gp3_funcs
 
 #define AMR_CODED_MAX       32                  /* max coded size */
 #define AMR_ENCODING        SOX_ENCODING_AMR_NB

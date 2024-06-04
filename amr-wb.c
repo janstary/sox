@@ -23,9 +23,6 @@ static const uint8_t amrwb_block_size[] = {18, 24, 33, 37, 41, 47, 51, 59, 61, 6
 static char const amrwb_magic[] = "#!AMR-WB\n";
 #define amr_block_size amrwb_block_size
 #define amr_magic amrwb_magic
-#define amr_priv_t amrwb_priv_t
-#define amr_opencore_funcs amrwb_opencore_funcs
-#define amr_vo_funcs amrwb_vo_funcs
 
 #define AMR_CODED_MAX       61 /* NB_SERIAL_MAX */
 #define AMR_ENCODING        SOX_ENCODING_AMR_WB
