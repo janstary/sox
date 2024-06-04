@@ -42,6 +42,7 @@ HAVE_OGG=
 HAVE_OPUS=
 HAVE_PNG=
 HAVE_SNDFILE=
+HAVE_TWOLAME=
 HAVE_VORBIS=
 HAVE_WAVPACK=
 HAVE_ZLIB=
@@ -179,6 +180,7 @@ runtest ogg	OGG     -logg		|| true
 runtest opus	OPUS  -lopus -lopusfile	|| true
 runtest png	PNG     -lpng		|| true
 runtest sndfile	SNDFILE -lsndfile	|| true
+runtest twolame	TWOLAME -ltwolame	|| true
 runtest vorbis	VORBIS  -lvorbis	|| true
 runtest wavpack	WAVPACK -lwavpack	|| true
 runtest zlib	ZLIB    -lz		|| true
@@ -227,9 +229,11 @@ if [ ${HAVE_GSM} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lgsm"
 fi
 
-if [ ${HAVE_LAME} -eq 1 -o ${HAVE_MAD} -eq 1 ]; then
-	[ ${HAVE_MAD} -eq 1  ] && ADDLIBS="${ADDLIBS} -lmad"
-	[ ${HAVE_LAME} -eq 1 ] && ADDLIBS="${ADDLIBS} -lmp3lame"
+# https://github.com/janstary/sox/issues/24
+if [ ${HAVE_LAME} -eq 1 -o ${HAVE_TWOLAME} -eq 1 -o ${HAVE_MAD} -eq 1 ]; then
+	[ ${HAVE_MAD} -eq 1     ] && ADDLIBS="${ADDLIBS} -lmad"
+	[ ${HAVE_LAME} -eq 1    ] && ADDLIBS="${ADDLIBS} -lmp3lame"
+	[ ${HAVE_TWOLAME} -eq 1 ] && ADDLIBS="${ADDLIBS} -ltwolame"
 	ADDOBJS="${ADDOBJS} mp3.o"
 fi
 
@@ -316,6 +320,7 @@ cat << __HEREDOC__
 #define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
 #define HAVE_SNDFILE	${HAVE_SNDFILE}
+#define HAVE_TWOLAME	${HAVE_TWOLAME}
 #define HAVE_VORBIS	${HAVE_VORBIS}
 #define HAVE_WAVPACK	${HAVE_WAVPACK}
 #define HAVE_ZLIB	${HAVE_ZLIB}

@@ -14,18 +14,16 @@
 #include <string.h>
 #include "sox_i.h"
 
-#if defined(HAVE_TWOLAME_H)
-  #define HAVE_TWOLAME 1
-#endif
-
-#if HAVE_MAD || HAVE_LAME || HAVE_TWOLAME
-
 #if HAVE_MAD
 #include <mad.h>
 #endif
 
 #if HAVE_LAME
 #include <lame/lame.h>
+#endif
+
+#if HAVE_TWOLAME
+#include <twolame.h>
 #endif
 
 #if HAVE_ID3TAG && HAVE_IO
@@ -40,10 +38,6 @@
 #endif
 #else
   #define ID3_TAG_FLAG_FOOTERPRESENT 0x10
-#endif
-
-#ifdef HAVE_TWOLAME_H
-  #include <twolame.h>
 #endif
 
 /* Under Windows, importing data from DLLs is a dicey proposition. This is true
@@ -134,12 +128,10 @@ static const char* const lame_library_names[] =
   LAME_FUNC(f,x, size_t, lame_get_id3v2_tag, (lame_global_flags *, unsigned char*, size_t)) \
   LAME_FUNC(f,x, int, id3tag_set_fieldvalue, (lame_global_flags *, const char *))
 
-#ifdef HAVE_TWOLAME
 static const char* const twolame_library_names[] =
 {
   NULL
 };
-#endif
 
 #define TWOLAME_FUNC LSX_DLENTRY_STATIC
 
@@ -189,7 +181,11 @@ typedef struct mp3_priv_t {
 #endif
 } priv_t;
 
+
 #if HAVE_MAD
+/* FIXME: it's not "MAD's libid3tag", it's a separate library,
+ * so perhaps even this #if is wrong. Also, we _want_ to link
+ * to the id3 library if we have it, as opposed to replicating it here. */
 
 /* This function merges the functions tagtype() and id3_tag_query()
    from MAD's libid3tag, so we don't have to link to it
@@ -1253,4 +1249,3 @@ LSX_FORMAT_HANDLER(mp3)
   };
   return &handler;
 }
-#endif
