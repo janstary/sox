@@ -33,6 +33,7 @@ DEVLIBS=
 # optional external libraries
 HAVE_AMRNB=
 HAVE_AMRWB=
+HAVE_AMRVO=
 HAVE_FLAC=
 HAVE_GSM=
 HAVE_MAD=
@@ -168,6 +169,7 @@ runtest ntohl		NTOHL		|| true
 # detect optional formats
 runtest amrnb	AMRNB  -lopencore-amrnb	|| true
 runtest amrwb	AMRWB  -lopencore-amrwb	|| true
+runtest amrvo	AMRVO  -lvo-amrwbenc	|| true
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest mad	MAD     -lmad		|| true
@@ -207,9 +209,10 @@ if [ ${HAVE_AMRNB} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lopencore-amrnb"
 fi
 
-if [ ${HAVE_AMRWB} -eq 1 ]; then
+if [ ${HAVE_AMRWB} -eq 1 -o ${HAVE_AMRVO} -eq 1 ]; then
+	[ ${HAVE_AMRWB} -eq 1 ] && ADDLIBS="${ADDLIBS} -lopencore-amrwb"
+	[ ${HAVE_AMRVO} -eq 1 ] && ADDLIBS="${ADDLIBS} -lvo-amrwbenc"
 	ADDOBJS="${ADDOBJS} amr-wb.o"
-	ADDLIBS="${ADDLIBS} -lopencore-amrwb"
 fi
 
 if [ ${HAVE_FLAC} -eq 1 ]; then
@@ -227,14 +230,16 @@ if [ ${HAVE_MAD} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lmad"
 fi
 
-if [ ${HAVE_OGG} -eq 1 -a ${HAVE_VORBIS} -eq 1 ]; then
-	ADDOBJS="${ADDOBJS} vorbis.o"
-	ADDLIBS="${ADDLIBS} -logg -lvorbis -lvorbisfile -lvorbisenc"
-fi
-
-if [ ${HAVE_OGG} -eq 1 -a ${HAVE_OPUS} -eq 1 ]; then
-	ADDOBJS="${ADDOBJS} opus.o"
-	ADDLIBS="${ADDLIBS} -logg -lopus -lopusfile"
+if [ ${HAVE_OGG} -eq 1 ]; then
+	if [ ${HAVE_OPUS} -eq 1 ]; then
+		ADDOBJS="${ADDOBJS} opus.o"
+		ADDLIBS="${ADDLIBS} -lopus -lopusfile"
+	fi
+	if [ ${HAVE_VORBIS} -eq 1 ]; then
+		ADDOBJS="${ADDOBJS} vorbis.o"
+		ADDLIBS="${ADDLIBS} -lvorbis -lvorbisfile -lvorbisenc"
+	fi
+	ADDLIBS="${ADDLIBS} -logg"
 fi
 
 if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
@@ -299,6 +304,7 @@ cat << __HEREDOC__
 
 #define HAVE_AMRNB	${HAVE_AMRNB}
 #define HAVE_AMRWB	${HAVE_AMRWB}
+#define HAVE_AMRVO	${HAVE_AMRVO}
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
 #define HAVE_MAD	${HAVE_MAD}
