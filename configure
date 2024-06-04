@@ -227,14 +227,10 @@ if [ ${HAVE_GSM} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lgsm"
 fi
 
-if [ ${HAVE_LAME} -eq 1 ]; then
+if [ ${HAVE_LAME} -eq 1 -o ${HAVE_MAD} -eq 1 ]; then
+	[ ${HAVE_MAD} -eq 1  ] && ADDLIBS="${ADDLIBS} -lmad"
+	[ ${HAVE_LAME} -eq 1 ] && ADDLIBS="${ADDLIBS} -lmp3lame"
 	ADDOBJS="${ADDOBJS} mp3.o"
-	ADDLIBS="${ADDLIBS} -lmp3lame"
-fi
-
-if [ ${HAVE_MAD} -eq 1 ]; then
-	ADDOBJS="${ADDOBJS} mp3.o"
-	ADDLIBS="${ADDLIBS} -lmad"
 fi
 
 if [ ${HAVE_OGG} -eq 1 ]; then
