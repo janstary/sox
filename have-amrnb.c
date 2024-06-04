@@ -5,11 +5,16 @@
 int
 main(void)
 {
-	if (Decoder_Interface_init() == NULL)
+	void * dec;
+	void * enc;
+
+	if ((dec = Decoder_Interface_init()) == NULL)
 		return 1;
 
-	if (Encoder_Interface_init(0) == NULL)
+	if ((enc = Encoder_Interface_init(0)) == NULL)
 		return 1;
 
+	Decoder_Interface_exit(dec);
+	Encoder_Interface_exit(enc);
 	return 0;
 }

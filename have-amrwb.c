@@ -4,8 +4,11 @@
 int
 main(void)
 {
-	if (D_IF_init() == NULL)
+	void * dec;
+
+	if ((dec = D_IF_init()) == NULL)
 		return 1;
 
+	D_IF_exit(dec);
 	return 0;
 }
