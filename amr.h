@@ -70,7 +70,7 @@ static size_t decode_1_frame(sox_format_t * ft)
   n--;
   if (lsx_readbuf(ft, &coded[1], n) != n)
     return AMR_FRAME;
-  AMR_CALL(p, AmrDecoderDecode, (p->state, coded, p->pcm, 0));
+  AMR_CALL(p, dec_decode, (p->state, coded, p->pcm, 0));
   return 0;
 }
 #endif
@@ -163,7 +163,7 @@ static int startread(sox_format_t * ft)
     return open_library_result;
 
   p->pcm_index = AMR_FRAME;
-  p->state = AMR_CALL(p, AmrDecoderInit, ());
+  p->state = AMR_CALL(p, dec_init, ());
   if (!p->state)
   {
       lsx_fail("AMR decoder failed to initialize.");
@@ -199,7 +199,7 @@ static size_t read_samples(sox_format_t * ft, sox_sample_t * buf, size_t len)
 static int stopread(sox_format_t * ft)
 {
   priv_t * p = (priv_t *)ft->priv;
-  AMR_CALL(p, AmrDecoderExit, (p->state));
+  AMR_CALL(p, dec_exit, (p->state));
   return SOX_SUCCESS;
 }
 
@@ -232,7 +232,7 @@ static int startwrite(sox_format_t * ft)
   if (open_library_result != SOX_SUCCESS)
     return open_library_result;
 
-  p->state = AMR_CALL_ENCODER(p, AmrEncoderInit, ());
+  p->state = AMR_CALL_ENCODER(p, enc_init, ());
   if (!p->state)
   {
       lsx_fail("AMR encoder failed to initialize.");
@@ -251,7 +251,7 @@ static sox_bool encode_1_frame(sox_format_t * ft)
 {
   priv_t * p = (priv_t *)ft->priv;
   uint8_t coded[AMR_CODED_MAX];
-  int n = AMR_CALL_ENCODER(p, AmrEncoderEncode, (p->state, p->mode, p->pcm, coded, 1));
+  int n = AMR_CALL_ENCODER(p, enc_encode, (p->state, p->mode, p->pcm, coded, 1));
   sox_bool result = lsx_writebuf(ft, coded, (size_t) (size_t) (unsigned)n) == (unsigned)n;
   if (!result)
     lsx_fail_errno(ft, errno, "write error");
@@ -287,7 +287,7 @@ static int stopwrite(sox_format_t * ft)
     if (!encode_1_frame(ft))
       result = SOX_EOF;
   }
-  AMR_CALL_ENCODER(p, AmrEncoderExit, (p->state));
+  AMR_CALL_ENCODER(p, enc_exit, (p->state));
   return result;
 }
 

@@ -46,12 +46,9 @@ static char const amrwb_magic[] = "#!AMR-WB\n";
   AMR_OC_FUNC(f,x, void,  D_IF_decode, (void* state, const unsigned char* in, short* out, int bfi)) \
   AMR_OC_FUNC(f,x, void,  D_IF_exit,   (void* state)) \
 
-#define AmrDecoderInit() \
-  D_IF_init()
-#define AmrDecoderDecode(state, in, out, bfi) \
-  D_IF_decode(state, in, out, bfi)
-#define AmrDecoderExit(state) \
-  D_IF_exit(state)
+#define dec_init()		D_IF_init()
+#define dec_exit(s)		D_IF_exit(s)
+#define dec_decode(s, i, o, b)	D_IF_decode(s, i, o, b)
 
 #define AMR_OPENCORE_DESC "amr-wb OpenCore library"
 static const char* const amr_opencore_library_names[] =
@@ -71,12 +68,9 @@ static const char* const amr_opencore_library_names[] =
   AMR_VO_FUNC(f,x, int,   E_IF_encode,(void* state, int16_t mode, int16_t* in, uint8_t* out, int16_t dtx)) \
   AMR_VO_FUNC(f,x, void,  E_IF_exit,     (void* state)) \
 
-#define AmrEncoderInit() \
-  E_IF_init()
-#define AmrEncoderEncode(state, mode, in, out, forceSpeech) \
-  E_IF_encode(state, mode, in, out, forceSpeech)
-#define AmrEncoderExit(state) \
-  E_IF_exit(state)
+#define enc_init()		E_IF_init()
+#define enc_exit(s)		E_IF_exit(s)
+#define enc_encode(s,m,i,o,f)	E_IF_encode(s,m,i,o,f)
 
 #define AMR_VO_DESC "amr-wb VisualOn library"
 static const char* const amr_vo_library_names[] =

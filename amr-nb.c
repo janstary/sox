@@ -52,18 +52,13 @@ static char const amrnb_magic[] = "#!AMR\n";
   AMR_FUNC(f,x, void,  Decoder_Interface_Decode, (void* state, const unsigned char* in, short* out, int bfi)) \
   AMR_FUNC(f,x, void,  Decoder_Interface_exit,   (void* state)) \
 
-#define AmrEncoderInit() \
-  Encoder_Interface_init(1)
-#define AmrEncoderEncode(state, mode, in, out, forceSpeech) \
-  Encoder_Interface_Encode(state, mode, in, out, forceSpeech)
-#define AmrEncoderExit(state) \
-  Encoder_Interface_exit(state)
-#define AmrDecoderInit() \
-  Decoder_Interface_init()
-#define AmrDecoderDecode(state, in, out, bfi) \
-  Decoder_Interface_Decode(state, in, out, bfi)
-#define AmrDecoderExit(state) \
-  Decoder_Interface_exit(state)
+#define dec_init()		Decoder_Interface_init()
+#define dec_exit(s)		Decoder_Interface_exit(s)
+#define dec_decode(s,i,o,b)	Decoder_Interface_Decode(s, i, o, b)
+
+#define enc_init()		Encoder_Interface_init(1)
+#define enc_exit(s)		Encoder_Interface_exit(s)
+#define enc_encode(s,m,i,o,f)	Encoder_Interface_Encode(s, m, i, o, f)
 
 #define AMR_OPENCORE_DESC "amr-nb OpenCore library"
 static const char* const amr_opencore_library_names[] =
