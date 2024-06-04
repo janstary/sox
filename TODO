@@ -29,7 +29,6 @@ SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],
 HAVE_LIBLPC10
 
-SOX_DL_LIB([lame], [lame/lame.h lame.h], [mp3lame], [lame_init])
 SOX_DL_LIB([twolame], [twolame.h], [twolame], [twolame_init])
 
 SOX_FMT_LIB([ao], [ao/ao.h], [ao], [ao_play], [], [], [devices])

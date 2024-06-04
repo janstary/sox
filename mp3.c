@@ -14,24 +14,18 @@
 #include <string.h>
 #include "sox_i.h"
 
-#if defined(HAVE_LAME_LAME_H) || defined(HAVE_LAME_H)
-#define HAVE_LAME 1
-#endif
-
 #if defined(HAVE_TWOLAME_H)
   #define HAVE_TWOLAME 1
 #endif
 
-#if HAVE_MAD || defined(HAVE_LAME) || defined(HAVE_TWOLAME)
+#if HAVE_MAD || HAVE_LAME || HAVE_TWOLAME
 
 #if HAVE_MAD
 #include <mad.h>
 #endif
 
-#if defined(HAVE_LAME_LAME_H)
+#if HAVE_LAME
 #include <lame/lame.h>
-#elif defined(HAVE_LAME_H)
-#include <lame.h>
 #endif
 
 #if HAVE_ID3TAG && HAVE_IO
@@ -176,20 +170,20 @@ typedef struct mp3_priv_t {
   LSX_DLENTRIES_TO_PTRS(MAD_FUNC_ENTRIES, mad_dl);
 #endif
 
-#if defined(HAVE_LAME) || defined(HAVE_TWOLAME)
+#if HAVE_LAME || HAVE_TWOLAME
   float *pcm_buffer;
   size_t pcm_buffer_size;
   char mp2;
 #endif
 
-#ifdef HAVE_LAME
+#if HAVE_LAME
   lame_global_flags *gfp;
   uint64_t num_samples;
   int vbr_tag;
   LSX_DLENTRIES_TO_PTRS(LAME_FUNC_ENTRIES, lame_dl);
 #endif
 
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
   twolame_options *opt;
   LSX_DLENTRIES_TO_PTRS(TWOLAME_FUNC_ENTRIES, twolame_dl);
 #endif
@@ -639,7 +633,7 @@ static int startread(sox_format_t * ft)
 #define sox_mp3seek NULL
 #endif /* HAVE_MAD */
 
-#ifdef HAVE_LAME
+#if HAVE_LAME
 
 /* Adapters for lame message callbacks: */
 
@@ -839,7 +833,7 @@ static void rewrite_tags(sox_format_t * ft, uint64_t num_samples)
 
 #endif /* HAVE_LAME */
 
-#if defined(HAVE_LAME) || defined(HAVE_TWOLAME)
+#if HAVE_LAME || HAVE_TWOLAME
 
 #define LAME_BUFFER_SIZE(num_samples) (((num_samples) + 3) / 4 * 5 + 7200)
 
@@ -859,7 +853,7 @@ static int startwrite(sox_format_t * ft)
       p->mp2 = 1;
 
   if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     LSX_DLLIBRARY_OPEN(
         p,
         twolame_dl,
@@ -872,7 +866,7 @@ static int startwrite(sox_format_t * ft)
     return SOX_EOF;
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     LSX_DLLIBRARY_OPEN(
         p,
         lame_dl,
@@ -895,7 +889,7 @@ static int startwrite(sox_format_t * ft)
   p->pcm_buffer = lsx_malloc(p->pcm_buffer_size);
 
   if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     p->opt = p->twolame_init();
 
     if (p->opt == NULL){
@@ -904,7 +898,7 @@ static int startwrite(sox_format_t * ft)
     }
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     p->gfp = p->lame_init();
 
     if (p->gfp == NULL){
@@ -926,11 +920,11 @@ static int startwrite(sox_format_t * ft)
 
   if (ft->signal.channels != SOX_ENCODING_UNKNOWN) {
     if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
       fail = (p->twolame_set_num_channels(p->opt,(int)ft->signal.channels) != 0);
 #endif
     } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
       fail = (p->lame_set_num_channels(p->gfp,(int)ft->signal.channels) < 0);
 #endif
     }
@@ -941,30 +935,30 @@ static int startwrite(sox_format_t * ft)
   }
   else {
     if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
       ft->signal.channels = p->twolame_get_num_channels(p->opt); /* Twolame default */
 #endif
     } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
       ft->signal.channels = p->lame_get_num_channels(p->gfp); /* LAME default */
 #endif
     }
   }
 
   if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     p->twolame_set_in_samplerate(p->opt,(int)ft->signal.rate);
     p->twolame_set_out_samplerate(p->opt,(int)ft->signal.rate);
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     p->lame_set_in_samplerate(p->gfp,(int)ft->signal.rate);
     p->lame_set_out_samplerate(p->gfp,(int)ft->signal.rate);
 #endif
   }
 
   if (!p->mp2) {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     if (!LSX_DLFUNC_IS_STUB(p, id3tag_init))
       write_comments(ft);
 #endif
@@ -1025,7 +1019,7 @@ static int startwrite(sox_format_t * ft)
         lsx_fail_errno(ft,SOX_EOF,"Variable bitrate encoding not supported for MP2 audio");
         return(SOX_EOF);
       }
-#ifdef HAVE_LAME
+#if HAVE_LAME
       if (p->lame_get_VBR(p->gfp) == vbr_off)
         p->lame_set_VBR(p->gfp, vbr_default);
 
@@ -1046,11 +1040,11 @@ static int startwrite(sox_format_t * ft)
 #endif
     } else {
       if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
         fail = (p->twolame_set_brate(p->opt, bitrate_q) != 0);
 #endif
       } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
         fail = (p->lame_set_brate(p->gfp, bitrate_q) < 0);
 #endif
       }
@@ -1068,7 +1062,7 @@ static int startwrite(sox_format_t * ft)
       /* use default quality value */
       lsx_report("using %s default quality", p->mp2? "MP2" : "MP3");
     } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
       if (p->lame_set_quality(p->gfp, encoder_q) < 0) {
         lsx_fail_errno(ft, SOX_EOF,
           "lame_set_quality(%d) failed", encoder_q);
@@ -1080,17 +1074,17 @@ static int startwrite(sox_format_t * ft)
   }
 
   if (!p->mp2) {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     p->lame_set_bWriteVbrTag(p->gfp, p->vbr_tag);
 #endif
   }
 
   if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     fail = (p->twolame_init_params(p->opt) != 0);
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     fail = (p->lame_init_params(p->gfp) < 0);
 #endif
   }
@@ -1169,12 +1163,12 @@ static size_t sox_mp3write(sox_format_t * ft, const sox_sample_t *buf, size_t sa
     }
 
     if(p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
         written = p->twolame_encode_buffer_float32_interleaved(p->opt, buffer_l,
                   nsamples, p->mp3_buffer, (int)p->mp3_buffer_size);
 #endif
     } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
         written = p->lame_encode_buffer_float(p->gfp, buffer_l, buffer_r,
                   nsamples, p->mp3_buffer, (int)p->mp3_buffer_size);
 #endif
@@ -1200,11 +1194,11 @@ static int stopwrite(sox_format_t * ft)
   int written = 0;
 
   if (p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     written = p->twolame_encode_flush(p->opt, p->mp3_buffer, (int)p->mp3_buffer_size);
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     written = p->lame_encode_flush(p->gfp, p->mp3_buffer, (int)p->mp3_buffer_size);
 #endif
   }
@@ -1213,7 +1207,7 @@ static int stopwrite(sox_format_t * ft)
   else if (lsx_writebuf(ft, p->mp3_buffer, (size_t)written) < (size_t)written)
     lsx_fail_errno(ft, SOX_EOF, "File write failed");
   else if (!p->mp2) {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     if (ft->seekable && (num_samples != p->num_samples || p->vbr_tag))
       rewrite_tags(ft, num_samples);
 #endif
@@ -1223,14 +1217,12 @@ static int stopwrite(sox_format_t * ft)
   free(p->pcm_buffer);
 
   if(p->mp2) {
-#ifdef HAVE_TWOLAME
+#if HAVE_TWOLAME
     p->twolame_close(&p->opt);
-    LSX_DLLIBRARY_CLOSE(p, twolame_dl);
 #endif
   } else {
-#ifdef HAVE_LAME
+#if HAVE_LAME
     p->lame_close(p->gfp);
-    LSX_DLLIBRARY_CLOSE(p, lame_dl);
 #endif
   }
   return SOX_SUCCESS;

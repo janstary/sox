@@ -76,7 +76,7 @@
 #if HAVE_LPC10
   FORMAT(lpc10)
 #endif
-#if HAVE_MAD
+#if HAVE_MAD || HAVE_LAME
   FORMAT(mp3)
 #endif
 #if HAVE_OGG && HAVE_VORBIS

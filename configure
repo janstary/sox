@@ -36,6 +36,7 @@ HAVE_AMRWB=
 HAVE_AMRVO=
 HAVE_FLAC=
 HAVE_GSM=
+HAVE_LAME=
 HAVE_MAD=
 HAVE_OGG=
 HAVE_OPUS=
@@ -172,6 +173,7 @@ runtest amrwb	AMRWB  -lopencore-amrwb	|| true
 runtest amrvo	AMRVO  -lvo-amrwbenc	|| true
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
+runtest lame	LAME    -lmp3lame	|| true
 runtest mad	MAD     -lmad		|| true
 runtest ogg	OGG     -logg		|| true
 runtest opus	OPUS  -lopus -lopusfile	|| true
@@ -223,6 +225,11 @@ fi
 if [ ${HAVE_GSM} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} gsm.o"
 	ADDLIBS="${ADDLIBS} -lgsm"
+fi
+
+if [ ${HAVE_LAME} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} mp3.o"
+	ADDLIBS="${ADDLIBS} -lmp3lame"
 fi
 
 if [ ${HAVE_MAD} -eq 1 ]; then
@@ -307,6 +314,7 @@ cat << __HEREDOC__
 #define HAVE_AMRVO	${HAVE_AMRVO}
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
+#define HAVE_LAME	${HAVE_LAME}
 #define HAVE_MAD	${HAVE_MAD}
 #define HAVE_OGG	${HAVE_OGG}
 #define HAVE_OPUS	${HAVE_OPUS}

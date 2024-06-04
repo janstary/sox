@@ -17,7 +17,7 @@
 
 #include <sys/stat.h>
 
-#if defined(HAVE_LAME)
+#if HAVE_LAME
 
 static void write_comments(sox_format_t * ft)
 {
