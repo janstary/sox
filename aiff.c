@@ -32,8 +32,8 @@ static int aifcwriteheader(sox_format_t *, uint64_t);
 static void write_ieee_extended(sox_format_t *, double);
 static double ConvertFromIeeeExtended(unsigned char*);
 static void ConvertToIeeeExtended(double, char *);
-static int textChunk(char **text, char *chunkDescription, sox_format_t * ft);
-static int commentChunk(char **text, char *chunkDescription, sox_format_t * ft);
+static int textChunk(char **text, const char *chunkDescription, sox_format_t * ft);
+static int commentChunk(char **text, const char *chunkDescription, sox_format_t * ft);
 static void reportInstrument(sox_format_t * ft);
 
 int lsx_aiffstartread(sox_format_t * ft)
@@ -465,7 +465,7 @@ static void reportInstrument(sox_format_t * ft)
 }
 
 /* Process a text chunk, allocate memory, display it if verbose and return */
-static int textChunk(char **text, char *chunkDescription, sox_format_t * ft)
+static int textChunk(char **text, const char *chunkDescription, sox_format_t * ft)
 {
   uint32_t chunksize0;
   size_t chunksize;
@@ -504,7 +504,7 @@ static int textChunk(char **text, char *chunkDescription, sox_format_t * ft)
 /* Comment lengths are words, not double words, and we can have several, so
    we use a special function, not textChunk().;
  */
-static int commentChunk(char **text, char *chunkDescription, sox_format_t * ft)
+static int commentChunk(char **text, const char *chunkDescription, sox_format_t * ft)
 {
   uint32_t chunksize;
   unsigned short numComments;
@@ -847,7 +847,7 @@ static int aifcwriteheader(sox_format_t * ft, uint64_t nframes)
         unsigned hsize;
         unsigned bits = 0;
         uint64_t size;
-        char *ctype = NULL, *cname = NULL;
+        const char *ctype = NULL, *cname = NULL;
         unsigned cname_len = 0, comm_len = 0, comm_padding = 0;
 
         if (ft->encoding.encoding == SOX_ENCODING_SIGN2 &&
