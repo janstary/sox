@@ -15,6 +15,26 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/* This file (named *.h although it's a C source file) gets included
+ * at the end of both amr-nb.c and amr-wb.c as both do mostly the same
+ * with a different decoder/encoder (if available). This file, then,
+ * is supposed to work both, taking care (via #if conditions) to do
+ * the thing suitable for either the narrowband or the wideband AMR.
+ *
+ * Firstly, the libraries involved (all of them optional):
+ *
+ *     opencore-amrnb (HAVE_AMRNB) provides both an NB decoder and encoder;
+ *     that's what amr-nb.c uses, setting both OC_DEC and OC_ENC to 1.
+ *
+ *     opencore-amrwb (HAVE_AMRWB) provides a WB decoder and no encoder;
+ *     that's what amr-wb.c uses, setting OC_DEC to 1 and OC_ENC to 0.
+ *
+ *     vo-amrwbenc (HAVE_AMRVO) provides a WB encoder and no decoder;
+ *     that's what amr-wb.c uses, setting VO_ENC to 1.
+ *
+ * The OC_DEC, OC_ENC and VO_ENC are then used here
+ * to decide the combination we actualy have. */
+
 #include <string.h>
 #include <math.h>
 
