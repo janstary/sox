@@ -11,7 +11,7 @@ main(void)
 	if ((dec = Decoder_Interface_init()) == NULL)
 		return 1;
 
-	if ((enc = Encoder_Interface_init(0)) == NULL)
+	if ((enc = Encoder_Interface_init(1)) == NULL)
 		return 1;
 
 	Decoder_Interface_exit(dec);
