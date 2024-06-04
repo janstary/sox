@@ -18,48 +18,42 @@
 #include <string.h>
 #include <math.h>
 
-#ifdef AMR_OPENCORE
-
+#if OC_DEC || OC_ENC
 LSX_DLENTRIES_TO_FUNCTIONS(AMR_OPENCORE_FUNC_ENTRIES)
-
 typedef struct amr_opencore_funcs {
   LSX_DLENTRIES_TO_PTRS(AMR_OPENCORE_FUNC_ENTRIES, amr_dl);
 } amr_opencore_funcs;
+#endif
 
-#endif /* AMR_OPENCORE */
-
-#ifdef AMR_VO
-
+#if VO_ENC
 LSX_DLENTRIES_TO_FUNCTIONS(AMR_VO_FUNC_ENTRIES)
-
 typedef struct amr_vo_funcs {
   LSX_DLENTRIES_TO_PTRS(AMR_VO_FUNC_ENTRIES, amr_dl);
 } amr_vo_funcs;
-
-#endif /* AMR_VO */
+#endif
 
 #define AMR_CALL(p, func, args) ((p)->opencore.func args)
 
-#ifdef AMR_VO
-  #define AMR_CALL_ENCODER(p, func, args) ((p)->vo.func args)
-#else
-  #define AMR_CALL_ENCODER(p, func, args) ((p)->opencore.func args)
+#if VO_ENC
+#define AMR_CALL_ENCODER(p, func, args) ((p)->vo.func args)
+#elif OC_ENC
+#define AMR_CALL_ENCODER(p, func, args) ((p)->opencore.func args)
 #endif
 
 typedef struct amr_priv_t {
   void* state;
   unsigned mode;
   size_t pcm_index;
-#ifdef AMR_OPENCORE
+#if OC_DEC || OC_ENC
   amr_opencore_funcs opencore;
-#endif /* AMR_OPENCORE */
-#ifdef AMR_VO
+#endif
+#if VO_ENC
   amr_vo_funcs vo;
-#endif /* AMR_VO */
+#endif
   short pcm[AMR_FRAME];
 } priv_t;
 
-#ifdef AMR_OPENCORE
+#if OC_DEC
 static size_t decode_1_frame(sox_format_t * ft)
 {
   priv_t * p = (priv_t *)ft->priv;
@@ -86,8 +80,8 @@ static int openlibrary(priv_t* p, int encoding)
   int open_library_result;
 
   (void)encoding;
-#ifdef AMR_OPENCORE
-  if (AMR_OPENCORE_ENABLE_ENCODE || !encoding)
+#if OC_DEC || OC_ENC
+  if (OC_ENC || !encoding)
   {
     LSX_DLLIBRARY_TRYOPEN(
       0,
@@ -102,9 +96,9 @@ static int openlibrary(priv_t* p, int encoding)
     lsx_fail("Unable to open " AMR_OPENCORE_DESC);
     return SOX_EOF;
   }
-#endif /* AMR_OPENCORE */
+#endif
 
-#ifdef AMR_VO
+#if VO_ENC
   if (encoding) {
     LSX_DLLIBRARY_TRYOPEN(
         0,
@@ -118,12 +112,12 @@ static int openlibrary(priv_t* p, int encoding)
       return SOX_SUCCESS;
     lsx_fail("Unable to open " AMR_VO_DESC);
   }
-#endif /* AMR_VO */
+#endif
 
   return SOX_EOF;
 }
 
-#ifdef AMR_OPENCORE
+#ifdef OC_DEC || OC_ENC
 static size_t amr_duration_frames(sox_format_t * ft)
 {
   off_t      frame_size, data_start_offset = lsx_tell(ft);
@@ -149,8 +143,8 @@ static size_t amr_duration_frames(sox_format_t * ft)
 
 static int startread(sox_format_t * ft)
 {
-#if !defined(AMR_OPENCORE)
-  lsx_fail_errno(ft, SOX_EOF, "SoX was compiled without AMR-WB decoding support.");
+#if !OC_DEC
+  lsx_fail_errno(ft, SOX_EOF, "SoX was compiled without AMR decoding.");
   return SOX_EOF;
 #else
   priv_t * p = (priv_t *)ft->priv;
@@ -185,7 +179,7 @@ static int startread(sox_format_t * ft)
 #endif
 }
 
-#ifdef AMR_OPENCORE
+#if OC_DEC
 
 static size_t read_samples(sox_format_t * ft, sox_sample_t * buf, size_t len)
 {
@@ -209,17 +203,17 @@ static int stopread(sox_format_t * ft)
   return SOX_SUCCESS;
 }
 
-#else
+#else /* no decoder */
 
-#define read_samples NULL
-#define stopread NULL
+#define read_samples	NULL
+#define stopread	NULL
 
 #endif
 
 static int startwrite(sox_format_t * ft)
 {
-#if !defined(AMR_VO) && !AMR_OPENCORE_ENABLE_ENCODE
-  lsx_fail_errno(ft, SOX_EOF, "SoX was compiled without AMR-WB encoding support.");
+#if !OC_ENC && !VO_ENC
+  lsx_fail_errno(ft, SOX_EOF, "SoX was compiled without AMR encoding.");
   return SOX_EOF;
 #else
   priv_t * p = (priv_t *)ft->priv;
@@ -251,7 +245,7 @@ static int startwrite(sox_format_t * ft)
 #endif
 }
 
-#if defined(AMR_VO) || AMR_OPENCORE_ENABLE_ENCODE
+#if OC_ENC || VO_ENC
 
 static sox_bool encode_1_frame(sox_format_t * ft)
 {
@@ -297,12 +291,12 @@ static int stopwrite(sox_format_t * ft)
   return result;
 }
 
-#else
+#else /* no encoder */
 
-#define write_samples NULL
-#define stopwrite NULL
+#define write_samples	NULL
+#define stopwrite	NULL
 
-#endif /* defined(AMR_VO) || AMR_OPENCORE_ENABLE_ENCODE */
+#endif
 
 sox_format_handler_t const * AMR_FORMAT_FN(void);
 sox_format_handler_t const * AMR_FORMAT_FN(void)

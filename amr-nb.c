@@ -15,13 +15,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-/*
- * In order to use the AMR format with SoX, you need to have an
- * AMR library installed at SoX build time. The SoX build system
- * recognizes the AMR implementations available from
- * http://opencore-amr.sourceforge.net/
- */
-
 #include "sox_i.h"
 
 /* Common definitions: */
@@ -45,13 +38,15 @@ static char const amrnb_magic[] = "#!AMR\n";
 #define AMR_RATE            8000
 #define AMR_DESC            "3GPP Adaptive Multi Rate Narrow-Band (AMR-NB) lossy speech compressor"
 
-#define AMR_FUNC  LSX_DLENTRY_STATIC
-
 /* OpenCore definitions: */
 
-#define AMR_OPENCORE 1
-#define AMR_OPENCORE_ENABLE_ENCODE 1
+#if HAVE_AMRNB
+#define OC_DEC 1
+#define OC_ENC 1
+#endif
+#define VO_ENC 0
 
+#define AMR_FUNC LSX_DLENTRY_STATIC
 #define AMR_OPENCORE_FUNC_ENTRIES(f,x) \
   AMR_FUNC(f,x, void*, Encoder_Interface_init,   (int dtx)) \
   AMR_FUNC(f,x, int,   Encoder_Interface_Encode, (void* state, enum amrnb_mode mode, const short* in, unsigned char* out, int forceSpeech)) \

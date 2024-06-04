@@ -15,13 +15,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-/*
- * In order to use the AMR format with SoX, you need to have an
- * AMR library installed at SoX build time. The SoX build system
- * recognizes the AMR implementations available from
- * http://opencore-amr.sourceforge.net/
- */
-
 #include "sox_i.h"
 
 /* Common definitions: */
@@ -45,13 +38,12 @@ static char const amrwb_magic[] = "#!AMR-WB\n";
 
 /* OpenCore definitions: */
 
-#define AMR_OC_FUNC  LSX_DLENTRY_STATIC
-
 #if HAVE_AMRWB
-  #define AMR_OPENCORE 1
-  #define AMR_OPENCORE_ENABLE_ENCODE 0
+#define OC_DEC 1
+#define OC_ENC 0
 #endif
 
+#define AMR_OC_FUNC  LSX_DLENTRY_STATIC
 #define AMR_OPENCORE_FUNC_ENTRIES(f,x) \
   AMR_OC_FUNC(f,x, void*, D_IF_init,   (void)) \
   AMR_OC_FUNC(f,x, void,  D_IF_decode, (void* state, const unsigned char* in, short* out, int bfi)) \
@@ -72,12 +64,11 @@ static const char* const amr_opencore_library_names[] =
 
 /* VO definitions: */
 
-#define AMR_VO_FUNC  LSX_DLENTRY_STATIC
-
-#if defined(HAVE_VO_AMRWBENC_ENC_IF_H)
-  #define AMR_VO 1
+#if HAVE_AMRVO
+#define VO_ENC 1
 #endif
 
+#define AMR_VO_FUNC LSX_DLENTRY_STATIC
 #define AMR_VO_FUNC_ENTRIES(f,x) \
   AMR_VO_FUNC(f,x, void*, E_IF_init,     (void)) \
   AMR_VO_FUNC(f,x, int,   E_IF_encode,(void* state, int16_t mode, int16_t* in, uint8_t* out, int16_t dtx)) \
