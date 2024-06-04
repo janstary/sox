@@ -521,7 +521,6 @@ static int stopread(sox_format_t * ft)
   p->mad_stream_finish(&p->Stream);
 
   free(p->mp3_buffer);
-  LSX_DLLIBRARY_CLOSE(p, mad_dl);
   return SOX_SUCCESS;
 }
 

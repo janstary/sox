@@ -1158,16 +1158,7 @@ enum {
   NSTATIC_FORMATS
 };
 
-static sox_bool plugins_initted = sox_false;
-
-#ifdef HAVE_LIBLTDL /* Plugin format handlers */
-  #define MAX_DYNAMIC_FORMATS 42
-  #define MAX_FORMATS (NSTATIC_FORMATS + MAX_DYNAMIC_FORMATS)
-  #define MAX_FORMATS_1 (MAX_FORMATS + 1)
-  #define MAX_NAME_LEN (size_t)1024 /* FIXME: Use vasprintf */
-#else
-  #define MAX_FORMATS_1
-#endif
+#define MAX_FORMATS_1
 
 #define FORMAT(f) extern sox_format_handler_t const * lsx_##f##_format_fn(void);
 #include "formats.h"
@@ -1187,69 +1178,6 @@ sox_get_format_fns(void)
 }
 
 static unsigned nformats = NSTATIC_FORMATS;
-
-#ifdef HAVE_LIBLTDL /* Plugin format handlers */
-
-  static int init_format(const char *file, lt_ptr data)
-  {
-    lt_dlhandle lth = lt_dlopenext(file);
-    const char *end = file + strlen(file);
-    const char prefix[] = "sox_fmt_";
-    char fnname[MAX_NAME_LEN];
-    char *start = strstr(file, prefix);
-
-    (void)data;
-    if (start && (start += sizeof(prefix) - 1) < end) {
-      int ret = snprintf(fnname, MAX_NAME_LEN,
-          "lsx_%.*s_format_fn", (int)(end - start), start);
-      if (ret > 0 && ret < (int)MAX_NAME_LEN) {
-        union {sox_format_fn_t fn; lt_ptr ptr;} ltptr;
-        ltptr.ptr = lt_dlsym(lth, fnname);
-        lsx_debug("opening format plugin `%s': library %p, entry point %p\n",
-            fnname, (void *)lth, ltptr.ptr);
-        if (ltptr.fn && (ltptr.fn()->sox_lib_version_code & ~255) ==
-            (SOX_LIB_VERSION_CODE & ~255)) { /* compatible version check */
-          if (nformats == MAX_FORMATS) {
-            lsx_warn("too many plugin formats");
-            return -1;
-          }
-          s_sox_format_fns[nformats++].fn = ltptr.fn;
-        }
-      }
-    }
-    return 0;
-  }
-#endif
-
-int sox_format_init(void) /* Find & load format handlers.  */
-{
-  if (plugins_initted)
-    return SOX_EOF;
-
-  plugins_initted = sox_true;
-#ifdef HAVE_LIBLTDL
-  {
-    int error = lt_dlinit();
-    if (error) {
-      lsx_fail("lt_dlinit failed with %d error(s): %s", error, lt_dlerror());
-      return SOX_EOF;
-    }
-    lt_dlforeachfile(PKGLIBDIR, init_format, NULL);
-  }
-#endif
-  return SOX_SUCCESS;
-}
-
-void sox_format_quit(void) /* Cleanup things.  */
-{
-#ifdef HAVE_LIBLTDL
-  int ret;
-  if (plugins_initted && (ret = lt_dlexit()) != 0)
-    lsx_fail("lt_dlexit failed with %d error(s): %s", ret, lt_dlerror());
-  plugins_initted = sox_false;
-  nformats = NSTATIC_FORMATS;
-#endif
-}
 
 /* Find a named format in the formats library.
  *
@@ -1283,7 +1211,5 @@ sox_format_handler_t const * sox_find_format(char const * name0, sox_bool no_dev
     }
     free(name);
   }
-  if (sox_format_init() == SOX_SUCCESS)   /* Try again with plugins */
-    return sox_find_format(name0, no_dev);
   return NULL;
 }

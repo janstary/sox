@@ -123,16 +123,6 @@ static int openlibrary(priv_t* p, int encoding)
   return SOX_EOF;
 }
 
-static void closelibrary(priv_t* p)
-{
-#ifdef AMR_OPENCORE
-  LSX_DLLIBRARY_CLOSE(&p->opencore, amr_dl);
-#endif
-#ifdef AMR_VO
-  LSX_DLLIBRARY_CLOSE(&p->vo, amr_dl);
-#endif
-}
-
 #ifdef AMR_OPENCORE
 static size_t amr_duration_frames(sox_format_t * ft)
 {
@@ -182,7 +172,6 @@ static int startread(sox_format_t * ft)
   p->state = AMR_CALL(p, AmrDecoderInit, ());
   if (!p->state)
   {
-      closelibrary(p);
       lsx_fail("AMR decoder failed to initialize.");
       return SOX_EOF;
   }
@@ -217,7 +206,6 @@ static int stopread(sox_format_t * ft)
 {
   priv_t * p = (priv_t *)ft->priv;
   AMR_CALL(p, AmrDecoderExit, (p->state));
-  closelibrary(p);
   return SOX_SUCCESS;
 }
 
@@ -253,7 +241,6 @@ static int startwrite(sox_format_t * ft)
   p->state = AMR_CALL_ENCODER(p, AmrEncoderInit, ());
   if (!p->state)
   {
-      closelibrary(p);
       lsx_fail("AMR encoder failed to initialize.");
       return SOX_EOF;
   }

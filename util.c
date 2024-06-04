@@ -138,56 +138,6 @@ int lsx_open_dllibrary(
   const char* failed_libname = NULL;
   const char* failed_funcname = NULL;
 
-#ifdef HAVE_LIBLTDL
-  if (library_names && library_names[0])
-  {
-    const char* const* libname;
-    if (lt_dlinit())
-    {
-      lsx_fail(
-        "Unable to load %s - failed to initialize ltdl.",
-        library_description);
-      return 1;
-    }
-
-    for (libname = library_names; *libname; libname++)
-    {
-      lsx_debug("Attempting to open %s (%s).", library_description, *libname);
-      dl = lt_dlopenext(*libname);
-      if (dl)
-      {
-        size_t i;
-        lsx_debug("Opened %s (%s).", library_description, *libname);
-        for (i = 0; func_infos[i].name; i++)
-        {
-          union {lsx_dlptr fn; lt_ptr ptr;} func;
-          func.ptr = lt_dlsym(dl, func_infos[i].name);
-          selected_funcs[i] = func.fn ? func.fn : func_infos[i].stub_func;
-          if (!selected_funcs[i])
-          {
-            lt_dlclose(dl);
-            dl = NULL;
-            failed_libname = *libname;
-            failed_funcname = func_infos[i].name;
-            lsx_debug("Cannot use %s (%s) - missing function \"%s\".", library_description, failed_libname, failed_funcname);
-            break;
-          }
-        }
-
-        if (dl)
-          break;
-      }
-      else if (!failed_libname)
-      {
-        failed_libname = *libname;
-      }
-    }
-
-    if (!dl)
-      lt_dlexit();
-  }
-#endif /* HAVE_LIBLTDL */
-
   if (!dl)
   {
     size_t i;
@@ -216,11 +166,7 @@ int lsx_open_dllibrary(
     size_t i;
     for (i = 0; func_infos[i].name; i++)
       selected_funcs[i] = NULL;
-#ifdef HAVE_LIBLTDL
-#define LTDL_MISSING ""
-#else
 #define LTDL_MISSING " (Dynamic library support not configured.)"
-#endif /* HAVE_LIBLTDL */
     if (failed_funcname)
     {
       if (show_error_on_failure)
@@ -264,16 +210,4 @@ int lsx_open_dllibrary(
 
   *pdl = dl;
   return failed;
-}
-
-void lsx_close_dllibrary(
-  lsx_dlhandle dl UNUSED)
-{
-#ifdef HAVE_LIBLTDL
-  if (dl)
-  {
-    lt_dlclose(dl);
-    lt_dlexit();
-  }
-#endif /* HAVE_LIBLTDL */
 }

@@ -1,6 +1,5 @@
 lsx_calloc
 lsx_check_read_params
-lsx_close_dllibrary
 lsx_debug_impl
 lsx_debug_more_impl
 lsx_debug_most_impl
@@ -61,7 +60,6 @@ sox_find_comment
 sox_find_effect
 sox_find_format
 sox_flow_effects
-sox_format_init
 sox_format_quit
 sox_format_supports_encoding
 sox_get_effect_fns

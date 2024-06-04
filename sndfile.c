@@ -389,7 +389,6 @@ static int stopread(sox_format_t * ft)
   sf->sf_stop(sf->sf_file);
   drain_log_buffer(ft);
   sf->sf_close(sf->sf_file);
-  LSX_DLLIBRARY_CLOSE(sf, sndfile_dl);
   return SOX_SUCCESS;
 }
 
@@ -461,7 +460,6 @@ static int stopwrite(sox_format_t * ft)
   sf->sf_stop(sf->sf_file);
   drain_log_buffer(ft);
   sf->sf_close(sf->sf_file);
-  LSX_DLLIBRARY_CLOSE(sf, sndfile_dl);
   return SOX_SUCCESS;
 }
 

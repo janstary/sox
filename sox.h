@@ -1766,15 +1766,6 @@ sox_find_comment(
 
 /**
 Client API:
-Find and load format handler plugins.
-@returns SOX_SUCCESS if successful.
-*/
-int
-LSX_API
-sox_format_init(void);
-
-/**
-Client API:
 Unload format handler plugins.
 */
 void

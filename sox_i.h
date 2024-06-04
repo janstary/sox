@@ -286,15 +286,10 @@ int lsx_effect_set_imin(sox_effect_t * effp, size_t imin);
 int lsx_effects_init(void);
 int lsx_effects_quit(void);
 
-/*--------------------------------- Dynamic Library ----------------------------------*/
+/*------------ Dynamic Library ----------------------------------*/
 
-#if defined(HAVE_LIBLTDL)
-    #include <ltdl.h>
-    typedef lt_dlhandle lsx_dlhandle;
-#else
-    struct lsx_dlhandle_tag;
-    typedef struct lsx_dlhandle_tag *lsx_dlhandle;
-#endif
+struct lsx_dlhandle_tag;
+typedef struct lsx_dlhandle_tag *lsx_dlhandle;
 
 typedef void (*lsx_dlptr)(void);
 
@@ -312,9 +307,6 @@ int lsx_open_dllibrary(
     const lsx_dlfunction_info func_infos[],
     lsx_dlptr selected_funcs[],
     lsx_dlhandle* pdl);
-
-void lsx_close_dllibrary(
-    lsx_dlhandle dl);
 
 #define LSX_DLENTRIES_APPLY__(entries, f, x) entries(f, x)
 
@@ -370,9 +362,6 @@ void lsx_close_dllibrary(
       (return_var) = lsx_open_dllibrary((error_on_failure), (library_description), (library_names), lsx_dlfunction_open_library_infos, lsx_dlfunction_open_library_funcs, &(ptr_container)->dlhandle); \
       LSX_DLENTRIES_APPLY__(entries, LSX_DLLIBRARY_OPEN2__, ptr_container) \
     } while(0)
-
-#define LSX_DLLIBRARY_CLOSE(ptr_container, dlhandle) \
-    lsx_close_dllibrary((ptr_container)->dlhandle)
 
   /* LSX_DLENTRY_STATIC: For use in creating an ENTRIES macro. func is
      expected to be available at link time. If not present, link will fail. */
