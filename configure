@@ -166,13 +166,13 @@ runtest err		ERR		|| true
 runtest ntohl		NTOHL		|| true
 
 # detect optional formats
-runtest amrnb	AMRNB   -lopencore-amrnb|| true
-runtest amrwb	AMRWB   -lopencore-amrwb|| true
+runtest amrnb	AMRNB  -lopencore-amrnb	|| true
+runtest amrwb	AMRWB  -lopencore-amrwb	|| true
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest mad	MAD     -lmad		|| true
 runtest ogg	OGG     -logg		|| true
-runtest opus	OPUS    -lopus		|| true
+runtest opus	OPUS  -lopus -lopusfile	|| true
 runtest png	PNG     -lpng		|| true
 runtest sndfile	SNDFILE -lsndfile	|| true
 runtest vorbis	VORBIS  -lvorbis	|| true
@@ -232,9 +232,9 @@ if [ ${HAVE_OGG} -eq 1 -a ${HAVE_VORBIS} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -logg -lvorbis -lvorbisfile -lvorbisenc"
 fi
 
-if [ ${HAVE_OPUS} -eq 1 ]; then
+if [ ${HAVE_OGG} -eq 1 -a ${HAVE_OPUS} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} opus.o"
-	ADDLIBS="${ADDLIBS} -lopus -lopusfile"
+	ADDLIBS="${ADDLIBS} -logg -lopus -lopusfile"
 fi
 
 if [ ${HAVE_PNG} -eq 1 -a ${HAVE_ZLIB} -eq 1 ]; then
