@@ -117,7 +117,7 @@ static int openlibrary(priv_t* p, int encoding)
   return SOX_EOF;
 }
 
-#ifdef OC_DEC || OC_ENC
+#if OC_DEC || OC_ENC
 static size_t amr_duration_frames(sox_format_t * ft)
 {
   off_t      frame_size, data_start_offset = lsx_tell(ft);
