@@ -22,12 +22,13 @@ Optional external libraries supporting extra audio encodings and
 file formats (such as Ogg Vorbis) need to be installed before
 compiling SoX itself. Currently, the following are supported:
 
-AMR		http://sourceforge.net/projects/opencore-amr
+AMRNB (dec+enc)	https://sourceforge.net/projects/opencore-amr/
+AMRWB (WB dec)	https://sourceforge.net/projects/opencore-amr/
+AMRVO (WB enc)	https://sourceforge.net/projects/opencore-amr/
 FLAC		http://flac.sourceforge.net
 LADSPA		http://www.ladspa.org
-Lame MP3	http://lame.sourceforge.net
-Twolame MP2	http://www.twolame.org
-MAD MP3+ID3	http://www.underbit.com/products/mad
+MAD MP3 (dec)	http://www.underbit.com/products/mad
+LAME MP3 (enc)	http://lame.sourceforge.net
 Ogg Vorbis	http://www.vorbis.com
 Opus		http://www.opus-codec.org/
 PNG		http://www.libpng.org/pub/png
