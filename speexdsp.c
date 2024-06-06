@@ -17,12 +17,9 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
-
-#if HAVE_SPEEXDSP
-
-#include <speex/speex_types.h>
 #include <speex/speex_preprocess.h>
+#include <speex/speexdsp_types.h>
+#include "sox_i.h"
 
 /* Private data for effect */
 typedef struct speexdsp_priv_t {
@@ -345,5 +342,3 @@ const sox_effect_handler_t* lsx_speexdsp_effect_fn(void)
   descriptor.usage = lsx_usage_lines(&usage, lines, array_length(lines));
   return &descriptor;
 }
-
-#endif
