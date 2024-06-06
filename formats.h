@@ -61,6 +61,8 @@
   FORMAT(wve)
   FORMAT(xa)
 
+/* optional formats */
+
 #if HAVE_AMRNB
   FORMAT(amr_nb)
 #endif
