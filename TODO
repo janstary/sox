@@ -23,7 +23,6 @@ glob.h
 	Why do we need these?
 
 SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
-SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
 
 SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],

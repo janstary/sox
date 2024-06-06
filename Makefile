@@ -45,7 +45,6 @@ SOXOBJS	= \
 	gsrt.o \
 	hcom.o \
 	htk.o \
-	id3.o \
 	ima-fmt.o \
 	ima_rw.o \
 	la-fmt.o \

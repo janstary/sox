@@ -18,7 +18,7 @@
 #include "sox_i.h"
 #include "id3.h"
 
-#if HAVE_ID3TAG
+#if HAVE_ID3
 
 #include <id3tag.h>
 

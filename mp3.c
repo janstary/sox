@@ -26,16 +26,14 @@
 #include <twolame.h>
 #endif
 
-#if HAVE_ID3TAG && HAVE_IO
-#define USING_ID3TAG 1
-#endif
+#if HAVE_ID3
+#include <id3tag.h>
+#include "id3.h"
 
-#ifdef USING_ID3TAG
-  #include <id3tag.h>
-  #include "id3.h"
 #if HAVE_IO
   #include <io.h>
 #endif
+
 #else
   #define ID3_TAG_FLAG_FOOTERPRESENT 0x10
 #endif
@@ -339,7 +337,7 @@ static int startread(sox_format_t * ft)
 
   ft->signal.length = SOX_UNSPEC;
   if (ft->seekable) {
-#ifdef USING_ID3TAG
+#if HAVE_ID3
     lsx_id3_read_tag(ft, sox_true);
     lsx_rewind(ft);
     if (!ft->signal.length)
