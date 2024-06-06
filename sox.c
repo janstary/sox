@@ -42,11 +42,6 @@
 #include "sox.h"
 #include "util.h"
 
-#ifdef HAVE_SYS_TIMEB_H
-  #include <sys/timeb.h>
-#endif
-
-
 #define TIME_FRAC 1e6
 
 #if !defined(HAVE_CONIO_H) && !defined(HAVE_TERMIOS_H) && (defined(_MSC_VER) || defined(__MINGW32__))
