@@ -15,11 +15,6 @@ AC_C_BIGENDIAN
 	How (and why) does SoX checks its own endianness?
 	https://commandcenter.blogspot.com/2012/04/byte-order-fallacy.html
 
-byteswap.h
-termios.h
-glob.h
-
-	Why do we need these?
 
 SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
 
@@ -58,5 +53,3 @@ test-comments
 
 	Do any of these still work?
 
-HAVE_LIBLTDL
-HAVE_TERMIOS_H
