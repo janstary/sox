@@ -65,7 +65,6 @@ FMTOBJS	= \
 	sounder.o \
 	soundtool.o \
 	sox-fmt.o \
-	speexdsp.o \
 	sphere.o \
 	tx16w.o \
 	u1-fmt.o \

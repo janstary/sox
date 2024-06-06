@@ -41,6 +41,7 @@ HAVE_OGG=
 HAVE_OPUS=
 HAVE_PNG=
 HAVE_SNDFILE=
+HAVE_SPEEXDSP=
 HAVE_TWOLAME=
 HAVE_VORBIS=
 HAVE_WAVPACK=
@@ -176,6 +177,7 @@ runtest ogg	OGG     -logg		|| true
 runtest opus	OPUS  -lopus -lopusfile	|| true
 runtest png	PNG     -lpng		|| true
 runtest sndfile	SNDFILE -lsndfile	|| true
+runtest speexdsp SPEEXDSP -lspeexdsp	|| true
 runtest twolame	TWOLAME -ltwolame	|| true
 runtest vorbis	VORBIS  -lvorbis	|| true
 runtest wavpack	WAVPACK -lwavpack	|| true
@@ -254,6 +256,11 @@ if [ ${HAVE_SNDFILE} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lsndfile"
 fi
 
+if [ ${HAVE_SPEEXDSP} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} speexdsp.o"
+	ADDLIBS="${ADDLIBS} -lspeexdsp"
+fi
+
 if [ ${HAVE_WAVPACK} -eq 1 ]; then
 	ADDOBJS="${ADDOBJS} wavpack.o"
 	ADDLIBS="${ADDLIBS} -lwavpack"
@@ -303,6 +310,7 @@ cat << __HEREDOC__
 #define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
 #define HAVE_SNDFILE	${HAVE_SNDFILE}
+#define HAVE_SPEEXDSP	${HAVE_SPEEXDSP}
 #define HAVE_TWOLAME	${HAVE_TWOLAME}
 #define HAVE_VORBIS	${HAVE_VORBIS}
 #define HAVE_WAVPACK	${HAVE_WAVPACK}
