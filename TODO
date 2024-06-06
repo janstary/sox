@@ -59,5 +59,4 @@ test-comments
 	Do any of these still work?
 
 HAVE_LIBLTDL
-HAVE_CONIO_H
 HAVE_TERMIOS_H

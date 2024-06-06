@@ -44,16 +44,6 @@
 
 #define TIME_FRAC 1e6
 
-#if !defined(HAVE_CONIO_H) && !defined(HAVE_TERMIOS_H) && (defined(_MSC_VER) || defined(__MINGW32__))
-#define HAVE_CONIO_H 1
-#endif
-
-#ifdef HAVE_CONIO_H
-/* _kbhit and _getch */
-#include <conio.h>
-#undef HAVE_TERMIOS_H
-#endif
-
 /*#define MORE_INTERACTIVE 1*/
 
 #define SOX_OPTS "SOX_OPTS"
@@ -1250,7 +1240,7 @@ static int kbhit(void)
   select(fileno(stdin) + 1, &fdset, NULL, NULL, &time_val);
   return FD_ISSET(fileno(stdin), &fdset);
 }
-#elif !defined(HAVE_CONIO_H)
+#else
 #define kbhit() 0
 #endif
 
@@ -1259,11 +1249,7 @@ static int update_status(sox_bool all_done, void * client_data)
   (void)client_data;
   if (interactive) while (kbhit()) {
     int LSX_UNUSED ch;
-#ifdef HAVE_CONIO_H
-    ch = _getch();
-#else
     ch = getchar();
-#endif
 
 #ifdef MORE_INTERACTIVE
     if (files[current_input]->ft->handler.seek &&
@@ -1683,7 +1669,7 @@ static int process(void)
   if (very_first_effchain)
     optimize_trim();
 
-#if defined(HAVE_TERMIOS_H) || defined(HAVE_CONIO_H)
+#if defined(HAVE_TERMIOS_H)
   if (stdin_is_a_tty) {
     if (show_progress && is_player && !interactive) {
       lsx_debug("automatically entering interactive mode");
@@ -2283,7 +2269,7 @@ static char parse_gopts_and_fopts(file_t * f)
         break;
 
       case 7:
-#if defined(HAVE_TERMIOS_H) || defined(HAVE_CONIO_H)
+#if defined(HAVE_TERMIOS_H)
         interactive = sox_true; break;
 #else
         lsx_fail("Interactive mode has not been enabled at compile time.");
