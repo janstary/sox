@@ -43,14 +43,12 @@ FMTOBJS	= \
 	g723_24.o \
 	g723_40.o \
 	g72x.o \
-	getopt.o \
 	gsrt.o \
 	hcom.o \
 	htk.o \
 	ima-fmt.o \
 	ima_rw.o \
 	la-fmt.o \
-	libsox.o \
 	lu-fmt.o \
 	maud.o \
 	nulfile.o \
@@ -67,7 +65,6 @@ FMTOBJS	= \
 	sounder.o \
 	soundtool.o \
 	sox-fmt.o \
-	sox.o \
 	speexdsp.o \
 	sphere.o \
 	tx16w.o \
@@ -76,14 +73,12 @@ FMTOBJS	= \
 	u3-fmt.o \
 	u4-fmt.o \
 	ul-fmt.o \
-	util.o \
 	voc.o \
 	vox-fmt.o \
 	vox.o \
 	wav.o \
 	wve.o \
 	xa.o \
-	xmalloc.o
 
 EFFOBJS	= \
 	bend.o \
