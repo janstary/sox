@@ -29,13 +29,8 @@
 #if HAVE_ID3
 #include <id3tag.h>
 #include "id3.h"
-
-#if HAVE_IO
-  #include <io.h>
-#endif
-
 #else
-  #define ID3_TAG_FLAG_FOOTERPRESENT 0x10
+#define ID3_TAG_FLAG_FOOTERPRESENT 0x10
 #endif
 
 /* Under Windows, importing data from DLLs is a dicey proposition. This is true

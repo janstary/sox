@@ -31,10 +31,6 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#if HAVE_IO
-  #include <io.h>
-#endif
-
 #if HAVE_MAGIC
   #include <magic.h>
 #endif

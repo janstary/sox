@@ -42,11 +42,6 @@
 #include "sox.h"
 #include "util.h"
 
-#if HAVE_IO
-  #include <io.h>
-#endif
-
-
 #ifdef HAVE_SYS_TIMEB_H
   #include <sys/timeb.h>
 #endif

@@ -26,10 +26,6 @@
 #include <zlib.h>
 #include <png.h>
 
-#if HAVE_IO
-  #include <io.h>
-#endif
-
 #include "sox_i.h"
 #include "fft4g.h"
 

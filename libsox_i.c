@@ -23,8 +23,4 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#if HAVE_IO
-  #include <io.h>
-#endif
-
 #include "sox_i.h"
