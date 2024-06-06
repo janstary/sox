@@ -17,7 +17,9 @@
 PROG	= sox
 MANS	= sox.1 soxi.1
 
-SOXOBJS	= \
+SOXOBJS	= getopt.o libsox.o sox.o util.o xmalloc.o
+
+FMTOBJS	= \
 	8svx.o \
 	adpcm.o \
 	adpcms.o \
@@ -147,7 +149,7 @@ include Makefile.local
 
 # dependencies
 
-OBJS	= $(SOXOBJS) $(EFFOBJS) $(CPTOBJS) $(ADDOBJS) $(DEVOBJS)
+OBJS	= $(SOXOBJS) $(FMTOBJS) $(EFFOBJS) $(ADDOBJS) $(DEVOBJS)
 LIBS	= $(ADDLIBS) $(DEVLIBS)
 
 all: $(PROG) $(MANS) Makefile.local
