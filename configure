@@ -28,8 +28,6 @@ ADDLIBS=
 DEVOBJS=
 DEVLIBS=
 
-# standard library functions
-
 # optional external libraries
 HAVE_AMRNB=
 HAVE_AMRWB=
@@ -78,7 +76,7 @@ else
 fi
 echo 1>&3
 
-# test functions
+# the testing functions
 
 # Check whether this HAVE_ setting is manually overridden.
 # If yes, use the override, if no, do not decide anything yet.
@@ -165,10 +163,6 @@ echo 1>&3
 
 COMP="${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}"
 
-# detect library functions
-runtest err		ERR		|| true
-runtest ntohl		NTOHL		|| true
-
 # detect optional formats
 runtest amrnb	AMRNB  -lopencore-amrnb	|| true
 runtest amrwb	AMRWB  -lopencore-amrwb	|| true
@@ -196,13 +190,6 @@ runtest portaudio	PORTAUDIO				|| true
 runtest pulseaudio	PULSEAUDIO				|| true
 runtest sndio		SNDIO -lsndio				|| true
 runtest sunaudio	SUNAUDIO				|| true
-
-# Do we have all the required functions?
-#if [ ${HAVE_NTOHL} -eq 0 ]; then
-	#echo "FATAL: no endian conversion functions found" 1>&2
-	#echo "FATAL: no endian conversion functions found" 1>&3
-	#FATAL=1
-#fi
 
 [ "${FATAL}" -eq 0 ] || exit 1
 
@@ -302,20 +289,8 @@ echo 1>&3
 
 exec > config.h
 
-# includes for compatibility implementations
-#[ ${HAVE_VASPRINTF} -eq 0 ] && echo "#include <stdarg.h>"
-
-# declarations of compatibility implementations
-#if [ ${HAVE_VASPRINTF} -eq 0 ]; then
-	#echo "extern	int	  vasprintf(char **, const char *, va_list);"
-	#CPTOBJS="${CPTOBJS} compat_vasprintf.o"
-#fi
-
 echo
 cat << __HEREDOC__
-#define HAVE_ERR	${HAVE_ERR}
-#define HAVE_NTOHL	${HAVE_NTOHL}
-
 #define HAVE_AMRNB	${HAVE_AMRNB}
 #define HAVE_AMRWB	${HAVE_AMRWB}
 #define HAVE_AMRVO	${HAVE_AMRVO}
