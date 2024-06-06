@@ -159,7 +159,7 @@ include Makefile.depend
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
 test: all
-	./$(PROG) -b 16 -c 2 -n file.wav synth 5 sin 220 sin 440 gain -3
+	./$(PROG) -r 8k -b 16 -c 1 -n file.wav synth 2 sin 440 gain -3
 	./$(PROG) file.wav file.aiff
 	./$(PROG) file.wav file.au
 
