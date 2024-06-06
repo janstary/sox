@@ -18,7 +18,6 @@
  */
 
 #include <speex/speex_preprocess.h>
-#include <speex/speexdsp_types.h>
 #include "sox_i.h"
 
 /* Private data for effect */
