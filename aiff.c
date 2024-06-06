@@ -311,7 +311,9 @@ int lsx_aiffstartread(sox_format_t * ft)
       off_t offs;
       lsx_readdw(ft, &chunksize);
       offs = lsx_tell(ft);
+#if HAVE_ID3
       lsx_id3_read_tag(ft, 0);
+#endif
       lsx_seeki(ft, offs + chunksize, SEEK_SET);
     }
     else {
