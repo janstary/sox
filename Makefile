@@ -15,7 +15,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 PROG	= sox
-MANS	= sox.1 soxi.1
+MAN1	= sox.1 soxi.1
+MAN7	= soxformat.7
 
 SOXOBJS	= getopt.o libsox.o sox.o util.o xmalloc.o
 
@@ -146,7 +147,7 @@ include Makefile.local
 OBJS	= $(SOXOBJS) $(FMTOBJS) $(EFFOBJS) $(ADDOBJS) $(DEVOBJS)
 LIBS	= $(ADDLIBS) $(DEVLIBS)
 
-all: $(PROG) $(MANS) Makefile.local
+all: $(PROG) $(MAN1) $(MAN7) Makefile.local
 
 sox: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
@@ -165,12 +166,14 @@ test: all
 
 install: all
 	install -d $(BINDIR)      && install -m 0755 $(PROG) $(BINDIR)
-	install -d $(MANDIR)/man1 && install -m 0644 $(MANS) $(MANDIR)/man1
+	install -d $(MANDIR)/man1 && install -m 0644 $(MAN1) $(MANDIR)/man1
+	install -d $(MANDIR)/man7 && install -m 0644 $(MAN7) $(MANDIR)/man7
 	( cd $(BINDIR) && $(LN) sox soxi && $(LN) sox play && $(LN) sox rec )
 
 uninstall:
 	( cd $(BINDIR) && rm -f $(PROG) soxi play rec )
-	( cd $(MANDIR) && rm -f $(MANS) )
+	( cd $(MANDIR)/man1/ && rm -f $(MAN1) )
+	( cd $(MANDIR)/man7/ && rm -f $(MAN7) )
 
 clean:
 	rm -rf $(PROG) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
