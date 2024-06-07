@@ -184,13 +184,13 @@ runtest wavpack	WAVPACK -lwavpack	|| true
 runtest zlib	ZLIB    -lz		|| true
 
 # detect optional audio devices/drivers
-runtest alsa		ALSA -lasound				|| true
-runtest ao		AO					|| true
-runtest coreaudio	COREAUDIO -Wl,-framework,CoreAudio	|| true
+runtest alsa		ALSA        -lasound			|| true
+runtest ao		AO          -lao			|| true
+runtest coreaudio	COREAUDIO   -Wl,-framework,CoreAudio	|| true
 runtest oss		OSS					|| true
 runtest portaudio	PORTAUDIO				|| true
 runtest pulseaudio	PULSEAUDIO				|| true
-runtest sndio		SNDIO -lsndio				|| true
+runtest sndio		SNDIO       -lsndio			|| true
 runtest sunaudio	SUNAUDIO				|| true
 
 [ "${FATAL}" -eq 0 ] || exit 1
@@ -269,6 +269,11 @@ fi
 if [ ${HAVE_ALSA} -eq 1 ]; then
 	DEVOBJS="${DEVOBJS} alsa.o"
 	DEVLIBS="${DEVLIBS} -lasound"
+fi
+
+if [ ${HAVE_AO} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} ao.o"
+	DEVLIBS="${DEVLIBS} -lao"
 fi
 
 if [ ${HAVE_COREAUDIO} -eq 1 ]; then
