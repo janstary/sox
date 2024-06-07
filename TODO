@@ -22,7 +22,6 @@ SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],
 HAVE_LIBLPC10
 
-SOX_FMT_LIB([ao], [ao/ao.h], [ao], [ao_play], [], [], [devices])
 SOX_FMT_LIB([pulseaudio], [pulse/simple.h], [pulse], [pa_simple_new], [],
     [-lpulse-simple], [devices])
 SOX_FMT_HEADERS([oss], [sys/soundcard.h], [SOUND_MIXER_MUTE], [], [devices])
@@ -30,26 +29,12 @@ SOX_FMT_HEADERS([oss], [sys/soundcard.h], [SOUND_MIXER_MUTE], [], [devices])
 sox.1
 	no need to have soxi.1 and play.1 and rec.1 as copies
 
-soxformat.7
-
-	should be incorporated into sox.1
-
 libsox.3
 
 	Does anybody even use the library?
 	https://github.com/janstary/sox/issues/43
 
-sox_sample_test
-
 monkey.wav
 
 	remove that and produce a stereo wave with synth instead
-
-tests.sh
-testall.sh
-tests.bat
-testall.bat
-test-comments
-
-	Do any of these still work?
 
