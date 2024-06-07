@@ -1,3 +1,4 @@
+#include <opus/opusfile.h>
 #include <opus/opus.h>
 
 int
