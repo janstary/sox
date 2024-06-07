@@ -23,12 +23,12 @@
 #undef NDEBUG /* Must undef above assert.h or other that might include it. */
 #endif
 
-#define _GNU_SOURCE
+#include <assert.h>
+#include <string.h>
+
 #include "sox_i.h"
 #include "fft4g.h"
 #include "dft_filter.h"
-#include <assert.h>
-#include <string.h>
 
 #define calloc     lsx_calloc
 #define malloc     lsx_malloc

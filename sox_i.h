@@ -13,16 +13,13 @@
 #ifndef SOX_I_H
 #define SOX_I_H
 
-#include "config.h"
-#include "sox.h"
-
-#define _GNU_SOURCE
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "sox.h"
 #include "util.h"
+#include "config.h"
 
 #if defined(LSX_EFF_ALIAS)
 #undef lsx_debug

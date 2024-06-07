@@ -18,9 +18,6 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#define _GNU_SOURCE
-#include "sox_i.h"
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -30,6 +27,8 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <errno.h>
+
+#include "sox_i.h"
 
 #if HAVE_MAGIC
   #include <magic.h>
