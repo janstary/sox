@@ -37,6 +37,7 @@ HAVE_GSM=
 HAVE_ID3=
 HAVE_LAME=
 HAVE_MAD=
+HAVE_MAGIC=
 HAVE_OGG=
 HAVE_OPUS=
 HAVE_PNG=
@@ -173,6 +174,7 @@ runtest gsm	GSM     -lgsm		|| true
 runtest id3	ID3     -lid3tag	|| true
 runtest lame	LAME    -lmp3lame	|| true
 runtest mad	MAD     -lmad		|| true
+runtest magic	MAGIC   -lmagic		|| true
 runtest ogg	OGG     -logg		|| true
 runtest opus	OPUS  -lopus -lopusfile	|| true
 runtest png	PNG     -lpng		|| true
@@ -231,6 +233,11 @@ if [ ${HAVE_LAME} -eq 1 -o ${HAVE_TWOLAME} -eq 1 -o ${HAVE_MAD} -eq 1 ]; then
 	[ ${HAVE_LAME} -eq 1    ] && ADDLIBS="${ADDLIBS} -lmp3lame"
 	[ ${HAVE_TWOLAME} -eq 1 ] && ADDLIBS="${ADDLIBS} -ltwolame"
 	ADDOBJS="${ADDOBJS} mp3.o"
+fi
+
+if [ ${HAVE_MAGIC} -eq 1 ]; then
+	ADDLIBS="${ADDLIBS} -lmagic"
+	# no extra *.o file
 fi
 
 if [ ${HAVE_OGG} -eq 1 ]; then
@@ -311,6 +318,7 @@ cat << __HEREDOC__
 #define HAVE_ID3	${HAVE_ID3}
 #define HAVE_LAME	${HAVE_LAME}
 #define HAVE_MAD	${HAVE_MAD}
+#define HAVE_MAGIC	${HAVE_MAGIC}
 #define HAVE_OGG	${HAVE_OGG}
 #define HAVE_OPUS	${HAVE_OPUS}
 #define HAVE_PNG	${HAVE_PNG}
