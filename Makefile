@@ -159,6 +159,9 @@ include Makefile.depend
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
+lint: $(MAN1) $(MAN7)
+	mandoc -Tlint $(MAN1) $(MAN7)
+
 test: all
 	./$(PROG) -r 8k -b 16 -c 1 -n file.wav synth 2 sin 440 gain -3
 	./$(PROG) file.wav file.aiff
