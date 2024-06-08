@@ -127,8 +127,10 @@ static int sox_ladspa_getopts(sox_effect_t *effp, int argc, char **argv)
 
   /* Load module */
   path = getenv("LADSPA_PATH");
-  if (path == NULL)
+  if (path == NULL) {
+    lsx_fail("LADSPA_PATH not set");
     return SOX_EOF;
+  }
 
   if(lt_dlinit() || lt_dlsetsearchpath(path)
       || (l_st->lth = lt_dlopenext(l_st->name)) == NULL) {
