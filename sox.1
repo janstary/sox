@@ -2404,8 +2404,10 @@ The
 (latency compensation) option automatically compensates for latency
 as reported by the plugin via an output control port named "latency".
 .SP
-If found, the environment variable LADSPA_PATH will be used as search
-path for plugins.
+To use the plugins, the user needs to set
+the LADSPA_PATH environment variable,
+a colon separated list of paths
+where plugins will be searched for.
 .TP
 \fBloudness\fR [\fIgain\fR [\fIreference\fR]]
 Loudness control\*msimilar to the

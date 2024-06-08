@@ -16,15 +16,15 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
-
-#if HAVE_LADSPA
-
 #include <assert.h>
 #include <limits.h>
 #include <string.h>
 #include <math.h>
-#include "ladspa.h"
+
+#include <ladspa.h>
+#include <ltdl.h>
+
+#include "sox_i.h"
 
 /*
  * Assuming LADSPA_Data == float.  This is the case in 2012 and has been
@@ -128,7 +128,7 @@ static int sox_ladspa_getopts(sox_effect_t *effp, int argc, char **argv)
   /* Load module */
   path = getenv("LADSPA_PATH");
   if (path == NULL)
-    path = LADSPA_PATH;
+    return SOX_EOF;
 
   if(lt_dlinit() || lt_dlsetsearchpath(path)
       || (l_st->lth = lt_dlopenext(l_st->name)) == NULL) {
@@ -488,5 +488,3 @@ const sox_effect_handler_t *lsx_ladspa_effect_fn(void)
 {
   return &sox_ladspa_effect;
 }
-
-#endif

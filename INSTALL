@@ -27,6 +27,7 @@ AMRWB (WB dec)	https://sourceforge.net/projects/opencore-amr/
 AMRVO (WB enc)	https://sourceforge.net/projects/opencore-amr/
 FLAC		http://flac.sourceforge.net
 LADSPA		http://www.ladspa.org
+LTDL		https://www.gnu.org/software/libtool/
 MAD MP3 (dec)	http://www.underbit.com/products/mad
 LAME MP3 (enc)	http://lame.sourceforge.net
 Ogg Vorbis	http://www.vorbis.com

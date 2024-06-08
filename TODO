@@ -15,15 +15,10 @@ AC_C_BIGENDIAN
 	How (and why) does SoX checks its own endianness?
 	https://commandcenter.blogspot.com/2012/04/byte-order-fallacy.html
 
-
-SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
-
 SOX_CHECK_LIB([LIBLPC10], [lpc10.h], [lpc10], [create_lpc10_encoder_state],
     [LPC10_LIBS="$LIBLPC10_LIBS"],
 HAVE_LIBLPC10
 
-SOX_FMT_LIB([pulseaudio], [pulse/simple.h], [pulse], [pa_simple_new], [],
-    [-lpulse-simple], [devices])
 SOX_FMT_HEADERS([oss], [sys/soundcard.h], [SOUND_MIXER_MUTE], [], [devices])
 
 sox.1

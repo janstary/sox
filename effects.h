@@ -45,7 +45,7 @@
   EFFECT(highpass)
   EFFECT(hilbert)
   EFFECT(input)
-#if HAVE_LADSPA
+#if HAVE_LADSPA && HAVE_LTDL
   EFFECT(ladspa)
 #endif
   EFFECT(loudness)

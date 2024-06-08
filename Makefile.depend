@@ -120,7 +120,7 @@ flanger.o: flanger.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 gain.o: gain.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 hilbert.o: hilbert.c sox_i.h config.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
 input.o: input.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
-ladspa.o: ladspa.c sox_i.h config.h sox.h util.h xmalloc.h effects.h ladspa.h
+ladspa.o: ladspa.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 loudness.o: loudness.c sox_i.h config.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
 mcompand.o: mcompand.c sox_i.h config.h sox.h util.h xmalloc.h effects.h compandt.h mcompand.h
 output.o: output.c sox_i.h config.h sox.h util.h xmalloc.h effects.h

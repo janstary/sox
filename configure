@@ -35,6 +35,8 @@ HAVE_AMRVO=
 HAVE_FLAC=
 HAVE_GSM=
 HAVE_ID3=
+HAVE_LADSPA=
+HAVE_LTDL=
 HAVE_LAME=
 HAVE_MAD=
 HAVE_MAGIC=
@@ -172,6 +174,8 @@ runtest amrvo	AMRVO  -lvo-amrwbenc	|| true
 runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest id3	ID3     -lid3tag	|| true
+runtest ladspa	LADSPA  		|| true
+runtest ltdl	LTDL	-lltdl		|| true
 runtest lame	LAME    -lmp3lame	|| true
 runtest mad	MAD     -lmad		|| true
 runtest magic	MAGIC   -lmagic		|| true
@@ -227,7 +231,11 @@ if [ ${HAVE_ID3} -eq 1 ]; then
 	ADDLIBS="${ADDLIBS} -lid3tag"
 fi
 
-# https://github.com/janstary/sox/issues/24
+if [ ${HAVE_LADSPA} -eq 1 -a ${HAVE_LTDL} -eq 1 ]; then
+	ADDOBJS="${ADDOBJS} ladspa.o"
+	ADDLIBS="${ADDLIBS} -lltdl"
+fi
+
 if [ ${HAVE_LAME} -eq 1 -o ${HAVE_TWOLAME} -eq 1 -o ${HAVE_MAD} -eq 1 ]; then
 	[ ${HAVE_MAD} -eq 1     ] && ADDLIBS="${ADDLIBS} -lmad"
 	[ ${HAVE_LAME} -eq 1    ] && ADDLIBS="${ADDLIBS} -lmp3lame"
@@ -321,6 +329,8 @@ cat << __HEREDOC__
 #define HAVE_FLAC	${HAVE_FLAC}
 #define HAVE_GSM	${HAVE_GSM}
 #define HAVE_ID3	${HAVE_ID3}
+#define HAVE_LADSPA	${HAVE_LADSPA}
+#define HAVE_LTDL	${HAVE_LTDL}
 #define HAVE_LAME	${HAVE_LAME}
 #define HAVE_MAD	${HAVE_MAD}
 #define HAVE_MAGIC	${HAVE_MAGIC}
