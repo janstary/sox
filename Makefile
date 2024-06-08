@@ -181,6 +181,6 @@ clean:
 distclean: clean
 	rm -f Makefile.local config.*
 
-Makefile.local config.h: configure $(TESTSRCS)
+Makefile.local config.h: configure
 	@echo "$@ is out of date; please run ./configure"
 	@exit 1
