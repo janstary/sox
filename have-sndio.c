@@ -4,11 +4,10 @@
 int
 main(void)
 {
-	char* devname = SIO_DEVANY;
 	struct sio_hdl* hdl = NULL;
 	struct sio_par want, have;
 
-	if ((hdl = sio_open(devname, SIO_PLAY | SIO_REC, 0)) == NULL)
+	if ((hdl = sio_open(SIO_DEVANY, SIO_PLAY | SIO_REC, 0)) == NULL)
 		return 1;
 
 	sio_initpar(&want);
