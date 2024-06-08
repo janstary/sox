@@ -191,7 +191,7 @@ runtest ao		AO          -lao			|| true
 runtest coreaudio	COREAUDIO   -Wl,-framework,CoreAudio	|| true
 runtest oss		OSS					|| true
 runtest portaudio	PORTAUDIO				|| true
-runtest pulseaudio	PULSEAUDIO				|| true
+runtest pulseaudio	PULSEAUDIO  -lpulse-simple		|| true
 runtest sndio		SNDIO       -lsndio			|| true
 runtest sunaudio	SUNAUDIO				|| true
 
@@ -286,6 +286,11 @@ fi
 if [ ${HAVE_COREAUDIO} -eq 1 ]; then
 	DEVOBJS="${DEVOBJS} coreaudio.o"
 	DEVLIBS="${DEVLIBS} -Wl,-framework,CoreAudio"
+fi
+
+if [ ${HAVE_PULSEAUDIO} -eq 1 ]; then
+	DEVOBJS="${DEVOBJS} pulseaudio.o"
+	DEVLIBS="${DEVLIBS} -lpulse -lpulse-simple"
 fi
 
 if [ ${HAVE_SNDIO} -eq 1 ]; then
