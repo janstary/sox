@@ -41,7 +41,7 @@ typedef struct {
   significant bits of the last byte. The 8 bit characters are "filled"
   in order from most significant bit to least significant.
 */
-static void write_bits(sox_format_t * ft, INT32 *bits, int len)
+static void write_bits(sox_format_t * ft, int32_t *bits, int len)
 {
   int i;
   uint8_t mask; /* The next bit position within the variable "data" to
@@ -96,7 +96,7 @@ static void write_bits(sox_format_t * ft, INT32 *bits, int len)
   the range 0 to len, inclusive. If it is less than len, it will
   always be a multiple of 8.
 */
-static int read_bits(sox_format_t * ft, INT32 *bits, int len)
+static int read_bits(sox_format_t * ft, int32_t *bits, int len)
 {
   int i;
   uint8_t c = 0;
@@ -152,7 +152,7 @@ static size_t read_samples(sox_format_t * ft, sox_sample_t *buf, size_t len)
     SOX_SAMPLE_LOCALS;
     /* Read more data if buffer is empty */
     if (lpc->samples == LPC10_SAMPLES_PER_FRAME) {
-      INT32 bits[LPC10_BITS_IN_COMPRESSED_FRAME];
+      int32_t bits[LPC10_BITS_IN_COMPRESSED_FRAME];
 
       if (read_bits(ft, bits, LPC10_BITS_IN_COMPRESSED_FRAME) !=
           LPC10_BITS_IN_COMPRESSED_FRAME)
@@ -181,7 +181,7 @@ static size_t write_samples(sox_format_t * ft, const sox_sample_t *buf, size_t l
     }
 
     if (lpc->samples == LPC10_SAMPLES_PER_FRAME) {
-      INT32 bits[LPC10_BITS_IN_COMPRESSED_FRAME];
+      int32_t bits[LPC10_BITS_IN_COMPRESSED_FRAME];
 
       lpc10_encode(lpc->speech, bits, lpc->encst);
       write_bits(ft, bits, LPC10_BITS_IN_COMPRESSED_FRAME);
