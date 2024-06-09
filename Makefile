@@ -35,8 +35,6 @@ FMTOBJS	= \
 	cvsd.o \
 	dat.o \
 	dvms-fmt.o \
-	f4-fmt.o \
-	f8-fmt.o \
 	formats.o \
 	formats_i.o \
 	g711.o \
@@ -56,10 +54,6 @@ FMTOBJS	= \
 	prc.o \
 	raw-fmt.o \
 	raw.o \
-	s1-fmt.o \
-	s2-fmt.o \
-	s3-fmt.o \
-	s4-fmt.o \
 	sf.o \
 	skelform.o \
 	smp.o \
@@ -68,10 +62,6 @@ FMTOBJS	= \
 	sox-fmt.o \
 	sphere.o \
 	tx16w.o \
-	u1-fmt.o \
-	u2-fmt.o \
-	u3-fmt.o \
-	u4-fmt.o \
 	ul-fmt.o \
 	voc.o \
 	vox-fmt.o \

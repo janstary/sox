@@ -16,8 +16,6 @@ cvsd-fmt.o: cvsd-fmt.c cvsd.h sox_i.h config.h sox.h util.h xmalloc.h effects.h
 cvsd.o: cvsd.c sox_i.h config.h sox.h util.h xmalloc.h effects.h cvsd.h cvsdfilt.h
 dat.o: dat.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 dvms-fmt.o: dvms-fmt.c cvsd.h sox_i.h config.h sox.h util.h xmalloc.h effects.h
-f4-fmt.o: f4-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-f8-fmt.o: f8-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
 fap.o: fap.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 fft4g.o: fft4g.c fft4g.h
 fir.o: fir.c sox_i.h config.h sox.h util.h xmalloc.h effects.h dft_filter.h fft4g.h fifo.h
@@ -55,10 +53,6 @@ prc.o: prc.c sox_i.h config.h sox.h util.h xmalloc.h effects.h adpcms.h
 pvf.o: pvf.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 raw-fmt.o: raw-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 raw.o: raw.c sox_i.h config.h sox.h util.h xmalloc.h effects.h g711.h
-s1-fmt.o: s1-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-s2-fmt.o: s2-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-s3-fmt.o: s3-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-s4-fmt.o: s4-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
 sd2.o: sd2.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 sf.o: sf.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 skelform.o: skelform.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
@@ -69,10 +63,6 @@ soundtool.o: soundtool.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 sox-fmt.o: sox-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 sphere.o: sphere.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 speed.o: speed.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
-u1-fmt.o: u1-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-u2-fmt.o: u2-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-u3-fmt.o: u3-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
-u4-fmt.o: u4-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
 ul-fmt.o: ul-fmt.c sox_i.h config.h sox.h util.h xmalloc.h effects.h raw.h
 voc.o: voc.c sox_i.h config.h sox.h util.h xmalloc.h effects.h g711.h adpcms.h
 vorbis.o: vorbis.c
