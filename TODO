@@ -15,8 +15,6 @@ AC_C_BIGENDIAN
 	How (and why) does SoX checks its own endianness?
 	https://commandcenter.blogspot.com/2012/04/byte-order-fallacy.html
 
-SOX_FMT_HEADERS([oss], [sys/soundcard.h], [SOUND_MIXER_MUTE], [], [devices])
-
 sox.1
 	no need to have soxi.1 and play.1 and rec.1 as copies
 
