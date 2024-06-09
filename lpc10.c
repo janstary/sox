@@ -19,7 +19,7 @@
 
 #include "sox_i.h"
 
-#include <lpc10.h>
+#include <lpc.h>
 
 /* Private data */
 typedef struct {

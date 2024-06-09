@@ -75,7 +75,7 @@
 #if HAVE_GSM
   FORMAT(gsm)
 #endif
-#if HAVE_LPC10
+#if HAVE_LPC
   FORMAT(lpc10)
 #endif
 #if HAVE_MAD || HAVE_LAME || HAVE_TWOLAME
