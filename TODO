@@ -22,8 +22,3 @@ libsox.3
 
 	Does anybody even use the library?
 	https://github.com/janstary/sox/issues/43
-
-monkey.wav
-
-	remove that and produce a stereo wave with synth instead
-
