@@ -14,6 +14,9 @@ Format types that can (also) be handled by sndfile are listed under
 This might be useful if you have a file that doesn't work
 with SoX's default format readers and writers,
 but there is an external reader or writer for that format.
+The list of the supported file formats
+is followed by the list of supported audio drivers.
+.Ss File formats
 .Bl -tag -width xx
 .It raw, f32, f64, s8, s16, s24, s32, u8, u16, u24, u32, ul, al, lu, la
 Raw (headerless) audio files.
@@ -61,10 +64,6 @@ AIFF-C is defined in DAVIC 1.4 Part 9 Annex B.
 This format is referred from ARIB STD-B24,
 which is specified for Japanese data broadcasting.
 No private chunks are supported.
-.It alsa (optional)
-Advanced Linux Sound Architecture device driver.
-ALSA is only used in Linux-based operating systems,
-though these might support OSS (see below) as well.
 .It amb
 Ambisonic B-Format: a specialisation of WAV
 with between 3 and 16 channels of audio
@@ -113,9 +112,6 @@ option.
 .It 7 = 23.05 kbit/s
 .It 8 = 23.85 kbit/s
 .El
-.It ao (optional)
-Xiph.org's Audio Output device driver; works only for playing.
-It supports a wide range of devices and sound systems.
 .It au, snd
 Sun Microsystems AU files.
 There are many types of AU files;
@@ -139,26 +135,6 @@ Compact Disc Digital Audio (raw audio).
 CDDA has two audio channels formatted as
 16-bit signed integers (big endian) at a sample rate of 44100 Hz.
 The number of (stereo) samples in each CDDA track is always a multiple of 588.
-.It coreaudio (optional)
-.\" FIXME Reorder so that audio drivers are separate
-MacOS CoreAudio device driver.
-If a filename is not specific or if the name is "default"
-then the default audio device is selected.
-Any other name will be used to select a specific device.
-Valid names are listed in the System Preferences under the Sound menu.
-For example:
-.Bd -literal
-sox infile -t coreaudio
-sox infile -t coreaudio default
-sox infile -t coreaudio "Internal Speakers"
-.Ed
-.\" FIXME Say this generally for output drivers:
-.\" See also
-.\".BR play (1),
-.\".BR rec (1),
-.\"and
-.\".BR sox (1)
-.\".BR \-d .
 .It cvs, cvsd
 Continuously Variable Slope Delta modulation.
 A headerless format used to compress speech audio.
@@ -299,13 +275,6 @@ fractional numbers are also allowed.
 Xiph.org's Opus compressed audio; an open, lossy, low-latency codec
 offering a wide range of compression rates, using the Ogg container.
 SoX can only read Opus files, not write them.
-.It oss (optional)
-Open Sound System
-.Pa /dev/dsp
-device driver.
-OSS support is used by
-.Fx
-FreeBSD and some other Unix operating systems.
 .It paf, fap
 Ensoniq PARIS file format (big and little-endian, respectively).
 .It pls
@@ -319,8 +288,6 @@ When writing, SoX defaults to the recommended A-law encoding.
 if you must use ADPCM, use the
 .Fl e Dv ima-adpcm
 switch.
-.It pulseaudio (optional)
-PulseAudio driver, a cross platform networked sound server.
 .It pvf
 Portable Voice Format.
 .It sd2
@@ -390,8 +357,6 @@ voc,
 vorbis,
 wav,
 xi.
-.It sndio (optional)
-OpenBSD audio device driver.
 .It sndr
 Sounder files.
 An MS-DOS/Windows format from the early '90s.
@@ -418,10 +383,6 @@ See
 in
 .Xr sox 1
 for examples of using the sox format with pipes.
-.It sunaudio (optional)
-Sun Microsystems
-.Pa /dev/audio
-device driver.
 .It txw
 Yamaha TX-16W sampler.
 A file format from a Yamaha sampling keyboard
@@ -475,28 +436,6 @@ Big endian versions of RIFF files, called RIFX, are also supported:
 to write a RIFX file, use the
 .Fl B
 option for the output file.
-.It waveaudio (optional)
-MS-Windows audio device driver.
-.\"sox infile \-t waveaudio
-.\"sox infile \-t waveaudio default
-.\"sox infile \-t waveaudio 1
-.\"sox infile \-t waveaudio "High Definition Audio Device ("
-If the device name is omitted, or is -1 or
-.Dq Bdefault ,
-you get the `Microsoft Wave Mapper' device,
-which means to use the system default audio devices.
-You can control what that means via the Control Panel.
-A device name given by any other number means
-the audio device with that index;
-so recording with device name 0 would get
-the first input device (perhaps the microphone),
-1 would get the second (perhaps line in), etc.
-Playback using 0 will get the
-first output device (usually the only audio device).
-If the device name given is something other than a number,
-SoX tries to match it (the first 31 characters)
-.\" FIXME Is that enough? Those win names can be crazy
-against the names of the available devices.
 .It wavpcm
 A non-standard, but widely used, variant of WAV.
 .\" FIXME is that true?
@@ -508,7 +447,7 @@ It is likely that such applications will eventually be updated
 to support the standard header, but in the mean time,
 this SoX format can be used to create files with
 the non-standard header that should work with these applications.
-.\" FIXME: throw that away
+.\" FIXME: throw that away?
 Note that SoX will automatically detect and read WAV files
 with these non-standard headers.
 The most common use of this file-type
@@ -528,6 +467,111 @@ These are 16-bit ADPCM audio files used by Maxis games.
 SoX onluy supports reading XA files.
 .It xi
 Fasttracker 2 Extended Instrument format.
+.El
+.Ss Audio drivers
+All of these are optional.
+SoX can be built without support for any audio driver
+and used for off-line processing of audio files;
+typically, however, the operating system will have one (or possibly more)
+of these drivers present for playing and recording.
+Technically, these are also audio formats,
+so to play on e.g. a sndio system means to
+write an output file of type sndio, as in
+.Pp
+.Dl play file.wav
+.Dl sox file.wav -t sndio
+.\"The (optional) name of the output file determines the device.
+.\"FIXME is that true for all of them? Which ones support it?
+.Bl -tag -width xx
+.It alsa
+Advanced Linux Sound Architecture.
+ALSA is only used in Linux-based operating systems,
+though these might support OSS as well.
+For example:
+.Bd -literal
+sox infile -t alsa
+sox infile -t alsa hw:0,0
+sox infile -t alsa plughw:0,0
+sox infile -t alsa default
+.Ed
+.It ao
+Xiph.org's Audio Output device driver; works only for playing.
+It supports a wide range of devices and sound systems.
+.Bd -literal
+sox infile -t ao
+sox infile -t ao default
+sox infile -t ao pulse
+.Ed
+.It coreaudio
+MacOS CoreAudio device driver.
+If a filename is not specific or if the name is "default"
+then the default audio device is selected.
+Any other name will be used to select a specific device.
+Valid names can be obtained by running
+.Sq system_profiler SPAudioDataType
+and are listed in the System Preferences under the Sound menu.
+For example:
+.Bd -literal
+sox infile -t coreaudio
+sox infile -t coreaudio default
+sox infile -t coreaudio "Internal Speakers"
+.Ed
+.It oss
+Open Sound System
+.Pa /dev/dsp
+device driver.
+OSS support is used by
+.Fx
+FreeBSD and some other Unix operating systems.
+.Bd -literal
+sox infile -t oss
+sox infile \-t oss /dev/dsp
+.Ed
+.It pulseaudio
+PulseAudio driver, a cross platform networked sound server.
+.Bd -literal
+sox infile -t pulseaudio
+sox infile -t pulseaudio default
+.Ed
+.It sndio
+OpenBSD audio device driver.
+.\" FIXME mention AUDIODEVICE
+.It sunaudio
+Sun Microsystems
+.Pa /dev/audio
+device driver.
+.Bd -literal
+sox infile -t sunau /dev/audio
+sox infile -t sunau -e mu-law -c 1 /dev/audio
+.Ed
+.It waveaudio
+MS-Windows audio device driver.
+If the device name is omitted, or is -1 or
+.Dq default ,
+you get the `Microsoft Wave Mapper' device,
+.\" FIXME 2024: Is it really called that?
+which means to use the system default audio devices.
+You can control what that means via the Control Panel.
+A device name given by any other number means
+the audio device with that index;
+so recording with device name 0 would get
+the first input device (perhaps the microphone),
+1 would get the second (perhaps line in), etc.
+Playback using 0 will get the
+first output device (usually the only audio device).
+If the device name given is something other than a number,
+SoX tries to match it (the first 31 characters)
+.\" FIXME Is that enough? Those win names can be crazy
+against the names of the available devices.
+For example:
+.Pp
+.Bd -literal
+sox file -t waveaudio
+sox file -t waveaudio 0
+sox file -t waveaudio 1
+sox file -t waveaudio default
+sox file -t waveaudio "High Definition Audio Device"
+.Ed
 .El
 .Sh SEE ALSO
 .Xr sox 1 ,
