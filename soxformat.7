@@ -474,7 +474,24 @@ SoX can be built without support for any audio driver
 and used for off-line processing of audio files;
 typically, however, the operating system will have one (or possibly more)
 of these drivers present for playing and recording.
-Technically, these are also audio formats,
+Playing a file with
+.Xr play 1
+or recording with
+.Xr rec 1
+will choose the default driver and its default device.
+These can be overriden with the
+.Ev AUDIODRIVER
+and
+.Ev AUDIODEV
+environment variables in case the system features
+more than one driver or more than one device.
+.\" FIXME can all drivers really do that?
+While
+.Xr play 1
+and
+.Xr rec 1
+are the standard ways to play and record,
+the audio driver is technicaly just another audio format,
 so to play on e.g. a sndio system means to
 write an output file of type sndio, as in
 .Pp
@@ -564,7 +581,6 @@ SoX tries to match it (the first 31 characters)
 .\" FIXME Is that enough? Those win names can be crazy
 against the names of the available devices.
 For example:
-.Pp
 .Bd -literal
 sox file -t waveaudio
 sox file -t waveaudio 0
