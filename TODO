@@ -15,10 +15,3 @@ AC_C_BIGENDIAN
 	How (and why) does SoX checks its own endianness?
 	https://commandcenter.blogspot.com/2012/04/byte-order-fallacy.html
 
-sox.1
-	no need to have soxi.1 and play.1 and rec.1 as copies
-
-libsox.3
-
-	Does anybody even use the library?
-	https://github.com/janstary/sox/issues/43
