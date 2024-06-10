@@ -37,6 +37,7 @@ HAVE_GSM=
 HAVE_ID3=
 HAVE_LADSPA=
 HAVE_LAME=
+HAVE_LE=
 HAVE_LPC=
 HAVE_LTDL=
 HAVE_MAD=
@@ -176,6 +177,7 @@ runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest id3	ID3     -lid3tag	|| true
 runtest ladspa	LADSPA  		|| true
+runtest le	LE  			|| true
 runtest lame	LAME    -lmp3lame	|| true
 runtest lpc	LPC	-llpc		|| true
 runtest ltdl	LTDL	-lltdl		|| true
@@ -343,6 +345,7 @@ cat << __HEREDOC__
 #define HAVE_ID3	${HAVE_ID3}
 #define HAVE_LADSPA	${HAVE_LADSPA}
 #define HAVE_LAME	${HAVE_LAME}
+#define HAVE_LE		${HAVE_LE}
 #define HAVE_LPC	${HAVE_LPC}
 #define HAVE_LTDL	${HAVE_LTDL}
 #define HAVE_MAD	${HAVE_MAD}

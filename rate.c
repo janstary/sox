@@ -104,10 +104,10 @@ typedef struct stage {
 
   /* For a stage with variable L/M: */
   union {               /* 32bit.32bit fixed point arithmetic */
-    #if defined(WORDS_BIGENDIAN)
-    struct {int32_t integer; uint32_t fraction;} parts;
-    #else
+    #if HAVE_LE
     struct {uint32_t fraction; int32_t integer;} parts;
+    #else
+    struct {int32_t integer; uint32_t fraction;} parts;
     #endif
     int64_t all;
     #define MULT32 (65536. * 65536.)

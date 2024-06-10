@@ -45,12 +45,12 @@
   #define SET_BINARY_MODE(file)
 #endif
 
-#ifdef WORDS_BIGENDIAN
-  #define MACHINE_IS_BIGENDIAN 1
-  #define MACHINE_IS_LITTLEENDIAN 0
+#if HAVE_LE
+#define MACHINE_IS_LITTLEENDIAN	1
+#define MACHINE_IS_BIGENDIAN	0
 #else
-  #define MACHINE_IS_BIGENDIAN 0
-  #define MACHINE_IS_LITTLEENDIAN 1
+#define MACHINE_IS_LITTLEENDIAN	0
+#define MACHINE_IS_BIGENDIAN	1
 #endif
 
 /*--------------------------- Language extensions ----------------------------*/
