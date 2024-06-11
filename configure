@@ -169,7 +169,10 @@ echo 1>&3
 
 COMP="${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}"
 
-# detect optional formats
+# byte order
+runtest le LE || true
+
+# optional formats
 runtest amrnb	AMRNB  -lopencore-amrnb	|| true
 runtest amrwb	AMRWB  -lopencore-amrwb	|| true
 runtest amrvo	AMRVO  -lvo-amrwbenc	|| true
@@ -177,7 +180,6 @@ runtest flac	FLAC    -lFLAC		|| true
 runtest gsm	GSM     -lgsm		|| true
 runtest id3	ID3     -lid3tag	|| true
 runtest ladspa	LADSPA  		|| true
-runtest le	LE  			|| true
 runtest lame	LAME    -lmp3lame	|| true
 runtest lpc	LPC	-llpc		|| true
 runtest ltdl	LTDL	-lltdl		|| true
@@ -193,7 +195,7 @@ runtest vorbis	VORBIS  -lvorbis	|| true
 runtest wavpack	WAVPACK -lwavpack	|| true
 runtest zlib	ZLIB    -lz		|| true
 
-# detect optional audio devices/drivers
+# audio devices/drivers
 runtest alsa		ALSA        -lasound			|| true
 runtest ao		AO          -lao			|| true
 runtest coreaudio	COREAUDIO   -Wl,-framework,CoreAudio	|| true
@@ -337,6 +339,8 @@ exec > config.h
 
 echo
 cat << __HEREDOC__
+#define HAVE_LE		${HAVE_LE}
+
 #define HAVE_AMRNB	${HAVE_AMRNB}
 #define HAVE_AMRWB	${HAVE_AMRWB}
 #define HAVE_AMRVO	${HAVE_AMRVO}
@@ -345,7 +349,6 @@ cat << __HEREDOC__
 #define HAVE_ID3	${HAVE_ID3}
 #define HAVE_LADSPA	${HAVE_LADSPA}
 #define HAVE_LAME	${HAVE_LAME}
-#define HAVE_LE		${HAVE_LE}
 #define HAVE_LPC	${HAVE_LPC}
 #define HAVE_LTDL	${HAVE_LTDL}
 #define HAVE_MAD	${HAVE_MAD}
