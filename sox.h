@@ -28,19 +28,6 @@ LSX_ and lsx_ symbols should not be used by libSoX-based applications.
 extern "C" {
 #endif
 
-#if defined __GNUC__
-#define LSX_GCC(maj, min) \
-  ((__GNUC__ > (maj)) || (__GNUC__ == (maj) && __GNUC_MINOR__ >= (min)))
-#else
-#define LSX_GCC(maj, min) 0
-#endif
-
-#if LSX_GCC(4,9)
-#define _Ret_ __attribute__ ((returns_nonnull))
-#define _Ret_valid_ _Ret_
-#define _Ret_z_ _Ret_
-#endif
-
 /*****************************************************************************
 API decoration macros:
 Mostly for documentation purposes. For some compilers, decorations also affect
