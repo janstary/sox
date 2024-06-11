@@ -28,11 +28,6 @@ LSX_ and lsx_ symbols should not be used by libSoX-based applications.
 extern "C" {
 #endif
 
-/* Suppress warnings from use of type long long. */
-#if defined __GNUC__
-#pragma GCC system_header
-#endif
-
 #if defined __GNUC__
 #define LSX_GCC(maj, min) \
   ((__GNUC__ > (maj)) || (__GNUC__ == (maj) && __GNUC_MINOR__ >= (min)))
