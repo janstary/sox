@@ -37,19 +37,6 @@ optimizations.
 
 /**
 Plugins API:
-Attribute required on all functions exported by libSoX and on all function
-pointer types used by the libSoX API.
-*/
-#if defined __GNUC__ && defined __i386__
-#define LSX_API  __attribute__ ((cdecl)) /* libSoX function */
-#elif _MSC_VER
-#define LSX_API  __cdecl /* libSoX function */
-#else
-#define LSX_API /* libSoX function */
-#endif
-
-/**
-Plugins API:
 Attribute applied to a parameter or local variable to suppress warnings about
 the variable being unused (especially in macro-generated code).
 */
@@ -1073,7 +1060,7 @@ Client API:
 Callback to write a message to an output device (console or log file),
 used by sox_globals_t.output_message_handler.
 */
-typedef void (LSX_API * sox_output_message_handler_t)(
+typedef void (* sox_output_message_handler_t)(
     unsigned level,                       /**< 1 = FAIL, 2 = WARN, 3 = INFO, 4 = DEBUG, 5 = DEBUG_MORE, 6 = DEBUG_MOST. */
     LSX_PARAM_IN_Z char const * filename, /**< Source code __FILENAME__ from which message originates. */
     LSX_PARAM_IN_PRINTF char const * fmt, /**< Message format string. */
@@ -1086,7 +1073,7 @@ Callback to retrieve information about a format handler,
 used by sox_format_tab_t.fn.
 @returns format handler information.
 */
-typedef sox_format_handler_t const * (LSX_API * sox_format_fn_t)(void);
+typedef sox_format_handler_t const * (* sox_format_fn_t)(void);
 
 /**
 Client API:
@@ -1094,7 +1081,7 @@ Callback to get information about an effect handler,
 used by the table returned from sox_get_effect_fns(void).
 @returns Pointer to information about an effect handler.
 */
-typedef sox_effect_handler_t const * (LSX_API *sox_effect_fn_t)(void);
+typedef sox_effect_handler_t const * (*sox_effect_fn_t)(void);
 
 /**
 Client API:
@@ -1102,7 +1089,7 @@ Callback to initialize reader (decoder), used by
 sox_format_handler.startread.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_format_handler_startread)(
+typedef int (* sox_format_handler_startread)(
     LSX_PARAM_INOUT sox_format_t * ft /**< Format pointer. */
     );
 
@@ -1112,7 +1099,7 @@ Callback to read (decode) a block of samples,
 used by sox_format_handler.read.
 @returns number of samples read, or 0 if unsuccessful.
 */
-typedef size_t (LSX_API * sox_format_handler_read)(
+typedef size_t (* sox_format_handler_read)(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     LSX_PARAM_OUT_CAP_POST_COUNT(len,return) sox_sample_t *buf, /**< Buffer from which to read samples. */
     size_t len /**< Number of samples available in buf. */
@@ -1124,7 +1111,7 @@ Callback to close reader (decoder),
 used by sox_format_handler.stopread.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_format_handler_stopread)(
+typedef int (* sox_format_handler_stopread)(
     LSX_PARAM_INOUT sox_format_t * ft /**< Format pointer. */
     );
 
@@ -1134,7 +1121,7 @@ Callback to initialize writer (encoder),
 used by sox_format_handler.startwrite.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_format_handler_startwrite)(
+typedef int (* sox_format_handler_startwrite)(
     LSX_PARAM_INOUT sox_format_t * ft /**< Format pointer. */
     );
 
@@ -1144,7 +1131,7 @@ Callback to write (encode) a block of samples,
 used by sox_format_handler.write.
 @returns number of samples written, or 0 if unsuccessful.
 */
-typedef size_t (LSX_API * sox_format_handler_write)(
+typedef size_t (* sox_format_handler_write)(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     LSX_PARAM_IN_COUNT(len) sox_sample_t const * buf, /**< Buffer to which samples are written. */
     size_t len /**< Capacity of buf, measured in samples. */
@@ -1156,7 +1143,7 @@ Callback to close writer (decoder),
 used by sox_format_handler.stopwrite.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_format_handler_stopwrite)(
+typedef int (* sox_format_handler_stopwrite)(
     LSX_PARAM_INOUT sox_format_t * ft /**< Format pointer. */
     );
 
@@ -1166,7 +1153,7 @@ Callback to reposition reader,
 used by sox_format_handler.seek.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_format_handler_seek)(
+typedef int (* sox_format_handler_seek)(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     sox_uint64_t offset /**< Sample offset to which reader should be positioned. */
     );
@@ -1177,7 +1164,7 @@ Callback to parse command-line arguments (called once per effect),
 used by sox_effect_handler.getopts.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_getopts)(
+typedef int (* sox_effect_handler_getopts)(
     LSX_PARAM_INOUT sox_effect_t * effp, /**< Effect pointer. */
     int argc, /**< Number of arguments in argv. */
     LSX_PARAM_IN_COUNT(argc) char *argv[] /**< Array of command-line arguments. */
@@ -1189,7 +1176,7 @@ Callback to initialize effect (called once per flow),
 used by sox_effect_handler.start.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_start)(
+typedef int (* sox_effect_handler_start)(
     LSX_PARAM_INOUT sox_effect_t * effp /**< Effect pointer. */
     );
 
@@ -1199,7 +1186,7 @@ Callback to process samples,
 used by sox_effect_handler.flow.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_flow)(
+typedef int (* sox_effect_handler_flow)(
     LSX_PARAM_INOUT sox_effect_t * effp, /**< Effect pointer. */
     LSX_PARAM_IN_COUNT(*isamp) sox_sample_t const * ibuf, /**< Buffer from which to read samples. */
     LSX_PARAM_OUT_CAP_POST_COUNT(*osamp,*osamp) sox_sample_t * obuf, /**< Buffer to which samples are written. */
@@ -1213,7 +1200,7 @@ Callback to finish getting output after input is complete,
 used by sox_effect_handler.drain.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_drain)(
+typedef int (* sox_effect_handler_drain)(
     LSX_PARAM_INOUT sox_effect_t * effp, /**< Effect pointer. */
     LSX_PARAM_OUT_CAP_POST_COUNT(*osamp,*osamp) sox_sample_t *obuf, /**< Buffer to which samples are written. */
     LSX_PARAM_INOUT size_t *osamp /**< On entry, contains capacity of obuf; on exit, contains number of samples written. */
@@ -1225,7 +1212,7 @@ Callback to shut down effect (called once per flow),
 used by sox_effect_handler.stop.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_stop)(
+typedef int (* sox_effect_handler_stop)(
     LSX_PARAM_INOUT sox_effect_t * effp /**< Effect pointer. */
     );
 
@@ -1235,7 +1222,7 @@ Callback to shut down effect (called once per effect),
 used by sox_effect_handler.kill.
 @returns SOX_SUCCESS if successful.
 */
-typedef int (LSX_API * sox_effect_handler_kill)(
+typedef int (* sox_effect_handler_kill)(
     LSX_PARAM_INOUT sox_effect_t * effp /**< Effect pointer. */
     );
 
@@ -1245,7 +1232,7 @@ Callback called while flow is running (called once per buffer),
 used by sox_flow_effects.callback.
 @returns SOX_SUCCESS to continue, other value to abort flow.
 */
-typedef int (LSX_API * sox_flow_effects_callback)(
+typedef int (* sox_flow_effects_callback)(
     sox_bool all_done,
     void * client_data
     );
@@ -1256,7 +1243,7 @@ Callback for enumerating the contents of a playlist,
 used by the sox_parse_playlist function.
 @returns SOX_SUCCESS if successful, any other value to abort playlist enumeration.
 */
-typedef int (LSX_API * sox_playlist_callback_t)(
+typedef int (* sox_playlist_callback_t)(
     void * callback_data,
     LSX_PARAM_IN_Z char const * filename
     );
@@ -1602,7 +1589,6 @@ Returns version number string of libSoX, for example, "14.4.0".
 */
 LSX_RETURN_VALID_Z
 char const *
-LSX_API
 sox_version(void);
 
 /**
@@ -1612,7 +1598,6 @@ Returns information about this build of libsox.
 */
 LSX_RETURN_VALID LSX_RETURN_PURE
 sox_version_info_t const *
-LSX_API
 sox_version_info(void);
 
 /**
@@ -1622,7 +1607,6 @@ Returns a pointer to the structure with libSoX's global settings.
 */
 LSX_RETURN_VALID LSX_RETURN_PURE
 sox_globals_t *
-LSX_API
 sox_get_globals(void);
 
 /**
@@ -1640,7 +1624,6 @@ End of list indicated by name == NULL.
 */
 LSX_RETURN_ARRAY LSX_RETURN_PURE
 sox_encodings_info_t const *
-LSX_API
 sox_get_encodings_info(void);
 
 /**
@@ -1655,7 +1638,6 @@ Client API:
 Fills in an encodinginfo with default values.
 */
 void
-LSX_API
 sox_init_encodinginfo(
     LSX_PARAM_OUT sox_encodinginfo_t * e /**< Pointer to uninitialized encoding info structure to be initialized. */
     );
@@ -1672,7 +1654,6 @@ should be used instead of a pre-determined precision.
 */
 LSX_RETURN_PURE
 unsigned
-LSX_API
 sox_precision(
     sox_encoding_t encoding,   /**< Encoding for which to lookup precision information. */
     unsigned bits_per_sample   /**< The number of encoded bits per sample. */
@@ -1684,7 +1665,6 @@ Returns the number of items in the metadata block.
 @returns the number of items in the metadata block.
 */
 size_t
-LSX_API
 sox_num_comments(
     LSX_PARAM_IN_OPT sox_comments_t comments /**< Metadata block. */
     );
@@ -1694,7 +1674,6 @@ Client API:
 Adds an "id=value" item to the metadata block.
 */
 void
-LSX_API
 sox_append_comment(
     LSX_PARAM_DEREF_PRE_MAYBENULL LSX_PARAM_DEREF_POST_NOTNULL sox_comments_t * comments, /**< Metadata block. */
     LSX_PARAM_IN_Z char const * item /**< Item to be added in "id=value" format. */
@@ -1705,7 +1684,6 @@ Client API:
 Adds a newline-delimited list of "id=value" items to the metadata block.
 */
 void
-LSX_API
 sox_append_comments(
     LSX_PARAM_DEREF_PRE_MAYBENULL LSX_PARAM_DEREF_POST_NOTNULL sox_comments_t * comments, /**< Metadata block. */
     LSX_PARAM_IN_Z char const * items /**< Newline-separated list of items to be added, for example "id1=value1\\nid2=value2". */
@@ -1718,7 +1696,6 @@ Duplicates the metadata block.
 */
 LSX_RETURN_OPT
 sox_comments_t
-LSX_API
 sox_copy_comments(
     LSX_PARAM_IN_OPT sox_comments_t comments /**< Metadata block to copy. */
     );
@@ -1728,7 +1705,6 @@ Client API:
 Frees the metadata block.
 */
 void
-LSX_API
 sox_delete_comments(
     LSX_PARAM_DEREF_PRE_MAYBENULL LSX_PARAM_DEREF_POST_NULL sox_comments_t * comments /**< Metadata block. */
     );
@@ -1740,7 +1716,6 @@ If "id=value" is found, return value, else return null.
 */
 LSX_RETURN_OPT
 char const *
-LSX_API
 sox_find_comment(
     LSX_PARAM_IN_OPT sox_comments_t comments, /**< Metadata block in which to search. */
     LSX_PARAM_IN_Z char const * id /**< Id for which to search */
@@ -1751,7 +1726,6 @@ Client API:
 Unload format handler plugins.
 */
 void
-LSX_API
 sox_format_quit(void);
 
 /**
@@ -1760,7 +1734,6 @@ Initialize effects library.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_init(void);
 
 /**
@@ -1769,7 +1742,7 @@ Close effects library and unload format handler plugins.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
+
 sox_quit(void);
 
 /**
@@ -1779,7 +1752,7 @@ Returns the table of format handler names and functions.
 */
 LSX_RETURN_ARRAY LSX_RETURN_PURE
 sox_format_tab_t const *
-LSX_API
+
 sox_get_format_fns(void);
 
 /**
@@ -1795,7 +1768,7 @@ Opens a decoding session for a file. Returned handle must be closed with sox_clo
 */
 LSX_RETURN_OPT
 sox_format_t *
-LSX_API
+
 sox_open_read(
     LSX_PARAM_IN_Z   char               const * path,      /**< Path to file to be opened (required). */
     LSX_PARAM_IN_OPT sox_signalinfo_t   const * signal,    /**< Information already known about audio stream, or NULL if none. */
@@ -1809,7 +1782,7 @@ Returns true if the format handler for the specified file type supports the spec
 @returns true if the format handler for the specified file type supports the specified encoding.
 */
 sox_bool
-LSX_API
+
 sox_format_supports_encoding(
     LSX_PARAM_IN_OPT_Z char               const * path,       /**< Path to file to be examined (required if filetype is NULL). */
     LSX_PARAM_IN_OPT_Z char               const * filetype,   /**< Previously-determined file type, or NULL to use extension from path. */
@@ -1823,7 +1796,7 @@ Gets the format handler for a specified file type.
 */
 LSX_RETURN_OPT
 sox_format_handler_t const *
-LSX_API
+
 sox_write_handler(
     LSX_PARAM_IN_OPT_Z char               const * path,         /**< Path to file (required if filetype is NULL). */
     LSX_PARAM_IN_OPT_Z char               const * filetype,     /**< Filetype for which handler is needed, or NULL to use extension from path. */
@@ -1837,14 +1810,14 @@ Opens an encoding session for a file. Returned handle must be closed with sox_cl
 */
 LSX_RETURN_OPT
 sox_format_t *
-LSX_API
+
 sox_open_write(
     LSX_PARAM_IN_Z     char               const * path,     /**< Path to file to be written (required). */
     LSX_PARAM_IN       sox_signalinfo_t   const * signal,   /**< Information about desired audio stream (required). */
     LSX_PARAM_IN_OPT   sox_encodinginfo_t const * encoding, /**< Information about desired sample encoding, or NULL to use defaults. */
     LSX_PARAM_IN_OPT_Z char               const * filetype, /**< Previously-determined file type, or NULL to auto-detect. */
     LSX_PARAM_IN_OPT   sox_oob_t          const * oob,      /**< Out-of-band data to add to file, or NULL if none. */
-    LSX_PARAM_IN_OPT   sox_bool           (LSX_API * overwrite_permitted)(LSX_PARAM_IN_Z char const * filename) /**< Called if file exists to determine whether overwrite is ok. */
+    LSX_PARAM_IN_OPT   sox_bool           (* overwrite_permitted)(LSX_PARAM_IN_Z char const * filename) /**< Called if file exists to determine whether overwrite is ok. */
     );
 
 /**
@@ -1853,7 +1826,6 @@ Reads samples from a decoding session into a sample buffer.
 @returns Number of samples decoded, or 0 for EOF.
 */
 size_t
-LSX_API
 sox_read(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     LSX_PARAM_OUT_CAP_POST_COUNT(len,return) sox_sample_t *buf, /**< Buffer from which to read samples. */
@@ -1866,7 +1838,6 @@ Writes samples to an encoding session from a sample buffer.
 @returns Number of samples encoded.
 */
 size_t
-LSX_API
 sox_write(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     LSX_PARAM_IN_COUNT(len) sox_sample_t const * buf, /**< Buffer from which to read samples. */
@@ -1879,7 +1850,6 @@ Closes an encoding or decoding session.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_close(
     LSX_PARAM_INOUT sox_format_t * ft /**< Format pointer. */
     );
@@ -1890,7 +1860,6 @@ Sets the location at which next samples will be decoded. Returns SOX_SUCCESS if 
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_seek(
     LSX_PARAM_INOUT sox_format_t * ft, /**< Format pointer. */
     sox_uint64_t offset, /**< Sample offset at which to position reader. */
@@ -1904,7 +1873,6 @@ Finds a format handler by name.
 */
 LSX_RETURN_OPT
 sox_format_handler_t const *
-LSX_API
 sox_find_format(
     LSX_PARAM_IN_Z char const * name, /**< Name of format handler to find. */
     sox_bool ignore_devices /**< Set to true to ignore device names. */
@@ -1917,7 +1885,6 @@ Returns global parameters for effects
 */
 LSX_RETURN_VALID LSX_RETURN_PURE
 sox_effects_globals_t *
-LSX_API
 sox_get_effects_globals(void);
 
 /**
@@ -1933,7 +1900,6 @@ Finds the effect handler with the given name.
 */
 LSX_RETURN_OPT LSX_RETURN_PURE
 sox_effect_handler_t const *
-LSX_API
 sox_find_effect(
     LSX_PARAM_IN_Z char const * name /**< Name of effect to find. */
     );
@@ -1945,7 +1911,6 @@ Creates an effect using the given handler.
 */
 LSX_RETURN_OPT
 sox_effect_t *
-LSX_API
 sox_create_effect(
     LSX_PARAM_IN sox_effect_handler_t const * eh /**< Handler to use for effect. */
     );
@@ -1956,7 +1921,6 @@ Applies the command-line options to the effect.
 @returns the number of arguments consumed.
 */
 int
-LSX_API
 sox_effect_options(
     LSX_PARAM_IN sox_effect_t *effp, /**< Effect pointer on which to set options. */
     int argc, /**< Number of arguments in argv. */
@@ -1970,7 +1934,6 @@ Returns an array containing the known effect handlers.
 */
 LSX_RETURN_VALID_Z LSX_RETURN_PURE
 sox_effect_fn_t const *
-LSX_API
 sox_get_effect_fns(void);
 
 /**
@@ -1986,7 +1949,6 @@ Initializes an effects chain. Returned handle must be closed with sox_delete_eff
 */
 LSX_RETURN_OPT
 sox_effects_chain_t *
-LSX_API
 sox_create_effects_chain(
     LSX_PARAM_IN sox_encodinginfo_t const * in_enc, /**< Input encoding. */
     LSX_PARAM_IN sox_encodinginfo_t const * out_enc /**< Output encoding. */
@@ -1997,7 +1959,6 @@ Client API:
 Closes an effects chain.
 */
 void
-LSX_API
 sox_delete_effects_chain(
     LSX_PARAM_INOUT sox_effects_chain_t *ecp /**< Effects chain pointer. */
     );
@@ -2008,7 +1969,6 @@ Adds an effect to the effects chain, returns SOX_SUCCESS if successful.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_add_effect(
     LSX_PARAM_INOUT sox_effects_chain_t * chain, /**< Effects chain to which effect should be added . */
     LSX_PARAM_INOUT sox_effect_t * effp, /**< Effect to be added. */
@@ -2022,7 +1982,6 @@ Runs the effects chain, returns SOX_SUCCESS if successful.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_flow_effects(
     LSX_PARAM_INOUT  sox_effects_chain_t * chain, /**< Effects chain to run. */
     LSX_PARAM_IN_OPT sox_flow_effects_callback callback, /**< Callback for monitoring flow progress. */
@@ -2035,7 +1994,6 @@ Gets the number of clips that occurred while running an effects chain.
 @returns the number of clips that occurred while running an effects chain.
 */
 sox_uint64_t
-LSX_API
 sox_effects_clips(
     LSX_PARAM_IN sox_effects_chain_t * chain /**< Effects chain from which to read clip information. */
     );
@@ -2046,7 +2004,6 @@ Shuts down an effect (calls stop on each of its flows).
 @returns the number of clips from all flows.
 */
 sox_uint64_t
-LSX_API
 sox_stop_effect(
     LSX_PARAM_INOUT_COUNT(effp->flows) sox_effect_t * effp /**< Effect to stop. */
     );
@@ -2056,7 +2013,6 @@ Client API:
 Adds an already-initialized effect to the end of the chain.
 */
 void
-LSX_API
 sox_push_effect_last(
     LSX_PARAM_INOUT sox_effects_chain_t * chain, /**< Effects chain to which effect should be added. */
     LSX_PARAM_INOUT sox_effect_t * effp /**< Effect to be added. */
@@ -2069,7 +2025,6 @@ Removes and returns an effect from the end of the chain.
 */
 LSX_RETURN_OPT
 sox_effect_t *
-LSX_API
 sox_pop_effect_last(
     LSX_PARAM_INOUT sox_effects_chain_t *chain /**< Effects chain from which to remove an effect. */
     );
@@ -2079,7 +2034,6 @@ Client API:
 Shut down and delete an effect.
 */
 void
-LSX_API
 sox_delete_effect(
     LSX_PARAM_INOUT_COUNT(effp->flows) sox_effect_t *effp /**< Effect to be deleted. */
     );
@@ -2089,7 +2043,6 @@ Client API:
 Shut down and delete the last effect in the chain.
 */
 void
-LSX_API
 sox_delete_effect_last(
     LSX_PARAM_INOUT sox_effects_chain_t *chain /**< Effects chain from which to remove the last effect. */
     );
@@ -2099,7 +2052,6 @@ Client API:
 Shut down and delete all effects in the chain.
 */
 void
-LSX_API
 sox_delete_effects(
     LSX_PARAM_INOUT sox_effects_chain_t *chain /**< Effects chain from which to delete effects. */
     );
@@ -2112,7 +2064,6 @@ clear trim start).
 @returns the sample offset of the start of the trim.
 */
 sox_uint64_t
-LSX_API
 sox_trim_get_start(
     LSX_PARAM_IN sox_effect_t * effp /**< Trim effect. */
     );
@@ -2122,7 +2073,6 @@ Client API:
 Clears the start of the trim to 0.
 */
 void
-LSX_API
 sox_trim_clear_start(
     LSX_PARAM_INOUT sox_effect_t * effp /**< Trim effect. */
     );
@@ -2133,7 +2083,6 @@ Returns true if the specified file is a known playlist file type.
 @returns true if the specified file is a known playlist file type.
 */
 sox_bool
-LSX_API
 sox_is_playlist(
     LSX_PARAM_IN_Z char const * filename /**< Name of file to examine. */
     );
@@ -2144,7 +2093,6 @@ Parses the specified playlist file.
 @returns SOX_SUCCESS if successful.
 */
 int
-LSX_API
 sox_parse_playlist(
     LSX_PARAM_IN sox_playlist_callback_t callback, /**< Callback to call for each item in the playlist. */
     void * p, /**< Data to pass to callback. */
@@ -2159,7 +2107,6 @@ or a generic message if the error code is not recognized.
 */
 LSX_RETURN_VALID_Z LSX_RETURN_PURE
 char const *
-LSX_API
 sox_strerror(
     int sox_errno /**< Error code to look up. */
     );
@@ -2172,7 +2119,6 @@ Gets the basename of the specified file; for example, the basename of
 or 0 on failure.
 */
 size_t
-LSX_API
 sox_basename(
     LSX_PARAM_OUT_Z_CAP_POST_COUNT(base_buffer_len,return) char * base_buffer, /**< Buffer into which basename should be written. */
     size_t base_buffer_len, /**< Size of base_buffer, in bytes. */
@@ -2191,7 +2137,6 @@ Plugins API:
 Print a fatal error in libSoX.
 */
 void
-LSX_API
 lsx_fail_impl(
     LSX_PARAM_IN_PRINTF char const * fmt, /**< printf-style format string. */
     ...)
@@ -2202,7 +2147,6 @@ Plugins API:
 Print a warning in libSoX.
 */
 void
-LSX_API
 lsx_warn_impl(
     LSX_PARAM_IN_PRINTF char const * fmt, /**< printf-style format string. */
     ...)
@@ -2213,7 +2157,6 @@ Plugins API:
 Print an informational message in libSoX.
 */
 void
-LSX_API
 lsx_report_impl(
     LSX_PARAM_IN_PRINTF char const * fmt, /**< printf-style format string. */
     ...)
@@ -2224,7 +2167,6 @@ Plugins API:
 Print a debug message in libSoX.
 */
 void
-LSX_API
 lsx_debug_impl(
     LSX_PARAM_IN_PRINTF char const * fmt, /**< printf-style format string. */
     ...)
@@ -2290,7 +2232,6 @@ Looks up an enumeration by name in an array of lsx_enum_items.
 */
 LSX_RETURN_OPT LSX_RETURN_PURE
 lsx_enum_item const *
-LSX_API
 lsx_find_enum_text(
     LSX_PARAM_IN_Z char const * text, /**< Name of enumeration to find. */
     LSX_PARAM_IN lsx_enum_item const * lsx_enum_items, /**< Array of items to search, with text == NULL for last item. */
@@ -2304,7 +2245,6 @@ Looks up an enumeration by value in an array of lsx_enum_items.
 */
 LSX_RETURN_OPT LSX_RETURN_PURE
 lsx_enum_item const *
-LSX_API
 lsx_find_enum_value(
     unsigned value, /**< Enumeration value to find. */
     LSX_PARAM_IN lsx_enum_item const * lsx_enum_items /**< Array of items to search, with text == NULL for last item. */
@@ -2319,7 +2259,6 @@ INT_MAX if the argument does not match any enumeration name.
 */
 LSX_RETURN_PURE
 int
-LSX_API
 lsx_enum_option(
     int c, /**< Option character to which arg is associated, for example with -a, c would be 'a'. */
     LSX_PARAM_IN_Z char const * arg, /**< Argument to find in enumeration list. */
@@ -2333,7 +2272,6 @@ Determines whether the specified string ends with the specified suffix (case-sen
 */
 LSX_RETURN_PURE
 sox_bool
-LSX_API
 lsx_strends(
     LSX_PARAM_IN_Z char const * str, /**< String to search. */
     LSX_PARAM_IN_Z char const * end  /**< Suffix to search for. */
@@ -2347,7 +2285,6 @@ not have an extension.
 */
 LSX_RETURN_OPT LSX_RETURN_PURE
 char const *
-LSX_API
 lsx_find_file_extension(
     LSX_PARAM_IN_Z char const * pathname /**< Filename to search for extension. */
     );
@@ -2361,7 +2298,6 @@ this function is called (note: not thread safe).
 */
 LSX_RETURN_VALID_Z
 char const *
-LSX_API
 lsx_sigfigs3(
     double number /**< Number to be formatted. */
     );
@@ -2375,7 +2311,6 @@ this function is called (note: not thread safe).
 */
 LSX_RETURN_VALID_Z
 char const *
-LSX_API
 lsx_sigfigs3p(
     double percentage /**< Number to be formatted. */
     );
@@ -2388,7 +2323,6 @@ terminates the running application if unable to allocate the requested memory.
 */
 LSX_RETURN_OPT
 void *
-LSX_API
 lsx_realloc(
     LSX_PARAM_IN_OPT void *ptr, /**< Pointer to be freed or resized, or null if allocating a new buffer. */
     size_t newsize /**< New size for buffer, or 0 to free the buffer. */
@@ -2448,7 +2382,6 @@ Plugins API:
 Initializes an lsx_getopt_t structure for use with lsx_getopt.
 */
 void
-LSX_API
 lsx_getopt_init(
     LSX_PARAM_IN             int argc,                      /**< Number of arguments in argv */
     LSX_PARAM_IN_COUNT(argc) char * const * argv,           /**< Array of arguments */
@@ -2471,7 +2404,6 @@ Note: lsx_getopt does not permute the non-option arguments.
 @returns option character (short), val or 0 (long), or -1 (no more).
 */
 int
-LSX_API
 lsx_getopt(
     LSX_PARAM_INOUT lsx_getopt_t * state /**< The getopt state pointer. */
     );
@@ -2482,7 +2414,6 @@ Gets the file length, or 0 if the file is not seekable/normal.
 @returns The file length, or 0 if the file is not seekable/normal.
 */
 sox_uint64_t
-LSX_API
 lsx_filelength(
     LSX_PARAM_IN sox_format_t * ft
     );
