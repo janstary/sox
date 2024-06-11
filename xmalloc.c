@@ -1,6 +1,7 @@
 /* SoX Memory allocation functions
  *
- * Copyright (c) 2005-2006 Reuben Thomas.  All rights reserved.
+ * Copyright (c) 2005-2006 Reuben Thomas
+ * Copyright (c) 2024      Jan Starý
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,57 +18,52 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
 #include <stdlib.h>
+#include <err.h>
 
-static void *lsx_checkptr(void *ptr)
+#include "sox_i.h"
+
+void *
+lsx_malloc(size_t size)
 {
-  if (!ptr) {
-    lsx_fail("out of memory");
-    exit(2);
-  }
-
-  return ptr;
+	void * ptr;
+	if ((ptr = malloc(size)) == NULL)
+		err(2, NULL);
+	return ptr;
 }
 
-/* Resize an allocated memory area; abort if not possible.
- *
- * For malloc, `If the size of the space requested is zero, the behavior is
- * implementation defined: either a null pointer is returned, or the
- * behavior is as if the size were some nonzero value, except that the
- * returned pointer shall not be used to access an object'
- */
-void *lsx_realloc(void *ptr, size_t newsize)
+void *
+lsx_calloc(size_t num, size_t size)
 {
-  if (ptr && newsize == 0) {
-    free(ptr);
-    return NULL;
-  }
-
-  return lsx_checkptr(realloc(ptr, newsize));
+	void * ptr;
+	if ((ptr = calloc(num, size)) == NULL)
+		err(2, NULL);
+	return ptr;
 }
 
-void *lsx_malloc(size_t size)
+void *
+lsx_realloc(void *ptr, size_t newsize)
 {
-  return lsx_checkptr(malloc(size + !size));
+	if ((ptr = realloc(ptr, newsize)) == NULL)
+		err(2, NULL);
+	return ptr;
 }
 
-void *lsx_calloc(size_t n, size_t size)
+void *
+lsx_realloc_array(void *p, size_t num, size_t size)
 {
-  return lsx_checkptr(calloc(n + !n, size + !size));
+	if (num > ((size_t)-1) / size) {
+		lsx_fail("reallocation size overflow");
+		exit(2);
+	}
+	return lsx_realloc(p, num * size);
 }
 
-void *lsx_realloc_array(void *p, size_t n, size_t size)
+char *
+lsx_strdup(const char *s)
 {
-  if (n > (size_t)-1 / size) {
-    lsx_fail("malloc size overflow");
-    exit(2);
-  }
-
-  return lsx_realloc(p, n * size);
-}
-
-char *lsx_strdup(const char *s)
-{
-  return lsx_checkptr(strdup(s));
+	char * ptr;
+	if ((ptr = strdup(s)) == NULL)
+		err(2, NULL);
+	return ptr;
 }
