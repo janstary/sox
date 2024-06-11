@@ -39,8 +39,8 @@ typedef enum {SOX_SHORT, SOX_INT, SOX_FLOAT, SOX_DOUBLE} sox_data_t;
 typedef enum {SOX_WAVE_SINE, SOX_WAVE_TRIANGLE} lsx_wave_t;
 lsx_enum_item const * lsx_get_wave_enum(void);
 
-void lsx_debug_more_impl(char const * fmt, ...) LSX_PRINTF12;
-void lsx_debug_most_impl(char const * fmt, ...) LSX_PRINTF12;
+void lsx_debug_more_impl(char const * fmt, ...);
+void lsx_debug_most_impl(char const * fmt, ...);
 
 #define lsx_debug_more sox_get_globals()->subsystem=__FILE__,lsx_debug_more_impl
 #define lsx_debug_most sox_get_globals()->subsystem=__FILE__,lsx_debug_most_impl

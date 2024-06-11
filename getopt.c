@@ -24,13 +24,13 @@
 
 void
 lsx_getopt_init(
-    LSX_PARAM_IN             int argc,                      /* Number of arguments in argv */
-    LSX_PARAM_IN_COUNT(argc) char * const * argv,           /* Array of arguments */
-    LSX_PARAM_IN_Z           char const * shortopts,        /* Short option characters */
-    LSX_PARAM_IN_OPT         lsx_option_t const * longopts, /* Array of long option descriptors */
-    LSX_PARAM_IN             lsx_getopt_flags_t flags,      /* Flags for longonly and opterr */
-    LSX_PARAM_IN             int first,                     /* First argument to check (usually 1) */
-    LSX_PARAM_OUT            lsx_getopt_t * state)          /* State object to initialize */
+    int argc,                      /* Number of arguments in argv */
+    char * const * argv,           /* Array of arguments */
+    char const * shortopts,        /* Short option characters */
+    lsx_option_t const * longopts, /* Array of long option descriptors */
+    lsx_getopt_flags_t flags,      /* Flags for longonly and opterr */
+    int first,                     /* First argument to check (usually 1) */
+    lsx_getopt_t * state)          /* State object to initialize */
 {
     assert(argc >= 0);
     assert(argv != NULL);
@@ -68,7 +68,7 @@ lsx_getopt_init(
 }
 
 static void CheckCurPosEnd(
-    LSX_PARAM_INOUT lsx_getopt_t * state)
+    lsx_getopt_t * state)
 {
     if (!state->curpos[0])
     {
@@ -79,7 +79,7 @@ static void CheckCurPosEnd(
 
 int
 lsx_getopt(
-    LSX_PARAM_INOUT lsx_getopt_t * state)
+    lsx_getopt_t * state)
 {
     int oerr;
     assert(state);

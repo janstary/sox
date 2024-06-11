@@ -1248,7 +1248,7 @@ static int update_status(sox_bool all_done, void * client_data)
 {
   (void)client_data;
   if (interactive) while (kbhit()) {
-    int LSX_UNUSED ch;
+    int ch;
     ch = getchar();
 
 #ifdef MORE_INTERACTIVE
