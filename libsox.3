@@ -34,7 +34,7 @@ typedef struct sox_encodinginfo_t {
 .Ft sox_format_t *
 .Fn sox_open_read "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype"
 .Ft sox_format_t
-.Fn sox_open_write "sox_bool (*overwrite_permitted)(const char *filename)" "const char *path" "const sox_signalinfo_t *info" "const char *filetype" "const char *comment" "sox_size_t length" "const sox_instrinfo_t *instr" "const sox_loopinfo_t * loops"
+.Fn sox_open_write "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype" "sox_oob_t const * oob" "sox_bool (*overwrite)(char const *)"
 .Ft size_t
 .Fn sox_read "sox_format_t * ft" "sox_sample_t * buf" "size_t len"
 .Ft sox_size_t
@@ -69,9 +69,7 @@ function performs cleanup related to all file format handlers.
 This should be called after all file operations are done.
 .Pp
 .Fn sox_open_read
-opens the named file for reading and associates a
-.Ft sox_format_t
-with it.
+opens the named file for reading.
 A special name of
 .Dq -
 can be used to read data from stdin.
@@ -90,21 +88,41 @@ are normally only needed for headerless audio files.
 If
 .Fa filetype
 is not NULL, it specifies the file type.
-Otherwise, the file type is derived from
+Otherwise, the file type is guessed from
 the filename extension or the file header.
 .Pp
-\fBsox_open_write\fR function opens the file for writing whose name is
-the string pointed to by \fIpath\fR and associates an sox_format_t with it. If
-\fIinfo\fR is non-NULL then it will be used to specify the data format
-of the output file. Since most file formats can write data in
-different data formats, this generally has to be specified. The info
-structure from the input format handler can be specified to copy data
-over in the same format. If \fIcomment\fR is non-NULL, it will be
-written in the file header for formats that support comments. If
-\fIfiletype\fR is non-NULL then it will be used to specify the file
-type. If this is not specified then the file type is attempted to be
-derived by looking at the filename extension. A special name of "-"
+.Fn sox_open_write
+function opens the named file for writing.
+A special name of
+.Dq -
 can be used to write data to stdout.
+If
+.Fa signal
+or
+.Fa encoding
+are not NULL, they specify the properties of
+the audio signal or the encoding of samples, as in
+.Fn sox_open_read ;
+for writing, this generally needs to be specified,
+as most file formats can store data using various
+sample rates and numbers of channels and various encodings.
+The structures filled during
+.Fn sox_open_read
+can be used to write data in the same format that was read.
+If
+.Fa filetype
+is not NULL, it specifies the file type.
+Otherwise, the file type is guessed from the filename extension.
+If
+.Fa oob
+is not NULL and the file formats supports comments or other out-of-bound data,
+these will be stored in the file header.
+If
+.Fa overwrite
+is not NULL and the file already exists,
+the function is called, with the file name as an argument,
+to determine whether the file can be overwritten.
+The default is to overwrite existing files.
 .Pp
 .Fn sox_read
 reads
@@ -176,14 +194,13 @@ example0.c and example1.c are a good starting point to see how
 to write applications using libsox.  sox.c itself is also a good
 reference.
 .Sh RETURN VALUES
-Upon success,
 .Fn sox_open_read
 and
 .Fn sox_open_write
 return a pointer to a filled
 .Ft sox_format_t
 structure, which can be passed to the readers and writers.
-Otherwise, NULL is returned.
+Upon error, NULL is returned.
 .Pp
 .Fn sox_read
 and

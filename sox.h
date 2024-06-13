@@ -1381,10 +1381,12 @@ Deprecated macro that returns the table of format handler names and functions.
 
 sox_format_t *
 sox_open_read(
-	char const *,
-	sox_signalinfo_t const *,
-	sox_encodinginfo_t const *,
-	char const *);
+	char const *,			/* file to be read		*/
+	sox_signalinfo_t const *,	/* if needed or when overriding	*/
+	sox_encodinginfo_t const *,	/* if needed or when overriding	*/
+	char const *			/* NULL for autodetection	*/
+);
+
 
 /**
 Client API:
@@ -1413,22 +1415,15 @@ sox_write_handler(
       char               const * * filetype1   /**< Receives the filetype that was detected. Pass NULL if not needed. */
     );
 
-/**
-Client API:
-Opens an encoding session for a file. Returned handle must be closed with sox_close().
-@returns The new session handle, or null on failure.
-*/
-
 sox_format_t *
-
 sox_open_write(
-         char               const * path,     /**< Path to file to be written (required). */
-    sox_signalinfo_t   const * signal,   /**< Information about desired audio stream (required). */
-       sox_encodinginfo_t const * encoding, /**< Information about desired sample encoding, or NULL to use defaults. */
-     char               const * filetype, /**< Previously-determined file type, or NULL to auto-detect. */
-       sox_oob_t          const * oob,      /**< Out-of-band data to add to file, or NULL if none. */
-       sox_bool           (* overwrite_permitted)( char const * filename) /**< Called if file exists to determine whether overwrite is ok. */
-    );
+	char const *,			/* file to be written		*/
+	sox_signalinfo_t const * ,	/* if needed or overriding	*/
+	sox_encodinginfo_t const *,	/* if needed or overriding	*/
+	char const *,			/* type: NULL for autodection	*/
+	sox_oob_t const *,		/* out-of-band data to add	*/
+	sox_bool (*)(char const *)	/* says if can be overwritten	*/
+);
 
 size_t
 sox_read(
