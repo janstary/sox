@@ -17,9 +17,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "sox.h"
-#include "util.h"
 #include "config.h"
+#include "util.h"
+#include "sox.h"
 
 #if defined(LSX_EFF_ALIAS)
 #undef lsx_debug
