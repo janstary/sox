@@ -6,27 +6,6 @@
 .Nd audio file-format and effect library
 .Sh SYNOPSIS
 .In sox.h
-.\" TODO: move the structures down to DESCRIPTION?
-.Bd -literal
-typedef struct sox_signalinfo_t {
-	sox_rate_t	rate;		/* samples per second		*/
-	unsigned	channels;	/* number of channels		*/
-	unsigned	precision;	/* bits per sample		*/
-	sox_uint64_t	length;		/* samples * channels		*/
-	double *	mult;		/* effects headroom multiplier	*/
-} sox_signalinfo_t;
-.Ed
-.Bd -literal
-typedef struct sox_encodinginfo_t {
-	sox_encoding_t encoding;	/* encoding of samples			*/
-	unsigned bits_per_sample;	/* < 0 if unknown or variable		*/
-	double compression;		/* compression factor, if applicable	*/
-	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
-	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
-	sox_option_t reverse_bits;	/* defaults to format or machine	*/
-	sox_bool opposite_endian;	/* reverse the format's default		*/
-} sox_encodinginfo_t;
-.Ed
 .Pp
 .Ft int
 .Fn sox_init "void"
@@ -58,8 +37,10 @@ typedef struct sox_encodinginfo_t {
 .Fn sox_add_effect(sox_effects_chaint_t *\fIchain\fB, sox_effect_t*\fIeffp\fB, sox_signalinfo_t *\fIin\fB, sox_signalinfo_t const *\fIout\fB);
 .Sh DESCRIPTION
 .Nm
-is a library of sound sample file format readers/writers and sound effects processors.
-It is mainly developed for use by SoX but is useful for any sound application.
+is a library of sound sample file format readers/writers
+and sound effects processors.
+It is mainly developed for use by SoX
+but is useful for any sound application.
 .Pp
 .Fn sox_format_init
 performs initialization related to all file format handlers.
@@ -68,6 +49,29 @@ This should be called before any other file operations.
 .Fn sox_format_quit
 function performs cleanup related to all file format handlers.
 This should be called after all file operations are done.
+.Pp
+The following structures are used to specify
+the audio signal properties and the encoding of samples:
+.Bd -literal
+typedef struct sox_signalinfo_t {
+	sox_rate_t	rate;		/* samples per second		*/
+	unsigned	channels;	/* number of channels		*/
+	unsigned	precision;	/* bits per sample		*/
+	sox_uint64_t	length;		/* samples * channels		*/
+	double *	mult;		/* effects headroom multiplier	*/
+} sox_signalinfo_t;
+.Ed
+.Bd -literal
+typedef struct sox_encodinginfo_t {
+	sox_encoding_t encoding;	/* encoding of samples			*/
+	unsigned bits_per_sample;	/* < 0 if unknown or variable		*/
+	double compression;		/* compression factor, if applicable	*/
+	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
+	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
+	sox_option_t reverse_bits;	/* defaults to format or machine	*/
+	sox_bool opposite_endian;	/* reverse the format's default		*/
+} sox_encodinginfo_t;
+.Ed
 .Pp
 .Fn sox_open_read
 opens the named file for reading.
@@ -158,7 +162,7 @@ is the number of samples across all channels.
 If it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
-.FN sox_close
+.Fn sox_close
 dissociates the given
 .Fa sox_format_t
 pointer from its underlying file and set of functions.
