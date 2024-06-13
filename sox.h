@@ -987,16 +987,12 @@ typedef struct sox_globals_t {
   size_t       log2_dft_min_size;
 } sox_globals_t;
 
-/**
-Client API:
-Signal parameters; members should be set to SOX_UNSPEC (= 0) if unknown.
-*/
 typedef struct sox_signalinfo_t {
-  sox_rate_t       rate;         /**< samples per second, 0 if unknown */
-  unsigned         channels;     /**< number of sound channels, 0 if unknown */
-  unsigned         precision;    /**< bits per sample, 0 if unknown */
-  sox_uint64_t     length;       /**< samples * chans in file, 0 if unknown, -1 if unspecified */
-  double           * mult;       /**< Effects headroom multiplier; may be null */
+	sox_rate_t	rate;		/* samples per second		*/
+	unsigned	channels;	/* number of channels		*/
+	unsigned	precision;	/* bits per sample		*/
+	sox_uint64_t	length;		/* samples * channels		*/
+	double *	mult;		/* effects headroom multiplier	*/
 } sox_signalinfo_t;
 
 /**
@@ -1009,40 +1005,14 @@ typedef struct sox_encodings_info_t {
   char const * desc;           /**< encoding description. */
 } sox_encodings_info_t;
 
-/**
-Client API:
-Encoding parameters.
-*/
 typedef struct sox_encodinginfo_t {
-  sox_encoding_t encoding; /**< format of sample numbers */
-  unsigned bits_per_sample;/**< 0 if unknown or variable; uncompressed value if lossless; compressed value if lossy */
-  double compression;      /**< compression factor (where applicable) */
-
-  /**
-  Should bytes be reversed? If this is default during sox_open_read or
-  sox_open_write, libSoX will set them to either no or yes according to the
-  machine or format default.
-  */
-  sox_option_t reverse_bytes;
-
-  /**
-  Should nibbles be reversed? If this is default during sox_open_read or
-  sox_open_write, libSoX will set them to either no or yes according to the
-  machine or format default.
-  */
-  sox_option_t reverse_nibbles;
-
-  /**
-  Should bits be reversed? If this is default during sox_open_read or
-  sox_open_write, libSoX will set them to either no or yes according to the
-  machine or format default.
-  */
-  sox_option_t reverse_bits;
-
-  /**
-  If set to true, the format should reverse its default endianness.
-  */
-  sox_bool opposite_endian;
+	sox_encoding_t encoding;	/* encoding of samples			*/
+	unsigned bits_per_sample;	/* <0 if unknown or variable		*/
+	double compression;		/* compression factor, if applicable	*/
+	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
+	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
+	sox_option_t reverse_bits;	/* defaults to format or machine	*/
+	sox_bool opposite_endian;	/* reverse the format's default		*/
 } sox_encodinginfo_t;
 
 /**
@@ -1434,20 +1404,12 @@ Deprecated macro that returns the table of format handler names and functions.
 */
 #define sox_format_fns (sox_get_format_fns())
 
-/**
-Client API:
-Opens a decoding session for a file. Returned handle must be closed with sox_close().
-@returns The handle for the new session, or null on failure.
-*/
-
 sox_format_t *
-
 sox_open_read(
-       char               const * path,      /**< Path to file to be opened (required). */
-     sox_signalinfo_t   const * signal,    /**< Information already known about audio stream, or NULL if none. */
-     sox_encodinginfo_t const * encoding,  /**< Information already known about sample encoding, or NULL if none. */
-     char             const * filetype   /**< Previously-determined file type, or NULL to auto-detect. */
-    );
+	char const *,
+	sox_signalinfo_t const *,
+	sox_encodinginfo_t const *,
+	char const *);
 
 /**
 Client API:

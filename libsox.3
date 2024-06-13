@@ -6,13 +6,33 @@
 .Nd audio file-format and effect library
 .Sh SYNOPSIS
 .In sox.h
+.Bd -literal
+typedef struct sox_signalinfo_t {
+	sox_rate_t	rate;		/* samples per second		*/
+	unsigned	channels;	/* number of channels		*/
+	unsigned	precision;	/* bits per sample		*/
+	sox_uint64_t	length;		/* samples * channels		*/
+	double *	mult;		/* effects headroom multiplier	*/
+} sox_signalinfo_t;
+.Ed
+.Bd -literal
+typedef struct sox_encodinginfo_t {
+	sox_encoding_t encoding;	/* encoding of samples			*/
+	unsigned bits_per_sample;	/* < 0 if unknown or variable		*/
+	double compression;		/* compression factor, if applicable	*/
+	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
+	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
+	sox_option_t reverse_bits;	/* defaults to format or machine	*/
+	sox_bool opposite_endian;	/* reverse the format's default		*/
+} sox_encodinginfo_t;
+.Ed
 .Pp
 .Ft int
 .Fn sox_init "void"
 .Ft void
 .Fn sox_quit "void"
-.Ft sox_format_t
-.Fn sox_open_read "const char *path" "const sox_signalinfo_t *info" "const char *filetype"
+.Ft sox_format_t *
+.Fn sox_open_read "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype"
 .Ft sox_format_t
 .Fn sox_open_write "sox_bool (*overwrite_permitted)(const char *filename)" "const char *path" "const sox_signalinfo_t *info" "const char *filetype" "const char *comment" "sox_size_t length" "const sox_instrinfo_t *instr" "const sox_loopinfo_t * loops"
 .Ft sox_size_t
@@ -48,16 +68,31 @@ This should be called before any other file operations.
 function performs cleanup related to all file format handlers.
 This should be called after all file operations are done.
 .Pp
-\fBsox_open_read\fR function opens the file for reading whose name is
-the string pointed to by \fIpath\fR and associates an sox_format_t with it. If
-\fIinfo\fR is non-NULL then it will be used to specify the data format
-of the input file. This is normally only needed for headerless audio
-files since the information is not stored in the file. If
-\fIfiletype\fR is non-NULL then it will be used to specify the file
-type. If this is not specified then the file type is attempted to be
-derived by looking at the file header and/or the filename extension. A
-special name of "-" can be used to read data from stdin.
-.P
+.Fn sox_open_read
+opens the named file for reading and associates a
+.Ft sox_format_t
+with it.
+A special name of
+.Dq -
+can be used to read data from stdin.
+If
+.Va signal
+is not NULL, it specifies the properties of the audio signal
+such as the sample rate or the number of channels.
+If
+.Va encoding
+is not NULL, it specifies the sample encoding.
+Both
+.Va signal
+and
+.Va encoding
+are normally only needed for headerless audio files.
+If
+.Va filetype
+is not NULL, it specifies the file type.
+Otherwise, the file type is derived from
+the filename extension or the file header.
+.Pp
 \fBsox_open_write\fR function opens the file for writing whose name is
 the string pointed to by \fIpath\fR and associates an sox_format_t with it. If
 \fIinfo\fR is non-NULL then it will be used to specify the data format
@@ -132,11 +167,15 @@ example0.c and example1.c are a good starting point to see how
 to write applications using libsox.  sox.c itself is also a good
 reference.
 .Sh RETURN VALUES
-Upon successful completion \fBsox_open_read\fR and
-\fBsox_open_write\fR return an \fIsox_format_t\fR (which is a pointer).
-Otherwise, NULL is returned. TODO: Need a way to return reason for
-failures. Currently, relies on \fBsox_warn\fR to print information.
-.P
+Upon success,
+.Fn sox_open_read
+and
+.Fn sox_open_write
+return a pointer to a filled
+.Ft sox_format_t
+structure.
+Otherwise, NULL is returned.
+.Pp
 \fBsox_read\fR and \fBsox_write\fR return the number of samples
 successfully read or written. If an error occurs, or the end-of-file
 is reached, the return value is a short item count or SOX_EOF. TODO:
