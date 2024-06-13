@@ -1108,49 +1108,24 @@ typedef struct sox_oob_t{
   /* TBD: Non-decoded chunks, etc: */
 } sox_oob_t;
 
-/**
-Client API:
-Data passed to/from the format handler
-*/
 struct sox_format_t {
-  char             * filename;      /**< File name */
-
-  /**
-  Signal specifications for reader (decoder) or writer (encoder):
-  sample rate, number of channels, precision, length, headroom multiplier.
-  Any info specified by the user is here on entry to startread or
-  startwrite. Info will be SOX_UNSPEC if the user provided no info.
-  At exit from startread, should be completely filled in, using
-  either data from the file's headers (if available) or whatever
-  the format is guessing/assuming (if header data is not available).
-  At exit from startwrite, should be completely filled in, using
-  either the data that was specified, or values chosen by the format
-  based on the format's defaults or capabilities.
-  */
-  sox_signalinfo_t signal;
-
-  /**
-  Encoding specifications for reader (decoder) or writer (encoder):
-  encoding (sample format), bits per sample, compression rate, endianness.
-  Should be filled in by startread. Values specified should be used
-  by startwrite when it is configuring the encoding parameters.
-  */
-  sox_encodinginfo_t encoding;
-
-  char             * filetype;      /**< Type of file, as determined by header inspection or libmagic. */
-  sox_oob_t        oob;             /**< comments, instrument info, loop info (out-of-band data) */
-  sox_bool         seekable;        /**< Can seek on this file */
-  char             mode;            /**< Read or write mode ('r' or 'w') */
-  sox_uint64_t     olength;         /**< Samples * chans written to file */
-  sox_uint64_t     clips;           /**< Incremented if clipping occurs */
-  int              sox_errno;       /**< Failure error code */
-  char             sox_errstr[256]; /**< Failure error text */
-  void             * fp;            /**< File stream pointer */
-  lsx_io_type      io_type;         /**< Stores whether this is a file, pipe or URL */
-  sox_uint64_t     tell_off;        /**< Current offset within file */
-  sox_uint64_t     data_start;      /**< Offset at which headers end and sound data begins (set by lsx_check_read_params) */
-  sox_format_handler_t handler;     /**< Format handler for this file */
-  void             * priv;          /**< Format handler's private data area */
+	char *			filename;
+	sox_signalinfo_t	signal;		/* user or start_{read,write}()	*/
+	sox_encodinginfo_t	encoding;	/* user or start_{read,write}()	*/
+	char *			filetype;	/* e.g. "wav"			*/
+	sox_oob_t		oob;		/* out of bound: comments etc	*/
+	sox_bool		seekable;	/* can we lseek() in the file?	*/
+	char			mode;		/* 'r' or 'w'			*/
+	sox_uint64_t		olength;	/* (samples * chans) written	*/
+	sox_uint64_t		clips;		/* # of clipped samples		*/
+	int			sox_errno;	/* failure error code		*/
+	char			sox_errstr[256];/* failure error text		*/
+	void *			fp;		/* file stream pointer		*/
+	lsx_io_type		io_type;	/* file, pipe, url		*/
+	sox_uint64_t		tell_off;	/* current offset		*/
+	sox_uint64_t		data_start;	/* offset where audio begins	*/
+	sox_format_handler_t	handler;	/* handler for this filetype	*/
+	void *			priv;		/* handler's private data	*/
 };
 
 /**
@@ -1455,17 +1430,12 @@ sox_open_write(
        sox_bool           (* overwrite_permitted)( char const * filename) /**< Called if file exists to determine whether overwrite is ok. */
     );
 
-/**
-Client API:
-Reads samples from a decoding session into a sample buffer.
-@returns Number of samples decoded, or 0 for EOF.
-*/
 size_t
 sox_read(
-     sox_format_t * ft, /**< Format pointer. */
-    sox_sample_t *buf, /**< Buffer from which to read samples. */
-    size_t len /**< Number of samples available in buf. */
-    );
+	sox_format_t * ft,	/* format pointer		*/
+	sox_sample_t * buf,	/* read into this buffer	*/
+	size_t len		/* read this many samples	*/
+);
 
 /**
 Client API:

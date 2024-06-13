@@ -35,8 +35,8 @@ typedef struct sox_encodinginfo_t {
 .Fn sox_open_read "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype"
 .Ft sox_format_t
 .Fn sox_open_write "sox_bool (*overwrite_permitted)(const char *filename)" "const char *path" "const sox_signalinfo_t *info" "const char *filetype" "const char *comment" "sox_size_t length" "const sox_instrinfo_t *instr" "const sox_loopinfo_t * loops"
-.Ft sox_size_t
-.Fn sox_read(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
+.Ft size_t
+.Fn sox_read "sox_format_t * ft" "sox_sample_t * buf" "size_t len"
 .Ft sox_size_t
 .Fn sox_write(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
 .Ft int
@@ -76,19 +76,19 @@ A special name of
 .Dq -
 can be used to read data from stdin.
 If
-.Va signal
+.Fa signal
 is not NULL, it specifies the properties of the audio signal
 such as the sample rate or the number of channels.
 If
-.Va encoding
+.Fa encoding
 is not NULL, it specifies the sample encoding.
 Both
-.Va signal
+.Fa signal
 and
-.Va encoding
+.Fa encoding
 are normally only needed for headerless audio files.
 If
-.Va filetype
+.Fa filetype
 is not NULL, it specifies the file type.
 Otherwise, the file type is derived from
 the filename extension or the file header.
@@ -105,14 +105,23 @@ written in the file header for formats that support comments. If
 type. If this is not specified then the file type is attempted to be
 derived by looking at the filename extension. A special name of "-"
 can be used to write data to stdout.
-.P
-The function \fBsox_read\fR reads \fIlen\fR samples in to \fIbuf\fR
-using the format handler specified by \fIft\fR. All data read is
-converted to 32-bit signed samples before being placed in to
-\fIbuf\fR. The value of \fIlen\fR is specified in total samples. If
-its value is not evenly divisable by the number of channels, undefined
-behavior will occur.
-.P
+.Pp
+.Fn sox_read
+reads
+.Fa len
+samples into
+.Fa buf
+using the format handler specified by
+.Fa ft .
+It is the caller's responsibility to provide a large enough buffer.
+Samples are converted to 32-bit signed integers before being placed in
+.Fa buf .
+The value of
+.Fa len
+is the number of samples accross all channels.
+If it is not divisible by the number of channels,
+the behaviour is undefined.
+.Pp
 The function \fBsox_write\fR writes \fIlen\fR samples from \fIbuf\fR
 using the format handler specified by \fIft\fR. Data in \fIbuf\fR must
 be 32-bit signed samples and will be converted during the write
@@ -173,21 +182,25 @@ and
 .Fn sox_open_write
 return a pointer to a filled
 .Ft sox_format_t
-structure.
+structure, which can be passed to the readers and writers.
 Otherwise, NULL is returned.
 .Pp
-\fBsox_read\fR and \fBsox_write\fR return the number of samples
-successfully read or written. If an error occurs, or the end-of-file
-is reached, the return value is a short item count or SOX_EOF. TODO:
-\fBsox_read\fR does not distiguish between end-of-file and error. Need
-an feof() and ferror() concept to determine which occurred.
-.P
+.Fn sox_read
+and
+.Fn sox_write
+return the number of samples successfully read or written.
+This can be less than the requested
+.Fa len
+when short-reading towards the end of the file.
+If the end of file is reached, or an error occurs, SOX_EOF is returned.
+Note that no distinction is made between end of file and an error.
+.Pp
 Upon successful completion \fBsox_close\fR returns 0. Otherwise, SOX_EOF
 is returned. In either case, any further access (including another
 call to \fBsox_close\fR()) to the handler results in undefined
 behavior. TODO: Need a way to return reason for failures. Currently,
 relies on sox_warn to print information.
-.P
+.Pp
 Upon successful completion \fBsox_seek\fR returns 0. Otherwise, SOX_EOF
 is returned. TODO Need to set a global error and implement sox_tell.
 .Pp
