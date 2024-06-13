@@ -6,6 +6,7 @@
 .Nd audio file-format and effect library
 .Sh SYNOPSIS
 .In sox.h
+.\" TODO: move the structures down to DESCRIPTION?
 .Bd -literal
 typedef struct sox_signalinfo_t {
 	sox_rate_t	rate;		/* samples per second		*/
@@ -37,8 +38,8 @@ typedef struct sox_encodinginfo_t {
 .Fn sox_open_write "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype" "sox_oob_t const * oob" "sox_bool (*overwrite)(char const *)"
 .Ft size_t
 .Fn sox_read "sox_format_t * ft" "sox_sample_t * buf" "size_t len"
-.Ft sox_size_t
-.Fn sox_write(sox_format_t \fIft\fB, sox_ssample_t *\fIbuf\fB, sox_size_t \fIlen\fB);
+.Ft size_t
+.Fn sox_write "sox_format_t * ft" "sox_sample_t const * buf" "size_t len"
 .Ft int
 .Fn sox_close(sox_format_t \fIft\fB);
 .Ft int
@@ -92,7 +93,7 @@ Otherwise, the file type is guessed from
 the filename extension or the file header.
 .Pp
 .Fn sox_open_write
-function opens the named file for writing.
+opens the named file for writing.
 A special name of
 .Dq -
 can be used to write data to stdout.
@@ -140,13 +141,23 @@ is the number of samples accross all channels.
 If it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
-The function \fBsox_write\fR writes \fIlen\fR samples from \fIbuf\fR
-using the format handler specified by \fIft\fR. Data in \fIbuf\fR must
-be 32-bit signed samples and will be converted during the write
-process. The value of \fIlen\fR is specified in total samples. If its
-value is not evenly divisable by the number of channels, undefined
-behavior will occur.
-.P
+.Fn sox_write
+writes
+.Fa len
+samples from
+.Fa buf
+using the format handler specified by
+.Fa ft .
+The data in
+.Fa buf
+are treated as 32-bit signed integers
+and are converted as specified by the format.
+The value of
+.Fa len
+is the number of samples across all channels.
+If it is not divisible by the number of channels,
+the behaviour is undefined.
+.Pp
 The \fBsox_close\fR function dissociates the named \fIsox_format_t\fR from its
 underlying file or set of functions. If the format handler was being
 used for output, any buffered data is written first.
@@ -200,7 +211,7 @@ and
 return a pointer to a filled
 .Ft sox_format_t
 structure, which can be passed to the readers and writers.
-Upon error, NULL is returned.
+If an error occurs, NULL is returned.
 .Pp
 .Fn sox_read
 and

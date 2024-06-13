@@ -1432,17 +1432,12 @@ sox_read(
 	size_t len		/* read this many samples	*/
 );
 
-/**
-Client API:
-Writes samples to an encoding session from a sample buffer.
-@returns Number of samples encoded.
-*/
 size_t
 sox_write(
-     sox_format_t * ft, /**< Format pointer. */
-    sox_sample_t const * buf, /**< Buffer from which to read samples. */
-    size_t len /**< Number of samples available in buf. */
-    );
+	sox_format_t * ft,		/* format pointer		*/
+	sox_sample_t const * buf,	/* write into this buffer	*/
+	size_t len			/* write this many samples	*/
+);
 
 /**
 Client API:
