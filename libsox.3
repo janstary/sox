@@ -41,7 +41,7 @@ typedef struct sox_encodinginfo_t {
 .Ft size_t
 .Fn sox_write "sox_format_t * ft" "sox_sample_t const * buf" "size_t len"
 .Ft int
-.Fn sox_close(sox_format_t \fIft\fB);
+.Fn sox_close "sox_format_t * ft"
 .Ft int
 .Fn sox_seek(sox_format_t \fIft\fB, sox_size_t \fIoffset\fB, int \fIwhence\fB);
 .Ft sox_effect_handler_t const *
@@ -158,23 +158,26 @@ is the number of samples across all channels.
 If it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
-The \fBsox_close\fR function dissociates the named \fIsox_format_t\fR from its
-underlying file or set of functions. If the format handler was being
-used for output, any buffered data is written first.
-.P
+.FN sox_close
+dissociates the given
+.Fa sox_format_t
+pointer from its underlying file and set of functions.
+If the format handler was being used for output,
+any buffered data is written first.
+.Pp
 The function \fBsox_find_effect\fR finds effect \fIname\fR, returning
 a pointer to its \fIsox_effect_handler_t\fR if it exists, and NULL
 otherwise.
-.P
+.Pp
 The function \fBsox_create_effect\fR instantiates an effect into a
 \fIsox_effect_t\fR given a \fIsox_effect_handler_t *\fR. Any missing
 methods are automatically set to the corresponding \fBnothing\fR
 method.
-.P
+.Pp
 The function \fBsox_effect_options\fR allows passing options into the effect to control its behavior.  It will return SOX_EOF if there were any invalid options passed in.  On success, the \fIeffp->in_signal\fR will optional contain the rate and channel count it requires input data from and \fIeffp->out_signal\fR will optionally contain the rate and channel count it outputs in.  When present, this information should be used to make sure appropriate effects are placed in the effects chain to handle any needed conversions.
-.P
+.Pp
 Passing in options is currently only supported when they are passed in before the effect is ever started.  The behavior is undefined if its called once the effect is started.
-.P
+.Pp
 \fBsox_create_effects_chain\fR will instantiate an effects chain that
 effects can be added to.  \fIin_enc\fR and \fIout_enc\fR are the 
 signal encoding of the input and output of the chain respectively.
@@ -183,11 +186,11 @@ are stored internally and so their memory should not be freed.  Also,
 it is OK if their values change over time to reflect new input or
 output encodings as they are referenced only as effects
 start up or are restarted.
-.P
+.Pp
 \fBsox_delete_effects_chain\fR will release any resources reserved during
 the creation of the chain.  This will also call \fBsox_delete_effects\fR
 if any effects are still in the chain.
-.P
+.Pp
 \fBsox_add_effect\fR adds an effect to the chain.  \fIin\fR specifies the input
 signal info for this effect.  \fIout\fR is a suggestion
 as to what the output signal should be but depending on the effects
@@ -195,12 +198,12 @@ given options and on \fIin\fR the effect can choose to do differently.
 Whatever output rate and channels the effect does produce are written
 back to \fIin\fR.  It is meant that \fIin\fR be stored and passed to each
 new call to \fBsox_add_effect\fR so that changes will be propagated to each new effect.
-.P
+.Pp
 SoX includes skeleton C files to assist you in writing new
 formats (skelform.c) and effects (skeleff.c). Note that new formats 
 can often just deal with the header and then use raw.c's routines 
 for reading and writing.
-
+.Pp
 example0.c and example1.c are a good starting point to see how
 to write applications using libsox.  sox.c itself is also a good
 reference.
@@ -223,14 +226,19 @@ when short-reading towards the end of the file.
 If the end of file is reached, or an error occurs, SOX_EOF is returned.
 Note that no distinction is made between end of file and an error.
 .Pp
-Upon successful completion \fBsox_close\fR returns 0. Otherwise, SOX_EOF
-is returned. In either case, any further access (including another
-call to \fBsox_close\fR()) to the handler results in undefined
-behavior. TODO: Need a way to return reason for failures. Currently,
-relies on sox_warn to print information.
+.Fn sox_close
+returns
+.Dv SOX_SUCCESS
+on success and
+.Dv SOX_EOF
+on error.
+In either case, any further access, including another call to
+.Fn sox_close ,
+will result in undefined behavior.
 .Pp
 Upon successful completion \fBsox_seek\fR returns 0. Otherwise, SOX_EOF
 is returned. TODO Need to set a global error and implement sox_tell.
+.\" FIXME The following has no place in RETURN VALUES
 .Pp
 SoX's formats and effects operate with an internal sample format of
 signed 32-bit integer.  The data processing routines are called with

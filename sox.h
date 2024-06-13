@@ -1439,15 +1439,8 @@ sox_write(
 	size_t len			/* write this many samples	*/
 );
 
-/**
-Client API:
-Closes an encoding or decoding session.
-@returns SOX_SUCCESS if successful.
-*/
 int
-sox_close(
-     sox_format_t * ft /**< Format pointer. */
-    );
+sox_close(sox_format_t * ft);
 
 /**
 Client API:
