@@ -24,7 +24,7 @@
 .Ft int
 .Fn sox_seek "sox_format_t * ft" "off_t offset"
 .Ft sox_effect_handler_t const *
-.Fn sox_find_effect(char const *\fIname\fB);
+.Fn sox_find_effect "char const  name"
 .Ft sox_effect_t *
 .Fn sox_create_effect(sox_effect_handler_t const *\fIeh\fB);
 .Ft int
@@ -174,9 +174,12 @@ repositions the offset of the file associated with
 to the given
 .Fa offset .
 .Pp
-The function \fBsox_find_effect\fR finds effect \fIname\fR, returning
-a pointer to its \fIsox_effect_handler_t\fR if it exists, and NULL
-otherwise.
+.Fn sox_find_effect
+finds effect
+.Fa name ,
+returning a pointer to its
+.Ft sox_effect_handler_t
+if it exists, and NULL otherwise.
 .Pp
 The function \fBsox_create_effect\fR instantiates an effect into a
 \fIsox_effect_t\fR given a \fIsox_effect_handler_t *\fR. Any missing
@@ -247,6 +250,10 @@ will result in undefined behavior.
 .Pp
 .Fn sox_seek
 returns 0 on success and SOX_EOF on error.
+.Pp
+returning a pointer to the named effect's
+.Ft sox_effect_handler_t
+if the effect exists, and NULL otherwise.
 .\" FIXME The following has no place in RETURN VALUES
 .Pp
 SoX's formats and effects operate with an internal sample format of

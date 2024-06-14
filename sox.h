@@ -1465,15 +1465,7 @@ Deprecated macro that returns global parameters for effects.
 */
 #define sox_effects_globals (*sox_get_effects_globals())
 
-/**
-Client API:
-Finds the effect handler with the given name.
-@returns Effect pointer, or null if not found.
-*/
-sox_effect_handler_t const *
-sox_find_effect(
-     char const * name /**< Name of effect to find. */
-    );
+sox_effect_handler_t const * sox_find_effect(char const * name);
 
 /**
 Client API:
