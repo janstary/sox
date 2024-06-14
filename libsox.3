@@ -22,7 +22,7 @@
 .Ft int
 .Fn sox_close "sox_format_t * ft"
 .Ft int
-.Fn sox_seek(sox_format_t \fIft\fB, sox_size_t \fIoffset\fB, int \fIwhence\fB);
+.Fn sox_seek "sox_format_t * ft" "off_t offset"
 .Ft sox_effect_handler_t const *
 .Fn sox_find_effect(char const *\fIname\fB);
 .Ft sox_effect_t *
@@ -168,6 +168,11 @@ dissociates the given
 pointer from its underlying file and set of functions.
 If the format handler was being used for output,
 any buffered data is written first.
+.Fn sox_seek
+repositions the offset of the file associated with
+.Fa ft
+to the given
+.Fa offset .
 .Pp
 The function \fBsox_find_effect\fR finds effect \fIname\fR, returning
 a pointer to its \fIsox_effect_handler_t\fR if it exists, and NULL
@@ -240,8 +245,8 @@ In either case, any further access, including another call to
 .Fn sox_close ,
 will result in undefined behavior.
 .Pp
-Upon successful completion \fBsox_seek\fR returns 0. Otherwise, SOX_EOF
-is returned. TODO Need to set a global error and implement sox_tell.
+.Fn sox_seek
+returns 0 on success and SOX_EOF on error.
 .\" FIXME The following has no place in RETURN VALUES
 .Pp
 SoX's formats and effects operate with an internal sample format of

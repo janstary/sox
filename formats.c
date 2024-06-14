@@ -1012,18 +1012,12 @@ int sox_close(sox_format_t * ft)
   return result;
 }
 
-int sox_seek(sox_format_t * ft, sox_uint64_t offset, int whence)
+int
+sox_seek(sox_format_t * ft, off_t offset)
 {
-    /* FIXME: Implement SOX_SEEK_CUR and SOX_SEEK_END. */
-    if (whence != SOX_SEEK_SET)
-        return SOX_EOF; /* FIXME: return SOX_EINVAL */
-
-    /* If file is a seekable file and this handler supports seeking,
-     * then invoke handler's function.
-     */
-    if (ft->seekable && ft->handler.seek)
-      return (*ft->handler.seek)(ft, offset);
-    return SOX_EOF; /* FIXME: return SOX_EBADF */
+	if (ft->seekable && ft->handler.seek)
+		return (*ft->handler.seek)(ft, offset);
+	return SOX_EOF;
 }
 
 static int strcaseends(char const * str, char const * end)

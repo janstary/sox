@@ -68,7 +68,7 @@ int main(int argc, char * argv[])
   /* Make sure that this is at a `wide sample' boundary: */
   seek -= seek % in->signal.channels;
   /* Move the file pointer to the desired starting position */
-  assert(sox_seek(in, seek, SOX_SEEK_SET) == SOX_SUCCESS);
+  assert(sox_seek(in, seek, SEEK_SET) == SOX_SUCCESS);
 
   /* Convert block size (in seconds) to a number of samples: */
   block_size = block_period * in->signal.rate * in->signal.channels + .5;

@@ -1261,8 +1261,7 @@ static int update_status(sox_bool all_done, void * client_data)
         if (input_wide_samples == 0 ||
                   read_wide_samples+jump < input_wide_samples) {
           read_wide_samples += jump;
-          sox_seek(files[current_input]->ft, read_wide_samples,
-                   SOX_SEEK_SET);
+          sox_seek(files[current_input]->ft, read_wide_samples);
           /* FIXME: Do something if seek fails. */
         }
       }
@@ -1271,8 +1270,7 @@ static int update_status(sox_bool all_done, void * client_data)
         uint64_t jump = files[current_input]->ft->signal.rate*30; /* 30 sec. */
         read_wide_samples = jump < read_wide_samples ?
             read_wide_samples-jump : 0;
-        sox_seek(files[current_input]->ft, read_wide_samples,
-                 SOX_SEEK_SET);
+        sox_seek(files[current_input]->ft, read_wide_samples);
         /* FIXME: Do something if seek fails. */
       }
     }
@@ -1309,7 +1307,7 @@ static void optimize_trim(void)
       strcmp(effects_chain->effects[1][0].handler.name, "trim") == 0) {
     if (files[0]->ft->handler.seek && files[0]->ft->seekable){
       uint64_t offset = sox_trim_get_start(&effects_chain->effects[1][0]);
-      if (offset && sox_seek(files[0]->ft, offset, SOX_SEEK_SET) == SOX_SUCCESS) {
+      if (offset && sox_seek(files[0]->ft, offset) == SOX_SUCCESS) {
         read_wide_samples = offset / files[0]->ft->signal.channels;
         /* Assuming a failed seek stayed where it was.  If the seek worked then
          * reset the start location of trim so that it thinks user didn't

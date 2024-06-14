@@ -17,12 +17,13 @@ LSX_ and lsx_ symbols should not be used by libSoX-based applications.
 */
 
 #ifndef SOX_H
-#define SOX_H /**< Client API: This macro is defined if sox.h has been included. */
+#define SOX_H
 
-#include <limits.h>
-#include <stdarg.h>
-#include <stddef.h>
+#include <unistd.h>
 #include <stdint.h>
+#include <stddef.h>
+#include <stdarg.h>
+#include <limits.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -713,13 +714,6 @@ if clipping occurs.
 #define SOX_EFF_MODIFY   256         /**< Client API: Effect does not modify sample values (but might remove or duplicate samples or insert zeros) */
 #define SOX_EFF_ALPHA    512         /**< Client API: Effect is experimental/incomplete */
 #define SOX_EFF_INTERNAL 1024        /**< Client API: Effect present in libSoX but not valid for use by SoX command-line tools */
-
-/**
-Client API:
-When used as the "whence" parameter of sox_seek, indicates that the specified
-offset is relative to the beginning of the file.
-*/
-#define SOX_SEEK_SET 0
 
 /*****************************************************************************
 Forward declarations:
@@ -1442,17 +1436,8 @@ sox_write(
 int
 sox_close(sox_format_t * ft);
 
-/**
-Client API:
-Sets the location at which next samples will be decoded. Returns SOX_SUCCESS if successful.
-@returns SOX_SUCCESS if successful.
-*/
 int
-sox_seek(
-     sox_format_t * ft, /**< Format pointer. */
-    sox_uint64_t offset, /**< Sample offset at which to position reader. */
-    int whence /**< Set to SOX_SEEK_SET. */
-    );
+sox_seek(sox_format_t * ft, off_t offset);
 
 /**
 Client API:
