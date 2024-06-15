@@ -63,13 +63,13 @@ typedef struct sox_signalinfo_t {
 .Ed
 .Bd -literal
 typedef struct sox_encodinginfo_t {
-	sox_encoding_t encoding;	/* encoding of samples			*/
-	unsigned bits_per_sample;	/* < 0 if unknown or variable		*/
-	double compression;		/* compression factor, if applicable	*/
-	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
-	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
-	sox_option_t reverse_bits;	/* defaults to format or machine	*/
-	sox_bool opposite_endian;	/* reverse the format's default		*/
+	sox_encoding_t encoding;	/* encoding of samples */
+	unsigned bits_per_sample;	/* < 0 if unknown or variable */
+	double compression;		/* compression factor, if applicable */
+	sox_option_t reverse_bytes;	/* defaults to format or machine */
+	sox_option_t reverse_nibbles;	/* defaults to format or machine */
+	sox_option_t reverse_bits;	/* defaults to format or machine */
+	sox_bool opposite_endian;	/* reverse the format's defaults */
 } sox_encodinginfo_t;
 .Ed
 .Pp
