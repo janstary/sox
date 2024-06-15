@@ -52,37 +52,37 @@ static int default_getopts(sox_effect_t * effp, int argc, char **argv UNUSED)
   return --argc? lsx_usage(effp) : SOX_SUCCESS;
 }
 
-/* Partially initialise the effect structure; signal info will come later */
-sox_effect_t * sox_create_effect(sox_effect_handler_t const * eh)
+/* Partially initialise the effect structure;
+ * signal info will come later */
+sox_effect_t *
+sox_create_effect(sox_effect_handler_t const * eh)
 {
-  sox_effect_t * effp = lsx_calloc(1, sizeof(*effp));
-  effp->obuf = NULL;
+	sox_effect_t * effp = lsx_calloc(1, sizeof(*effp));
+	effp->obuf = NULL;
 
-  effp->global_info = sox_get_effects_globals();
-  effp->handler = *eh;
-  if (!effp->handler.getopts) effp->handler.getopts = default_getopts;
-  if (!effp->handler.start  ) effp->handler.start   = default_function;
-  if (!effp->handler.flow   ) effp->handler.flow    = lsx_flow_copy;
-  if (!effp->handler.drain  ) effp->handler.drain   = default_drain;
-  if (!effp->handler.stop   ) effp->handler.stop    = default_function;
-  if (!effp->handler.kill   ) effp->handler.kill    = default_function;
+	effp->global_info = sox_get_effects_globals();
+	effp->handler = *eh;
+	if (!effp->handler.getopts) effp->handler.getopts = default_getopts;
+	if (!effp->handler.start  ) effp->handler.start   = default_function;
+	if (!effp->handler.flow   ) effp->handler.flow    = lsx_flow_copy;
+	if (!effp->handler.drain  ) effp->handler.drain   = default_drain;
+	if (!effp->handler.stop   ) effp->handler.stop    = default_function;
+	if (!effp->handler.kill   ) effp->handler.kill    = default_function;
+	effp->priv = lsx_calloc(1, effp->handler.priv_size);
+	return effp;
+}
 
-  effp->priv = lsx_calloc(1, effp->handler.priv_size);
-
-  return effp;
-} /* sox_create_effect */
-
-int sox_effect_options(sox_effect_t *effp, int argc, char * const argv[])
+int
+sox_effect_options(sox_effect_t *effp, int argc, char ** const argv)
 {
-  int result;
-
-  char * * argv2 = lsx_malloc((argc + 1) * sizeof(*argv2));
-  argv2[0] = (char *)effp->handler.name;
-  memcpy(argv2 + 1, argv, argc * sizeof(*argv2));
-  result = effp->handler.getopts(effp, argc + 1, argv2);
-  free(argv2);
-  return result;
-} /* sox_effect_options */
+	int result;
+	char ** argv2 = lsx_malloc((argc + 1) * sizeof(*argv2));
+	argv2[0] = (char *)effp->handler.name;
+	memcpy(argv2 + 1, argv, argc * sizeof(*argv2));
+	result = effp->handler.getopts(effp, argc + 1, argv2);
+	free(argv2);
+	return result;
+}
 
 /* Effects chain: */
 
@@ -574,23 +574,23 @@ static sox_effect_fn_t s_sox_effect_fns[] = {
   NULL
 };
 
-const sox_effect_fn_t*
+const sox_effect_fn_t *
 sox_get_effect_fns(void)
 {
-    return s_sox_effect_fns;
+	return s_sox_effect_fns;
 }
 
-/* Find a named effect in the effects library */
-sox_effect_handler_t const * sox_find_effect(char const * name)
+sox_effect_handler_t const *
+sox_find_effect(char const * name)
 {
-  int e;
-  sox_effect_fn_t const * fns = sox_get_effect_fns();
-  for (e = 0; fns[e]; ++e) {
-    const sox_effect_handler_t *eh = fns[e] ();
-    if (eh && eh->name && strcasecmp(eh->name, name) == 0)
-      return eh;                 /* Found it. */
-  }
-  return NULL;
+	int e;
+	sox_effect_fn_t const * fns = sox_get_effect_fns();
+	for (e = 0; fns[e]; ++e) {
+		const sox_effect_handler_t *eh = fns[e] ();
+		if (eh && eh->name && strcasecmp(eh->name, name) == 0)
+			return eh;
+	}
+	return NULL;
 }
 
 

@@ -1000,13 +1000,13 @@ typedef struct sox_encodings_info_t {
 } sox_encodings_info_t;
 
 typedef struct sox_encodinginfo_t {
-	sox_encoding_t encoding;	/* encoding of samples			*/
-	unsigned bits_per_sample;	/* <0 if unknown or variable		*/
-	double compression;		/* compression factor, if applicable	*/
-	sox_option_t reverse_bytes;	/* defaults to format or machine	*/
-	sox_option_t reverse_nibbles;	/* defaults to format or machine	*/
-	sox_option_t reverse_bits;	/* defaults to format or machine	*/
-	sox_bool opposite_endian;	/* reverse the format's default		*/
+	sox_encoding_t encoding;	/* encoding of samples */
+	unsigned bits_per_sample;	/* < 0 if unknown or variable */
+	double compression;		/* compression factor, if applicable */
+	sox_option_t reverse_bytes;	/* defaults to format or machine */
+	sox_option_t reverse_nibbles;	/* defaults to format or machine */
+	sox_option_t reverse_bits;	/* defaults to format or machine */
+	sox_bool opposite_endian;	/* reverse the format's default  */
 } sox_encodinginfo_t;
 
 /**
@@ -1466,17 +1466,7 @@ Deprecated macro that returns global parameters for effects.
 #define sox_effects_globals (*sox_get_effects_globals())
 
 sox_effect_handler_t const * sox_find_effect(char const * name);
-
-/**
-Client API:
-Creates an effect using the given handler.
-@returns The new effect, or null if not found.
-*/
-
-sox_effect_t *
-sox_create_effect(
-    sox_effect_handler_t const * eh /**< Handler to use for effect. */
-    );
+sox_effect_t * sox_create_effect(sox_effect_handler_t const * eh);
 
 /**
 Client API:
@@ -1487,7 +1477,7 @@ int
 sox_effect_options(
     sox_effect_t *effp, /**< Effect pointer on which to set options. */
     int argc, /**< Number of arguments in argv. */
-    char * const argv[] /**< Array of command-line options. */
+    char ** const argv /**< Array of command-line options. */
     );
 
 /**

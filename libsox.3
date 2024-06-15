@@ -24,11 +24,11 @@
 .Ft int
 .Fn sox_seek "sox_format_t * ft" "off_t offset"
 .Ft sox_effect_handler_t const *
-.Fn sox_find_effect "char const  name"
+.Fn sox_find_effect "char const * name"
 .Ft sox_effect_t *
-.Fn sox_create_effect(sox_effect_handler_t const *\fIeh\fB);
+.Fn sox_create_effect "sox_effect_handler_t const * handler"
 .Ft int
-.Fn sox_effect_options(sox_effect_t *\fIeffp\fB, int \fIargc\fB, char * const \fIargv[]\fB);
+.Fn sox_effect_options "sox_effect_t * effp" "int argc" "char ** const argv"
 .Ft sox_effects_chain_t *
 .Fn sox_create_effects_chain(sox_encodinginfo_t const *\fIin_enc\fB, sox_encodinginfo_t const *\fIout_enc\fB);
 .Ft void
@@ -175,20 +175,27 @@ to the given
 .Fa offset .
 .Pp
 .Fn sox_find_effect
-finds effect
+finds and effect by the given
 .Fa name ,
-returning a pointer to its
-.Ft sox_effect_handler_t
-if it exists, and NULL otherwise.
-.Pp
-The function \fBsox_create_effect\fR instantiates an effect into a
-\fIsox_effect_t\fR given a \fIsox_effect_handler_t *\fR. Any missing
-methods are automatically set to the corresponding \fBnothing\fR
-method.
-.Pp
-The function \fBsox_effect_options\fR allows passing options into the effect to control its behavior.  It will return SOX_EOF if there were any invalid options passed in.  On success, the \fIeffp->in_signal\fR will optional contain the rate and channel count it requires input data from and \fIeffp->out_signal\fR will optionally contain the rate and channel count it outputs in.  When present, this information should be used to make sure appropriate effects are placed in the effects chain to handle any needed conversions.
-.Pp
-Passing in options is currently only supported when they are passed in before the effect is ever started.  The behavior is undefined if its called once the effect is started.
+returning a pointer to its handler.
+.Fn sox_create_effect
+instantiates an effect into a
+.Ft sox_effect_t
+given its handler.
+.Fn sox_effect_options
+passes options to the effect to control its behavior.
+.\"It will return SOX_EOF if there were any invalid options passed in.
+If successful,
+.Fa effp->in_signal
+will optionally contain the rate and channel count
+the ffect expects on input and
+.Fa effp->out_signal
+will optionally contain the rate and channel count of the output.
+When present, this information should be used to make sure
+appropriate effects are placed in the effects chain
+to handle any needed conversions.
+Passing in options is only supported before the effect is ever started.
+Once the effect is started, the behavior is undefined.
 .Pp
 \fBsox_create_effects_chain\fR will instantiate an effects chain that
 effects can be added to.  \fIin_enc\fR and \fIout_enc\fR are the 
