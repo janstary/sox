@@ -29,87 +29,21 @@ LSX_ and lsx_ symbols should not be used by libSoX-based applications.
 extern "C" {
 #endif
 
-/*****************************************************************************
-Basic typedefs:
-*****************************************************************************/
+/* typedefs */
 
-/**
-Client API:
-Signed twos-complement 8-bit type. Typically defined as signed char.
-*/
-typedef int8_t sox_int8_t;
-
-/**
-Client API:
-Unsigned 8-bit type. Typically defined as unsigned char.
-*/
-typedef uint8_t sox_uint8_t;
-
-/**
-Client API:
-Signed twos-complement 16-bit type. Typically defined as short.
-*/
-typedef int16_t sox_int16_t;
-
-/**
-Client API:
-Unsigned 16-bit type. Typically defined as unsigned short.
-*/
-typedef uint16_t sox_uint16_t;
-
-/**
-Client API:
-Signed twos-complement 32-bit type. Typically defined as int.
-*/
-typedef int32_t sox_int32_t;
-
-/**
-Client API:
-Unsigned 32-bit type. Typically defined as unsigned int.
-*/
-typedef uint32_t sox_uint32_t;
-
-/**
-Client API:
-Signed twos-complement 64-bit type. Typically defined as long or long long.
-*/
-typedef int64_t sox_int64_t;
-
-/**
-Client API:
-Unsigned 64-bit type. Typically defined as unsigned long or unsigned long long.
-*/
-typedef uint64_t sox_uint64_t;
-
-/**
-Client API:
-Alias for sox_int32_t (beware of the extra byte).
-*/
-typedef sox_int32_t sox_int24_t;
-
-/**
-Client API:
-Alias for sox_uint32_t (beware of the extra byte).
-*/
-typedef sox_uint32_t sox_uint24_t;
-
-/**
-Client API:
-Native SoX audio sample type (alias for sox_int32_t).
-*/
-typedef sox_int32_t sox_sample_t;
-
-/**
-Client API:
-Samples per second is stored as a double.
-*/
-typedef double sox_rate_t;
-
-/**
-Client API:
-File's metadata, access via sox_*_comments functions.
-*/
-typedef char * * sox_comments_t;
+typedef int8_t		sox_int8_t;
+typedef uint8_t		sox_uint8_t;
+typedef int16_t		sox_int16_t;
+typedef uint16_t	sox_uint16_t;
+typedef int32_t		sox_int32_t;
+typedef uint32_t	sox_uint32_t;
+typedef int64_t		sox_int64_t;
+typedef uint64_t	sox_uint64_t;
+typedef sox_int32_t	sox_int24_t;
+typedef sox_uint32_t	sox_uint24_t;
+typedef sox_int32_t	sox_sample_t;
+typedef double		sox_rate_t;
+typedef char **		sox_comments_t;
 
 /*****************************************************************************
 Enumerations:
