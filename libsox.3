@@ -1,4 +1,4 @@
-.Dd June 8, 2024
+.Dd June 16, 2024
 .Dt LIBSOX 3
 .Os
 .Sh NAME
@@ -16,39 +16,51 @@
 .Ft sox_format_t *
 .Fn sox_open_write "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype" "sox_oob_t const * oob" "sox_bool (*overwrite)(char const *)"
 .Ft size_t
-.Fn sox_read "sox_format_t * ft" "sox_sample_t * buf" "size_t len"
+.Fn sox_read "sox_format_t * format" "sox_sample_t * buf" "size_t len"
 .Ft size_t
-.Fn sox_write "sox_format_t * ft" "sox_sample_t const * buf" "size_t len"
+.Fn sox_write "sox_format_t * format" "sox_sample_t const * buf" "size_t len"
 .Ft int
-.Fn sox_seek "sox_format_t * ft" "off_t offset"
+.Fn sox_seek "sox_format_t * format" "off_t offset"
 .Ft int
-.Fn sox_close "sox_format_t * ft"
+.Fn sox_close "sox_format_t * format"
 .Ft sox_effect_handler_t const *
 .Fn sox_find_effect "char const * name"
 .Ft sox_effect_t *
 .Fn sox_create_effect "sox_effect_handler_t const * handler"
 .Ft int
-.Fn sox_effect_options "sox_effect_t * effp" "int argc" "char ** const argv"
+.Fn sox_effect_options "sox_effect_t * effect" "int argc" "char ** const argv"
 .Ft sox_effects_chain_t *
-.Fn sox_create_effects_chain "sox_encodinginfo_t const * in_enc" "sox_encodinginfo_t const * out_enc"
+.Fn sox_create_effects_chain "sox_encodinginfo_t const * ienc" "sox_encodinginfo_t const * oenc"
 .Ft int
-.Fn sox_add_effect "sox_effects_chain_t * chain" "sox_effect_t * effp" "sox_signalinfo_t * in" "sox_signalinfo_t const * out"
+.Fn sox_add_effect "sox_effects_chain_t * chain" "sox_effect_t * effect" "sox_signalinfo_t * in" "sox_signalinfo_t const * out"
 .Ft void
 .Fn sox_delete_effects_chain "sox_effects_chain_t * chain"
 .Sh DESCRIPTION
 .Nm
-is a library of sound sample file format readers/writers
-and sound effects processors.
-It is mainly developed for use by SoX
-but is useful for any sound application.
+is a library of sound sample file format readers/writers and sound effects.
+It is mainly developed to be used by
+.Xr sox 1
+but any audio application might find it useful.
 .Pp
-.Fn sox_format_init
-performs initialization related to all file format handlers.
-This should be called before any other file operations.
+All audio formats and sound effects operate
+with an internal sample format of signed 32-bit integer.
+This can cause problems;
+for example, distortion might occur
+when mixing two channels down to mono with the obvious
+.Sy *obuf++ = (*ibuf++ + *ibuf++)/2
+since the intermediate addition can overflow.
+Doing
+.Sy *obuf++ = *ibuf++/2 + *ibuf++/2
+instead would get around that problem,
+at the expense of the least significant bit.
 .Pp
-.Fn sox_format_quit
-function performs cleanup related to all file format handlers.
-This should be called after all file operations are done.
+.Nm
+always stores multichannel data interleaved, i.e.
+successive samples in the stream are the samples of respective channels.
+For stereo data, this means a sample from the left channel
+followed by a sample from the right channel.
+Quadraphonic data is stored as
+left front, right front, left rear, right rear.
 .Pp
 The following structures are used to specify
 the audio signal properties and the encoding of samples:
@@ -73,6 +85,13 @@ typedef struct sox_encodinginfo_t {
 } sox_encodinginfo_t;
 .Ed
 .Pp
+.Fn sox_format_init
+performs initialization related to all file format handlers.
+This should be called before any other file operations.
+.Fn sox_format_quit
+performs cleanup related to all file format handlers.
+This should be called after all file operations are done.
+.Pp
 .Fn sox_open_read
 opens the named file for reading.
 A special name of
@@ -92,9 +111,9 @@ and
 are normally only needed for headerless audio files.
 If
 .Fa filetype
-is not NULL, it specifies the file type.
-Otherwise, the file type is guessed from
-the filename extension or the file header.
+is not NULL, it specifies the file type, such as
+.Dq wav ;
+otherwise, it is guessed from the name extension or the header.
 .Pp
 .Fn sox_open_write
 opens the named file for writing.
@@ -106,18 +125,17 @@ If
 or
 .Fa encoding
 are not NULL, they specify the properties of
-the audio signal or the encoding of samples, as in
-.Fn sox_open_read ;
+the audio signal or the encoding of samples;
 for writing, this generally needs to be specified,
 as most file formats can store data using various
-sample rates and numbers of channels and various encodings.
+sample rates, sample sizes, encodings, etc.
 The structures filled during
 .Fn sox_open_read
 can be used to write data in the same format that was read.
 If
 .Fa filetype
-is not NULL, it specifies the file type.
-Otherwise, the file type is guessed from the filename extension.
+is not NULL, it specifies the file type;
+otherwise, the file type is guessed from the filename extension.
 If
 .Fa oob
 is not NULL and the file formats supports comments or other out-of-bound data,
@@ -135,14 +153,14 @@ reads
 samples into
 .Fa buf
 using the format handler specified by
-.Fa ft .
+.Fa format .
 It is the caller's responsibility to provide a large enough buffer.
 Samples are converted to 32-bit signed integers before being placed in
 .Fa buf .
 The value of
 .Fa len
-is the number of samples accross all channels.
-If it is not divisible by the number of channels,
+is the number of samples accross all channels;
+if it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
 .Fn sox_write
@@ -151,11 +169,12 @@ writes
 samples from
 .Fa buf
 using the format handler specified by
-.Fa ft .
+.Fa format .
 The data in
 .Fa buf
 are treated as 32-bit signed integers
-and are converted as specified by the format.
+and are converted as specified by the
+.Fa format .
 The value of
 .Fa len
 is the number of samples across all channels.
@@ -163,14 +182,14 @@ If it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
 .Fn sox_seek
-repositions the file associated with
-.Fa ft
+positions the file associated with
+.Fa format
 to the given
 .Fa offset .
 .Pp
 .Fn sox_close
 dissociates the given
-.Fa sox_format_t
+.Fa format
 pointer from its underlying file and set of functions.
 If the format handler was being used for output,
 any buffered data is written first.
@@ -180,20 +199,18 @@ finds and effect by the given
 .Fa name ,
 returning a pointer to its handler.
 .Fn sox_create_effect
-instantiates an effect into a
-.Ft sox_effect_t
-given its
+instantiates an effect given its
 .Fa handler .
 .Fn sox_effect_options
 passes options to the effect to control its behavior.
 .\"It will return SOX_EOF if there were any invalid options passed in.
-If successful,
-.Fa effp->in_signal
-(a
+If successful, the
 .Fa sox_signalinfo_t
-structure) will optionally contain the rate and channel count
+structure stored in
+.Fa effect->in_signal
+will optionally contain the rate and channel count
 the effect expects on input and
-.Fa effp->out_signal
+.Fa effect->out_signal
 will optionally contain the rate and channel count of the output.
 When present, this information should be used to make sure
 appropriate effects are placed in the effects chain
@@ -202,14 +219,14 @@ Passing in options is only supported before the effect is ever started.
 .Pp
 .Fn sox_create_effects_chain
 creates an effects chain that effects can be added to;
-.Fa in_enc
+.Fa ienc
 and
-.Fa out_enc
+.Fa oenc
 are the signal encoding of the input and output of the chain.
 The memory pointed to by
-.Fa in_enc
+.Fa ienc
 and
-.Fa out_enc
+.Fa oenc
 is stored internally and should not be freed.
 It is OK if these encodings change over time to reflect
 new input or output encodings as they are referenced only
@@ -227,21 +244,19 @@ encoding specifies the encoding of the effect's input, while
 is a suggestion of how the output should be encoded.
 Depending on the effect's options and what
 .Fa in
-said, the effect can choose a different encoding.
+says, the effect may choose a different encoding.
 The output sample rate and number of channels the effect produces
 are written back to
 .Fa in ,
 ready for the next effect in the chain to use:
-it can passed to subsequent calls to
+it can be passed to subsequent calls to
 .Fn sox_add_effect
 so that the changes can be propagated to subsequent effects.
 .Pp
 .Fn sox_delete_effects_chain
 releases any resources reserved during the creation of the
 .Fa chain .
-This will also call
-.Fn sox_delete_effects
-if any effects are still in the chain.
+This will also delete any effects in the chain.
 .Sh RETURN VALUES
 .Fn sox_open_read
 and
@@ -261,7 +276,6 @@ when short-reading towards the end of the file.
 If the end of file is reached, or an error occurs, SOX_EOF is returned.
 Note that no distinction is made between end of file and an error.
 .Pp
-.Ft int
 .Fn sox_close
 returns
 .Dv SOX_SUCCESS
@@ -273,43 +287,13 @@ In either case, any further access, including another call to
 will result in undefined behavior.
 .Pp
 .Fn sox_seek
-returns 0 on success and SOX_EOF on error.
+returns SOX_SUCCESS on success and SOX_EOF on error,
+for example if the file is not seekable.
 .Pp
 .Fn sox_find_effect
-returs a pointer to the named effect's
-.Ft sox_effect_handler_t
+returs a pointer to the named effect's handler
 if the effect exists, and NULL otherwise.
-.\" FIXME The following has no place in RETURN VALUES
-.Pp
-SoX's formats and effects operate with an internal sample format of
-signed 32-bit integer.  The data processing routines are called with
-buffers of these samples, and buffer sizes which refer to the number
-of samples processed, not the number of bytes.  File readers translate
-the input samples to signed 32-bit integers and return the number of
-samples read.  For example, data in linear signed byte format is
-left-shifted 24 bits.
-.P
-Representing samples as integers can cause problems when processing the audio.  
-For example, if an effect to
-mix down left and right channels into one monophonic channel
-were to use the line
-.EX
-   *obuf++ = (*ibuf++ + *ibuf++)/2;
-.EE
-distortion might occur since
-the intermediate addition can overflow 32 bits.
-The line
-.EX
-   *obuf++ = *ibuf++/2 + *ibuf++/2;
-.EE
-would get round the overflow problem (at the expense of the least significant
-bit).
-.P
-Stereo data is stored with the left and right speaker data in
-successive samples.
-Quadraphonic data is stored in this order: 
-left front, right front, left rear, right rear.
-.Pp
+.\" FIXME move this to a comment in skel*.c
 A 
 .I format 
 is responsible for translating between sound sample files
@@ -448,12 +432,14 @@ See pad.c for an example.
 .Xr sox 1 ,
 .Xr soxformat 7
 and
-.Pa {example,skel}*.c
-file in the source.
+.Pa example*.c
+and
+.Pa skel*.c
+files in the source.
 .Sh AUTHORS
 .An Chris Bagwell Aq Mt cbagwell@users.sourceforge.net
 .\"Copyright 1991 Lance Norskog and Sundry Contributors.
-.\"Copyright 1998\-2011 by Chris Bagwell and SoX Contributors.
+.\"Copyright 1998-2011 Chris Bagwell and SoX Contributors.
 .\"
 .\"This library is free software; you can redistribute it and/or modify
 .\"it under the terms of the GNU Lesser General Public License as published by
@@ -465,4 +451,4 @@ file in the source.
 .\"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 .\"GNU Lesser General Public License for more details.
 .Sh BUGS
-This manual page is both incomplete and hopelessly out of date.
+This manual page is incomplete.
