@@ -17,6 +17,41 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/*
+ * An effect runs with one input and one output stream.
+ * An effect's implementation consists of six functions:
+ * getopts(), start(), flow(), drain(), stop(), kill().
+ * For some effects, some of these functions may not be needed
+ * and can be NULL. An effect that is marked `MCHAN' must perform
+ * multiple channel processing inside the affected functions.
+ *
+ * getopts() is called with a character string argument list for the effect.
+ *
+ * start() is called with signal parameters for the input and output streams.
+ *
+ * flow() is called with input and output data buffers, and (by reference)
+ * the input and output data buffer sizes. It processes the input buffer
+ * into the output buffer, and sets the size variables to the numbers
+ * of samples actually processed. It is under no obligation to read
+ * from the input buffer or write to the output buffer during the same call.
+ * If the call returns SOX_EOF then this should be used as an indication
+ * that this effect will no longer read any data and can start to drain().
+ *
+ * drain() is called after there are no more input data samples. If the
+ * effect wishes to generate more data samples, it copies the generated data
+ * into a given buffer and returns the number of samples generated.
+ * If it fills the buffer, it will be called again, etc.
+ * For example, the echo effect uses this to fade away.
+ *
+ * stop() is called when there are no more input samples and no more
+ * output samples to process. It is typically used to release or close
+ * resources (e.g. allocated memory or temporary files) that were set up
+ * in start(); see echo.c for an example.
+ *
+ * kill() is called to allow resources allocated by getopts()
+ * to be released; see pad.c for an example.
+ */
+
 #include "sox_i.h"
 
 /* Private data for effect */
