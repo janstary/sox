@@ -1034,22 +1034,22 @@ typedef struct sox_oob_t{
 
 struct sox_format_t {
 	char *			filename;
-	sox_signalinfo_t	signal;		/* user or start_{read,write}()	*/
-	sox_encodinginfo_t	encoding;	/* user or start_{read,write}()	*/
-	char *			filetype;	/* e.g. "wav"			*/
-	sox_oob_t		oob;		/* out of bound: comments etc	*/
-	sox_bool		seekable;	/* can we lseek() in the file?	*/
-	char			mode;		/* 'r' or 'w'			*/
-	sox_uint64_t		olength;	/* (samples * chans) written	*/
-	sox_uint64_t		clips;		/* # of clipped samples		*/
-	int			sox_errno;	/* failure error code		*/
-	char			sox_errstr[256];/* failure error text		*/
-	void *			fp;		/* file stream pointer		*/
-	lsx_io_type		io_type;	/* file, pipe, url		*/
-	sox_uint64_t		tell_off;	/* current offset		*/
-	sox_uint64_t		data_start;	/* offset where audio begins	*/
-	sox_format_handler_t	handler;	/* handler for this filetype	*/
-	void *			priv;		/* handler's private data	*/
+	sox_signalinfo_t	signal;		/* by user or start_*() */
+	sox_encodinginfo_t	encoding;	/* by user or start_*() */
+	char *			filetype;	/* e.g. "wav" */
+	sox_oob_t		oob;		/* out of bound: comments etc */
+	sox_bool		seekable;	/* can we lseek()? */
+	char			mode;		/* 'r' or 'w' */
+	sox_uint64_t		olength;	/* (samples * chans) written */
+	sox_uint64_t		clips;		/* # of clipped samples */
+	int			sox_errno;	/* failure error code */
+	char			sox_errstr[256];/* failure error text */
+	void *			fp;		/* file stream pointer */
+	lsx_io_type		io_type;	/* file, pipe, url */
+	sox_uint64_t		tell_off;	/* current offset */
+	sox_uint64_t		data_start;	/* offset where audio begins */
+	sox_format_handler_t	handler;	/* handler for this filetype */
+	void *			priv;		/* handler's private data */
 };
 
 /**
