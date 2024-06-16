@@ -55,7 +55,6 @@ FMTOBJS	= \
 	raw-fmt.o \
 	raw.o \
 	sf.o \
-	skelform.o \
 	smp.o \
 	sounder.o \
 	soundtool.o \
@@ -113,7 +112,6 @@ EFFOBJS	= \
 	reverse.o \
 	silence.o \
 	sinc.o \
-	skeleff.o \
 	speed.o \
 	splice.o \
 	stat.o \
