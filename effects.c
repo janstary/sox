@@ -119,12 +119,6 @@ int lsx_effect_set_imin(sox_effect_t * effp, size_t imin)
 /* Effects table to be extended in steps of EFF_TABLE_STEP */
 #define EFF_TABLE_STEP 8
 
-/* Add an effect to the chain. *in is the input signal for this effect. *out is
- * a suggestion as to what the output signal should be, but depending on its
- * given options and *in, the effect can choose to do differently.  Whatever
- * output rate and channels the effect does produce are written back to *in,
- * ready for the next effect in the chain.
- */
 int sox_add_effect(sox_effects_chain_t * chain, sox_effect_t * effp, sox_signalinfo_t * in, sox_signalinfo_t const * out)
 {
   int ret, (*start)(sox_effect_t * effp) = effp->handler.start;

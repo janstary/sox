@@ -13,16 +13,16 @@
 .Fn sox_quit "void"
 .Ft sox_format_t *
 .Fn sox_open_read "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype"
-.Ft sox_format_t
+.Ft sox_format_t *
 .Fn sox_open_write "char const * path" "sox_signalinfo_t const * signal" "sox_encodinginfo_t const * encoding" "char const * filetype" "sox_oob_t const * oob" "sox_bool (*overwrite)(char const *)"
 .Ft size_t
 .Fn sox_read "sox_format_t * ft" "sox_sample_t * buf" "size_t len"
 .Ft size_t
 .Fn sox_write "sox_format_t * ft" "sox_sample_t const * buf" "size_t len"
 .Ft int
-.Fn sox_close "sox_format_t * ft"
-.Ft int
 .Fn sox_seek "sox_format_t * ft" "off_t offset"
+.Ft int
+.Fn sox_close "sox_format_t * ft"
 .Ft sox_effect_handler_t const *
 .Fn sox_find_effect "char const * name"
 .Ft sox_effect_t *
@@ -30,11 +30,11 @@
 .Ft int
 .Fn sox_effect_options "sox_effect_t * effp" "int argc" "char ** const argv"
 .Ft sox_effects_chain_t *
-.Fn sox_create_effects_chain(sox_encodinginfo_t const *\fIin_enc\fB, sox_encodinginfo_t const *\fIout_enc\fB);
-.Ft void
-.Fn sox_delete_effects_chain(sox_effects_chain_t *\fIecp\fB);
+.Fn sox_create_effects_chain "sox_encodinginfo_t const * in_enc" "sox_encodinginfo_t const * out_enc"
 .Ft int
-.Fn sox_add_effect(sox_effects_chaint_t *\fIchain\fB, sox_effect_t*\fIeffp\fB, sox_signalinfo_t *\fIin\fB, sox_signalinfo_t const *\fIout\fB);
+.Fn sox_add_effect "sox_effects_chain_t * chain" "sox_effect_t * effp" "sox_signalinfo_t * in" "sox_signalinfo_t const * out"
+.Ft void
+.Fn sox_delete_effects_chain "sox_effects_chain_t * chain"
 .Sh DESCRIPTION
 .Nm
 is a library of sound sample file format readers/writers
@@ -54,22 +54,22 @@ The following structures are used to specify
 the audio signal properties and the encoding of samples:
 .Bd -literal
 typedef struct sox_signalinfo_t {
-	sox_rate_t	rate;		/* samples per second		*/
-	unsigned	channels;	/* number of channels		*/
-	unsigned	precision;	/* bits per sample		*/
-	sox_uint64_t	length;		/* samples * channels		*/
-	double *	mult;		/* effects headroom multiplier	*/
+	sox_rate_t	rate;
+	unsigned	channels;
+	unsigned	precision;
+	uint64_t	length;
+	double *	mult;
 } sox_signalinfo_t;
 .Ed
 .Bd -literal
 typedef struct sox_encodinginfo_t {
-	sox_encoding_t encoding;	/* encoding of samples */
-	unsigned bits_per_sample;	/* < 0 if unknown or variable */
-	double compression;		/* compression factor, if applicable */
-	sox_option_t reverse_bytes;	/* defaults to format or machine */
-	sox_option_t reverse_nibbles;	/* defaults to format or machine */
-	sox_option_t reverse_bits;	/* defaults to format or machine */
-	sox_bool opposite_endian;	/* reverse the format's defaults */
+	sox_encoding_t	encoding;
+	unsigned	bits_per_sample;
+	double		compression;
+	sox_option_t	reverse_bytes;
+	sox_option_t	reverse_nibbles;
+	sox_option_t	reverse_bits;
+	sox_bool	opposite_endian;
 } sox_encodinginfo_t;
 .Ed
 .Pp
@@ -162,17 +162,18 @@ is the number of samples across all channels.
 If it is not divisible by the number of channels,
 the behaviour is undefined.
 .Pp
+.Fn sox_seek
+repositions the file associated with
+.Fa ft
+to the given
+.Fa offset .
+.Pp
 .Fn sox_close
 dissociates the given
 .Fa sox_format_t
 pointer from its underlying file and set of functions.
 If the format handler was being used for output,
 any buffered data is written first.
-.Fn sox_seek
-repositions the offset of the file associated with
-.Fa ft
-to the given
-.Fa offset .
 .Pp
 .Fn sox_find_effect
 finds and effect by the given
@@ -181,51 +182,66 @@ returning a pointer to its handler.
 .Fn sox_create_effect
 instantiates an effect into a
 .Ft sox_effect_t
-given its handler.
+given its
+.Fa handler .
 .Fn sox_effect_options
 passes options to the effect to control its behavior.
 .\"It will return SOX_EOF if there were any invalid options passed in.
 If successful,
 .Fa effp->in_signal
-will optionally contain the rate and channel count
-the ffect expects on input and
+(a
+.Fa sox_signalinfo_t
+structure) will optionally contain the rate and channel count
+the effect expects on input and
 .Fa effp->out_signal
 will optionally contain the rate and channel count of the output.
 When present, this information should be used to make sure
 appropriate effects are placed in the effects chain
 to handle any needed conversions.
 Passing in options is only supported before the effect is ever started.
-Once the effect is started, the behavior is undefined.
 .Pp
-\fBsox_create_effects_chain\fR will instantiate an effects chain that
-effects can be added to.  \fIin_enc\fR and \fIout_enc\fR are the 
-signal encoding of the input and output of the chain respectively.
-The pointers to \fIin_enc\fR and \fIout_enc\fR
-are stored internally and so their memory should not be freed.  Also,
-it is OK if their values change over time to reflect new input or
-output encodings as they are referenced only as effects
-start up or are restarted.
+.Fn sox_create_effects_chain
+creates an effects chain that effects can be added to;
+.Fa in_enc
+and
+.Fa out_enc
+are the signal encoding of the input and output of the chain.
+The memory pointed to by
+.Fa in_enc
+and
+.Fa out_enc
+is stored internally and should not be freed.
+It is OK if these encodings change over time to reflect
+new input or output encodings as they are referenced only
+when effects are started or restarted.
 .Pp
-\fBsox_delete_effects_chain\fR will release any resources reserved during
-the creation of the chain.  This will also call \fBsox_delete_effects\fR
+.Fn sox_add_effect
+adds an
+.Fa effect
+to an existing effects
+.Fa chain .
+The
+.Fa in
+encoding specifies the encoding of the effect's input, while
+.Fa out
+is a suggestion of how the output should be encoded.
+Depending on the effect's options and what
+.Fa in
+said, the effect can choose a different encoding.
+The output sample rate and number of channels the effect produces
+are written back to
+.Fa in ,
+ready for the next effect in the chain to use:
+it can passed to subsequent calls to
+.Fn sox_add_effect
+so that the changes can be propagated to subsequent effects.
+.Pp
+.Fn sox_delete_effects_chain
+releases any resources reserved during the creation of the
+.Fa chain .
+This will also call
+.Fn sox_delete_effects
 if any effects are still in the chain.
-.Pp
-\fBsox_add_effect\fR adds an effect to the chain.  \fIin\fR specifies the input
-signal info for this effect.  \fIout\fR is a suggestion
-as to what the output signal should be but depending on the effects
-given options and on \fIin\fR the effect can choose to do differently.
-Whatever output rate and channels the effect does produce are written
-back to \fIin\fR.  It is meant that \fIin\fR be stored and passed to each
-new call to \fBsox_add_effect\fR so that changes will be propagated to each new effect.
-.Pp
-SoX includes skeleton C files to assist you in writing new
-formats (skelform.c) and effects (skeleff.c). Note that new formats 
-can often just deal with the header and then use raw.c's routines 
-for reading and writing.
-.Pp
-example0.c and example1.c are a good starting point to see how
-to write applications using libsox.  sox.c itself is also a good
-reference.
 .Sh RETURN VALUES
 .Fn sox_open_read
 and
@@ -245,6 +261,7 @@ when short-reading towards the end of the file.
 If the end of file is reached, or an error occurs, SOX_EOF is returned.
 Note that no distinction is made between end of file and an error.
 .Pp
+.Ft int
 .Fn sox_close
 returns
 .Dv SOX_SUCCESS
@@ -258,7 +275,8 @@ will result in undefined behavior.
 .Fn sox_seek
 returns 0 on success and SOX_EOF on error.
 .Pp
-returning a pointer to the named effect's
+.Fn sox_find_effect
+returs a pointer to the named effect's
 .Ft sox_effect_handler_t
 if the effect exists, and NULL otherwise.
 .\" FIXME The following has no place in RETURN VALUES
@@ -430,8 +448,8 @@ See pad.c for an example.
 .Xr sox 1 ,
 .Xr soxformat 7
 and
-.Pa example*.c
-in the source distribution.
+.Pa {example,skel}*.c
+file in the source.
 .Sh AUTHORS
 .An Chris Bagwell Aq Mt cbagwell@users.sourceforge.net
 .\"Copyright 1991 Lance Norskog and Sundry Contributors.

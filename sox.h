@@ -989,14 +989,10 @@ typedef struct sox_signalinfo_t {
 	double *	mult;		/* effects headroom multiplier	*/
 } sox_signalinfo_t;
 
-/**
-Client API:
-Basic information about an encoding.
-*/
 typedef struct sox_encodings_info_t {
-  sox_encodings_flags_t flags; /**< lossy once (lossy1), lossy twice (lossy2), or lossless (none). */
-  char const * name;           /**< encoding name. */
-  char const * desc;           /**< encoding description. */
+	sox_encodings_flags_t	flags;
+	char const *		name;
+	char const *		desc;
 } sox_encodings_info_t;
 
 typedef struct sox_encodinginfo_t {
@@ -1342,21 +1338,10 @@ Unload format handler plugins.
 void
 sox_format_quit(void);
 
-/**
-Client API:
-Initialize effects library.
-@returns SOX_SUCCESS if successful.
-*/
 int
 sox_init(void);
 
-/**
-Client API:
-Close effects library and unload format handler plugins.
-@returns SOX_SUCCESS if successful.
-*/
 int
-
 sox_quit(void);
 
 /**
@@ -1388,7 +1373,6 @@ Returns true if the format handler for the specified file type supports the spec
 @returns true if the format handler for the specified file type supports the specified encoding.
 */
 sox_bool
-
 sox_format_supports_encoding(
      char               const * path,       /**< Path to file to be examined (required if filetype is NULL). */
      char               const * filetype,   /**< Previously-determined file type, or NULL to use extension from path. */
@@ -1402,7 +1386,6 @@ Gets the format handler for a specified file type.
 */
 
 sox_format_handler_t const *
-
 sox_write_handler(
      char               const * path,         /**< Path to file (required if filetype is NULL). */
      char               const * filetype,     /**< Filetype for which handler is needed, or NULL to use extension from path. */
@@ -1433,11 +1416,8 @@ sox_write(
 	size_t len			/* write this many samples	*/
 );
 
-int
-sox_close(sox_format_t * ft);
-
-int
-sox_seek(sox_format_t * ft, off_t offset);
+int sox_close(sox_format_t * ft);
+int sox_seek(sox_format_t * ft, off_t offset);
 
 /**
 Client API:
@@ -1465,28 +1445,21 @@ Deprecated macro that returns global parameters for effects.
 */
 #define sox_effects_globals (*sox_get_effects_globals())
 
-sox_effect_handler_t const * sox_find_effect(char const * name);
-sox_effect_t * sox_create_effect(sox_effect_handler_t const * eh);
+sox_effect_handler_t const *
+sox_find_effect(char const * name);
 
-/**
-Client API:
-Applies the command-line options to the effect.
-@returns the number of arguments consumed.
-*/
+sox_effect_t *
+sox_create_effect(sox_effect_handler_t const * eh);
+
 int
-sox_effect_options(
-    sox_effect_t *effp, /**< Effect pointer on which to set options. */
-    int argc, /**< Number of arguments in argv. */
-    char ** const argv /**< Array of command-line options. */
-    );
+sox_effect_options(sox_effect_t *effp, int argc, char ** const argv);
 
 /**
 Client API:
 Returns an array containing the known effect handlers.
 @returns An array containing the known effect handlers.
 */
-sox_effect_fn_t const *
-sox_get_effect_fns(void);
+sox_effect_fn_t const * sox_get_effect_fns(void);
 
 /**
 Client API:
@@ -1494,39 +1467,20 @@ Deprecated macro that returns an array containing the known effect handlers.
 */
 #define sox_effect_fns (sox_get_effect_fns())
 
-/**
-Client API:
-Initializes an effects chain. Returned handle must be closed with sox_delete_effects_chain().
-@returns Handle, or null on failure.
-*/
-
 sox_effects_chain_t *
 sox_create_effects_chain(
-    sox_encodinginfo_t const * in_enc, /**< Input encoding. */
-    sox_encodinginfo_t const * out_enc /**< Output encoding. */
-    );
+	sox_encodinginfo_t const * in_enc,
+	sox_encodinginfo_t const * out_enc);
 
-/**
-Client API:
-Closes an effects chain.
-*/
 void
-sox_delete_effects_chain(
-     sox_effects_chain_t *ecp /**< Effects chain pointer. */
-    );
+sox_delete_effects_chain(sox_effects_chain_t *);
 
-/**
-Client API:
-Adds an effect to the effects chain, returns SOX_SUCCESS if successful.
-@returns SOX_SUCCESS if successful.
-*/
 int
 sox_add_effect(
-     sox_effects_chain_t * chain, /**< Effects chain to which effect should be added . */
-     sox_effect_t * effp, /**< Effect to be added. */
-     sox_signalinfo_t * in, /**< Input format. */
-    sox_signalinfo_t const * out /**< Output format. */
-    );
+	sox_effects_chain_t * chain,
+	sox_effect_t * effp,
+	sox_signalinfo_t * in,
+	sox_signalinfo_t const * out);
 
 /**
 Client API:
