@@ -17,9 +17,43 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sox_i.h"
+
+/*
+ * A format is responsible for translating between sound sample files
+ * and an internal buffer. The internal buffer is encoded as int32_t
+ * integers with a fixed sampling rate.
+ *
+ * The format operates using two data structures: a format structure,
+ * and a private structure. The format structure contains a list
+ * of control parameters for the sample: sampling rate, data size
+ * (8, 16, or 32 bits), encoding (unsigned, signed, floating point, etc.),
+ * number of sound channels, whether the sample file needs to be byte-swapped,
+ * whether sox_seek() will work, the suffix, the file stream pointer,
+ * the format pointer, and the private structure. See sox.h for details.
+ *
+ * The private area is just a preallocated data array for the format
+ * to use however it wishes. It should have a defined data structure
+ * and cast the array to that structure. See for example how voc.c
+ * uses the private data area. It has to track the number of samples
+ * it writes and when finishing, seek back to the beginning of the file
+ * and write it out. That private area is not very large; the "echo"
+ * effect needs a much larger area for its delay line buffers.
+ *
+ * Every format specifies 6 routines:
+ * startread() sets up the format parameters, reads in tha data header,
+ * and does what needs to be done before sampels are read.
+ * read() reads samples into a buffer, transforming them into int32_t
+ * values and returning the number of samples actually read.
+ * stopread() does what needs to be done after samples are read.
+ * startwrite() sets up the format parameters, writes the header,
+ * and does what needs to be done before samples are written.
+ * write() writes samples from a buffer into a file, converting them from
+ * their int32_t values to the appropriate format.
+ * stopwrite() does whatever needsd to be done after the samples are written,
+ * such as fixing the header for the actual length. */
 
 #include <string.h>
+#include "sox_i.h"
 
 /* Private data for SKEL file */
 typedef struct {
