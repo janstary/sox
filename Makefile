@@ -140,11 +140,11 @@ DEPS	= $(ADDLIBS) $(DEVLIBS)
 
 all: $(BIN) $(LIB) $(MAN1) $(MAN3) $(MAN7) Makefile.local
 
-sox: sox.o $(OBJS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o $(OBJS) $(DEPS)
-
 libsox.so: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) $(DEPS)
+
+sox: sox.o $(OBJS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o -lsox $(DEPS)
 
 include Makefile.depend
 
