@@ -14,11 +14,14 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-PROG	= sox
+BIN	= sox
+INC	= sox.h
+LIB	= libsox.so
 MAN1	= sox.1 soxi.1
+MAN3	= libsox.3
 MAN7	= soxformat.7
 
-SOXOBJS	= getopt.o libsox.o sox.o util.o xmalloc.o
+SOXOBJS	= getopt.o libsox.o util.o xmalloc.o
 
 FMTOBJS	= \
 	8svx.o \
@@ -133,12 +136,15 @@ include Makefile.local
 # dependencies
 
 OBJS	= $(SOXOBJS) $(FMTOBJS) $(EFFOBJS) $(ADDOBJS) $(DEVOBJS)
-LIBS	= $(ADDLIBS) $(DEVLIBS)
+DEPS	= $(ADDLIBS) $(DEVLIBS)
 
-all: $(PROG) $(MAN1) $(MAN7) Makefile.local
+all: $(BIN) $(LIB) $(MAN1) $(MAN3) $(MAN7) Makefile.local
 
-sox: $(OBJS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o sox $(OBJS) $(LIBS)
+sox: sox.o $(OBJS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o $(OBJS) $(DEPS)
+
+libsox.so: $(OBJS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) $(DEPS)
 
 include Makefile.depend
 
@@ -147,27 +153,33 @@ include Makefile.depend
 .c.o:
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
 
-lint: $(MAN1) $(MAN7)
-	mandoc -Tlint $(MAN1) $(MAN7)
+lint: $(MAN1) $(MAN3) $(MAN7)
+	mandoc -Tlint $(MAN1) $(MAN3) $(MAN7)
 
 test: all
-	./$(PROG) -r 8k -b 16 -c 1 -n file.wav synth 2 sin 440 gain -3
-	./$(PROG) file.wav file.aiff
-	./$(PROG) file.wav file.au
+	./$(BIN) -r 8k -b 16 -c 1 -n file.wav synth 2 sin 440 gain -3
+	./$(BIN) file.wav file.aiff
+	./$(BIN) file.wav file.au
 
 install: all
-	install -d $(BINDIR)      && install -m 0755 $(PROG) $(BINDIR)
-	install -d $(MANDIR)/man1 && install -m 0644 $(MAN1) $(MANDIR)/man1
-	install -d $(MANDIR)/man7 && install -m 0644 $(MAN7) $(MANDIR)/man7
+	install -d $(BINDIR) && install -m 0755 $(BIN)  $(BINDIR)
+	install -d $(INCDIR) && install -m 0755 $(INC)  $(INCDIR)
+	install -d $(LIBDIR) && install -m 0755 $(LIB)  $(LIBDIR)
+	install -d $(MANDIR)/man1 && install -m 0644 $(MAN1) $(MANDIR)/man1/
+	install -d $(MANDIR)/man3 && install -m 0644 $(MAN3) $(MANDIR)/man3/
+	install -d $(MANDIR)/man7 && install -m 0644 $(MAN7) $(MANDIR)/man7/
 	( cd $(BINDIR) && $(LN) sox soxi && $(LN) sox play && $(LN) sox rec )
 
 uninstall:
-	( cd $(BINDIR) && rm -f $(PROG) soxi play rec )
+	( cd $(BINDIR) && rm -f $(BIN) soxi play rec )
+	( cd $(INCDIR) && rm -f $(INC) )
+	( cd $(LIBDIR) && rm -f $(LIB) )
 	( cd $(MANDIR)/man1/ && rm -f $(MAN1) )
+	( cd $(MANDIR)/man3/ && rm -f $(MAN3) )
 	( cd $(MANDIR)/man7/ && rm -f $(MAN7) )
 
 clean:
-	rm -rf $(PROG) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
+	rm -rf $(BIN) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
 
 distclean: clean
 	rm -f Makefile.local config.*
