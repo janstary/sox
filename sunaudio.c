@@ -367,7 +367,7 @@ static size_t sunread(sox_format_t* ft, sox_sample_t* pOutput, size_t cOutput)
     size_t i, cRead;
     int cbRead;
     SOX_SAMPLE_LOCALS;
-    LSX_USE_VAR(sox_macro_temp_double);
+    sox_macro_temp_double;
 
     while (cbOutputLeft) {
         cbRead = read(pPriv->device, pbOutput, cbOutputLeft);
