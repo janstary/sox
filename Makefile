@@ -179,7 +179,7 @@ uninstall:
 	( cd $(MANDIR)/man7/ && rm -f $(MAN7) )
 
 clean:
-	rm -rf $(BIN) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
+	rm -rf $(BIN) $(LIB) $(OBJS) *.o soxi play rec *~ *.core *.dSYM
 
 distclean: clean
 	rm -f Makefile.local config.*
