@@ -151,7 +151,7 @@ runtest() {
 
 # compiler options
 
-DEFCFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings -Wno-unused-parameter"
+DEFCFLAGS="-g -W -Wall -Wmissing-prototypes -Wstrict-prototypes -Wwrite-strings -Wno-unused-parameter "
 
 if [ -n "${CFLAGS}" ]; then
 	COMP="${CC} ${CFLAGS} -Wno-unused -Werror"
