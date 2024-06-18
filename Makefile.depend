@@ -150,7 +150,6 @@ vol.o: vol.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 # sox itself ind its internals
 getopt.o: getopt.c sox.h
 libsox.o: libsox.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
-libsox_i.o: libsox_i.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 sox.o: sox.c config.h sox.h util.h xmalloc.h
 util.o: util.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
 xmalloc.o: xmalloc.c sox_i.h config.h sox.h util.h xmalloc.h effects.h
