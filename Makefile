@@ -144,7 +144,7 @@ libsox.so: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) $(DEPS)
 
 sox: sox.o $(OBJS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o -lsox $(DEPS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o -lsox $(DEPS) -L.
 
 include Makefile.depend
 
