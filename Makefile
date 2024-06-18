@@ -143,7 +143,7 @@ all: $(BIN) $(LIB) $(MAN1) $(MAN3) $(MAN7) Makefile.local
 libsox.so: $(OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -o $@ $(OBJS) $(DEPS)
 
-sox: sox.o $(OBJS)
+sox: sox.o $(LIB)
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ sox.o -lsox $(DEPS) -L.
 
 include Makefile.depend
