@@ -5,13 +5,12 @@ int
 main(void)
 {
 	struct sio_hdl* hdl = NULL;
-	struct sio_par want, have;
+	struct sio_par want;
 
 	if ((hdl = sio_open(SIO_DEVANY, SIO_PLAY | SIO_REC, 0)) == NULL)
 		return 1;
 
 	sio_initpar(&want);
-	sio_initpar(&have);
 
 	want.bits  = 16;
 	want.bps   = SIO_BPS(want.bits);
